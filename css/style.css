@@ -1,0 +1,1003 @@
+/* =====================================================
+   FONTS
+   Proxima Nova Condensed is a licensed font (not free/CDN).
+   Drop the licensed .woff2 files into /fonts and uncomment
+   the @font-face block below. Until then, a free condensed
+   fallback (Barlow Semi Condensed) is used so layout/weight
+   match closely.
+===================================================== */
+
+/*
+@font-face {
+  font-family: "Proxima Nova Condensed";
+  src: url("../fonts/ProximaNovaCondensed-Regular.woff2") format("woff2");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Proxima Nova Condensed";
+  src: url("../fonts/ProximaNovaCondensed-Black.woff2") format("woff2");
+  font-weight: 700;
+}
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@300;400;600;700&family=Libre+Baskerville:wght@400;700&display=swap");
+
+:root {
+  --navy: #23398D;
+  --orange: #F17C08;
+  --white: #FFFFFF;
+  --black: #000000;
+
+  --font-heading: "Proxima Nova Condensed", "Barlow Semi Condensed", sans-serif;
+  --font-body: "Libre Baskerville", Georgia, serif;
+
+  --header-h: 112px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  height: 100%;
+  font-family: var(--font-body);
+  color: var(--black);
+  background: var(--white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* Kept genuinely (if imperceptibly) scrollable via the 1px spacer below - on Windows,
+     Chrome throttles wheel-event dispatch to "one tick per mouse move" once it decides
+     nothing on the page can ever scroll, which is exactly what html,body:overflow:hidden
+     triggered here. JS still preventDefault()s every wheel event, so nothing visibly moves. */
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+body::after {
+  content: "";
+  display: block;
+  height: 1px;
+}
+
+/* =====================================================
+   SPLASH SCREEN
+===================================================== */
+
+#splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Tunnel-vision mask (glaucoma stage): a transparent circle
+   whose giant box-shadow paints everything outside it black. */
+#tunnel-mask {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 9999px #000000;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Macular-degeneration mask: a soft blurred dark spot
+   over the centre of the logo, edges left clear. */
+#macular-mask {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 180px;
+  height: 180px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 55%, rgba(0,0,0,0) 75%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  filter: blur(6px);
+}
+
+.splash-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.logo-wrap {
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash-logo {
+  width: 100%;
+  height: auto;
+  filter: blur(28px) contrast(0.6) grayscale(1) brightness(0.4);
+  transition: none;
+}
+
+.splash-text {
+  text-align: center;
+  color: var(--white);
+}
+
+.percentage {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 1;
+  letter-spacing: 0%;
+}
+
+.condition {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+
+#splash.is-hidden {
+  pointer-events: none;
+}
+
+/* =====================================================
+   SITE (revealed after splash)
+===================================================== */
+
+#site {
+  opacity: 0;
+  min-height: 100vh;
+}
+
+/* A shared touch of tracking keeps the heavy condensed display font from feeling smooshed
+   together at large sizes - every element set in --font-heading at weight 900 gets it. */
+.percentage,
+.cta-btn,
+.hero-heading,
+.stage2-headline .word,
+.stage2-text h3,
+.stage-placeholder-num,
+.segment-intro-peek,
+.page02-headline,
+.page02-col h3,
+.page02-journey-heading,
+.page03-heading,
+.cause-card h3,
+.page04-heading,
+.team-member-text h3 {
+  letter-spacing: 0.3px;
+}
+
+.cta-btn {
+  display: inline-block;
+  background: var(--orange);
+  color: var(--white);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  padding: 12px 28px;
+  border-radius: 4px;
+  transition: transform 0.2s ease;
+}
+
+.cta-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ---- Site header ---- */
+
+.site-header {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: var(--header-h);
+  padding: 0 64px;
+  box-sizing: border-box;
+  /* Navy at zero alpha, not "transparent" (= black at zero alpha) - so the JS-driven fade to
+     var(--navy) below only ramps opacity, never hue, and reads as one motion, not a repaint. */
+  background: rgba(35, 57, 141, 0);
+}
+
+/* The background itself is animated directly by the SAME GSAP tween that grows the corner
+   rectangle (see the "isOnDark" block in stage-scroll.js) - no separate CSS transition here,
+   so the header can't drift out of step with it. This class only carries the settled end
+   state plus the nav/button text-color swap. */
+.site-header.on-dark {
+  background: var(--navy);
+}
+
+.site-header.on-dark .site-nav a {
+  color: var(--white);
+}
+
+.site-header.on-dark .btn-outline {
+  color: var(--white);
+  border-color: var(--white);
+}
+
+.site-header.on-dark .btn-solid {
+  background: var(--white);
+  color: var(--navy);
+}
+
+/* White backdrop behind the logo - invisible on the site's normal white background,
+   becomes a visible card once the header goes dark (see .site-header.on-dark above). */
+.logo-card {
+  display: inline-flex;
+  align-items: center;
+  background: var(--white);
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+.site-logo {
+  height: 72px;
+  width: auto;
+}
+
+.site-right {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--navy);
+}
+
+.site-nav a {
+  color: var(--navy);
+  text-decoration: none;
+}
+
+.site-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-outline,
+.btn-solid {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 12px;
+  text-decoration: none;
+  padding: 6px 18px;
+  border-radius: 4px;
+  border: 1px solid var(--orange);
+}
+
+.btn-outline {
+  color: var(--orange);
+  background: transparent;
+}
+
+.btn-solid {
+  color: var(--white);
+  background: var(--orange);
+}
+
+@media (max-width: 900px) {
+  .site-nav {
+    display: none;
+  }
+  .site-header {
+    padding: 16px 24px;
+  }
+}
+
+/* ---- Hero ---- */
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - var(--header-h));
+  overflow: hidden;
+}
+
+.hero-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  z-index: 5;
+}
+
+.hero-heading {
+  position: absolute;
+  left: 64px;
+  right: 64px;
+  bottom: 64px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(22px, 2.8vw, 42px);
+  line-height: 1.1;
+  color: var(--white);
+  text-align: left;
+  max-width: 900px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
+/* ---- Scroll-stepper layers (all positioned within #stage-viewport) ---- */
+
+.stage-numbers {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  opacity: 0;
+  z-index: 20;
+  font-family: var(--font-body);
+}
+
+.stage-numbers .num {
+  color: #C4C9E0;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+
+.stage-numbers .num.active {
+  color: var(--navy);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 28px;
+}
+
+.stage-numbers.on-dark .num {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.stage-numbers.on-dark .num.active {
+  color: var(--white);
+}
+
+.stage-paragraph {
+  position: absolute;
+  opacity: 0;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--navy);
+  z-index: 20;
+}
+
+.stage-cta {
+  position: absolute;
+  opacity: 0;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  z-index: 20;
+}
+
+.stage2-headline {
+  position: absolute;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 20;
+}
+
+.stage2-headline .word {
+  font-family: var(--font-heading);
+  font-weight: 300;
+  font-size: clamp(18px, 2.2vw, 34px);
+  line-height: 1.15;
+  color: #C4C9E0;
+  transition: font-weight 0.3s ease, color 0.3s ease;
+}
+
+.stage2-headline .word.active {
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.stage2-photo {
+  position: absolute;
+  opacity: 0;
+  z-index: 20;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.stage2-text {
+  position: absolute;
+  opacity: 0;
+  z-index: 20;
+  text-align: center;
+}
+
+.stage2-text h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(16px, 1.6vw, 24px);
+  line-height: 1.2;
+  color: var(--navy);
+  margin-bottom: 24px;
+}
+
+.stage2-text p {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--navy);
+  margin-bottom: 24px;
+}
+
+.stage2-text .read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--orange);
+  text-decoration: underline;
+}
+
+.stage2-text .read-more .arrow {
+  width: 14px;
+  height: 14px;
+}
+
+/* Teaser for the "02" segment - sits pinned near the bottom edge throughout the
+   Educate/Empathise/Empower chapters, hinting at what comes after them. */
+.segment-intro-peek {
+  position: absolute;
+  left: 32.5%;
+  bottom: -0.5em;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(20px, 2.2vw, 32px);
+  color: var(--navy);
+  white-space: nowrap;
+  z-index: 15;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Corner peek of the next section's visual - pokes into view during the last ("Empower")
+   chapter, then grows (bottom-right anchored, so it sweeps toward the top-left) to cover the
+   whole viewport as you scroll into "02", becoming that page's navy backdrop. */
+.next-section-peek {
+  position: absolute;
+  right: -120px;
+  bottom: -120px;
+  width: 260px;
+  height: 260px;
+  background: var(--navy);
+  border-radius: 8px;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* "02" page: three sub-stops sharing the same navy backdrop (next-section-peek, grown to
+   fill the screen) - Vision/Mission, then Our Journey's timeline, then its impact figures.
+   All text is white/cream since the backdrop behind it is now navy. Sub-view position/opacity
+   is driven by JS (see page02VisionOpacityFor / page02JourneyPoseFor in stage-scroll.js);
+   only their internal layout lives here. */
+.page02 {
+  position: absolute;
+  inset: 0;
+  z-index: 22;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.page02-vision {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 56px;
+  padding: 96px 9% 40px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.page02-headline {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(22px, 2.6vw, 36px);
+  line-height: 1.15;
+  color: var(--white);
+}
+
+.page02-body {
+  display: grid;
+  grid-template-columns: 1fr minmax(180px, 260px) 1fr;
+  align-items: center;
+  gap: 72px;
+  width: 100%;
+  max-width: 1160px;
+}
+
+.page02-col {
+  font-family: var(--font-body);
+  color: var(--white);
+}
+
+.page02-col h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(17px, 1.8vw, 24px);
+  margin-bottom: 20px;
+}
+
+.page02-col p {
+  font-size: 14px;
+  line-height: 1.85;
+  opacity: 0.9;
+}
+
+/* "Our Vision" (heading first) sits flush with the photo's top; "Our Mission" (heading last)
+   sits flush with the photo's bottom - each column self-aligns to match. */
+.page02-col-left {
+  align-self: start;
+  text-align: left;
+}
+
+.page02-col-right {
+  align-self: end;
+  text-align: right;
+}
+
+/* The right column reverses the heading/paragraph order, so the 20px gap has to move from
+   the heading's margin-bottom onto the paragraph's margin-bottom to land in the same spot. */
+.page02-col-right h3 {
+  margin-bottom: 0;
+}
+
+.page02-col-right p {
+  margin-bottom: 20px;
+}
+
+.page02-photo {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+
+/* "02" sub-views B + C: peeks up from the bottom edge while Vision/Mission is showing (see
+   page02JourneyPoseFor), then settles into place and stays put while its impact column fades
+   in beside the timeline (no reflow between the two). */
+.page02-journey {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: 0 9%;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.page02-journey-heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(22px, 2.6vw, 36px);
+  color: var(--white);
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+.page02-journey-body {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(220px, 30%) 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.page02-impact {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+.page02-impact-stat:nth-child(2) { margin-left: 20%; }
+.page02-impact-stat:nth-child(3) { margin-left: 40%; }
+
+.page02-impact-num {
+  display: block;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(30px, 3.4vw, 48px);
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.page02-impact-stat p {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--white);
+  opacity: 0.85;
+  max-width: 20ch;
+}
+
+.page02-timeline {
+  list-style: none;
+  position: relative;
+  padding-left: 28px;
+}
+
+.page02-timeline::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.page02-timeline li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 24px;
+  align-items: baseline;
+}
+
+.page02-timeline li:not(:last-child) {
+  margin-bottom: 26px;
+}
+
+.page02-timeline li::before {
+  content: "";
+  position: absolute;
+  left: -28px;
+  top: 0.4em;
+  width: 8px;
+  height: 8px;
+  margin-left: 1px;
+  border-radius: 50%;
+  background: var(--white);
+}
+
+.page02-timeline-year {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--white);
+}
+
+.page02-timeline li p {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--white);
+  opacity: 0.9;
+}
+
+.page02-journey-cta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  margin: 40px auto 0;
+  padding: 10px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.page02-journey-cta-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+}
+
+/* Aligned to the timeline/impact rows specifically (not the heading or CTA above/below them),
+   nudged out past the body's own side padding toward the true edge. */
+.page02-scroll-hint {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+
+.page02-scroll-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: var(--white);
+  font-size: 14px;
+}
+
+/* =====================================================
+   "03" - Our Causes (single stop, white backdrop)
+===================================================== */
+
+.page03 {
+  position: absolute;
+  inset: 0;
+  z-index: 22;
+  opacity: 0;
+  pointer-events: none;
+  padding: 90px 8% 40px;
+  box-sizing: border-box;
+}
+
+.page03-heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(22px, 2.6vw, 36px);
+  color: var(--navy);
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.page03-cards {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Width is set inline by stage-scroll.js (measured against the pinned viewport's actual
+   height, since the photo's fixed aspect-ratio means width is what controls whether the
+   whole card - and thus the row - fits without being clipped by .hero's overflow:hidden).
+   flex:0 0 auto here is a pre-JS fallback only; JS overrides it to match. */
+/* overflow:hidden is load-bearing, not decorative - stage-scroll.js sizes this card's width
+   (and .cause-card-photo's height, via its aspect-ratio) against a measured budget, but that
+   measurement is an estimate re-checked over a couple of passes, not a guarantee. Without a
+   hard clip here, any shortfall bleeds down past the card and into whatever sits below/beside
+   it instead of just quietly losing a line of text - which is exactly what was happening before
+   this was added. */
+.cause-card {
+  flex: 0 0 auto;
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: var(--orange);
+  border-radius: 24px;
+  padding: 16px 18px 20px;
+  color: var(--white);
+  overflow: hidden;
+}
+
+.cause-card-photo {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.cause-card h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(18px, 2vw, 28px);
+  letter-spacing: 0.3px;
+  margin-bottom: 6px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.cause-card p {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.55;
+  opacity: 0.95;
+  margin-bottom: 10px;
+}
+
+/* Capped to 3 lines - the description's wrapped height would otherwise grow unboundedly as
+   card width shrinks to fit short viewports, which is exactly what was clipping the whole row
+   out of the pinned viewport before this was added (see the geometry comment in stage-scroll.js). */
+.cause-card p:not(.cause-card-goal) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.cause-card-goal {
+  margin-bottom: 6px;
+}
+
+/* Fundraising progress toward the goal amount - fill % is set inline per card (a placeholder
+   until real raised-so-far figures exist, same spirit as the "XX" stats elsewhere on the site). */
+.cause-card-progress {
+  width: 100%;
+  height: 7px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.cause-card-progress-fill {
+  height: 100%;
+  background: var(--white);
+  border-radius: 999px;
+}
+
+.cause-card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Buttons on an orange card get the outline/solid pairing inverted (white-based)
+   rather than the orange-based pairing used everywhere else against white/navy. */
+.cause-card .btn-outline {
+  color: var(--white);
+  border-color: var(--white);
+}
+
+.cause-card .btn-solid {
+  background: var(--white);
+  color: var(--orange);
+}
+
+/* =====================================================
+   "04" - Meet the Team (two profile stops, crossfade in place)
+===================================================== */
+
+.page04 {
+  position: absolute;
+  inset: 0;
+  z-index: 22;
+  opacity: 0;
+  pointer-events: none;
+  padding: 90px 9% 40px;
+  box-sizing: border-box;
+}
+
+.page04-heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(22px, 2.6vw, 36px);
+  color: var(--navy);
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* Viewport onto the member track below - height is set inline by stage-scroll.js so it
+   clips at exactly 1.5 cards' worth, giving the next member a "peek" at the bottom edge.
+   overflow:hidden is what turns the track's translateY into a carousel instead of a scrollbar. */
+.page04-members {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+/* Moved (translateY, via GSAP) by stage-scroll.js to bring each member to the top slot in
+   turn - gap here MUST match the teamGap constant in stage-scroll.js, they drive the same math. */
+.page04-members-track {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Height is set inline by stage-scroll.js (1.5 cards' worth of .page04-members' own height) -
+   the value here is a pre-JS fallback only. overflow:hidden is load-bearing: a CSS grid row
+   with no explicit grid-template-rows sizes itself to its tallest child's INTRINSIC height,
+   ignoring this height property entirely once content wants to be taller - without a hard
+   clip that overflow bleeds down into the next member peeking below, instead of just being cut. */
+.team-member {
+  flex: 0 0 auto;
+  height: 280px;
+  display: grid;
+  grid-template-columns: minmax(180px, 300px) 1fr;
+  gap: 48px;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Height is set inline by stage-scroll.js, in lockstep with .team-member's own height - NOT
+   via percentage here, because percentage heights resolve against a grid row's own height,
+   which (per the comment above) is content-driven, not this element's, and would just be
+   ignored. Width follows from that fixed height via the aspect-ratio. */
+.team-member-photo {
+  width: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.team-member-text {
+  overflow: hidden;
+}
+
+.team-member-text h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(20px, 2.4vw, 32px);
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+
+.team-member-role {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--navy);
+  opacity: 0.55;
+  margin-bottom: 12px;
+}
+
+.team-member-bio {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--navy);
+  max-width: 42ch;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+
