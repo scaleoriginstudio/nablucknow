@@ -356,6 +356,12 @@ export default function IntroSequence() {
   const journeyIndexRef = useRef(0);
   const impactStatsRef = useRef<HTMLDivElement>(null);
   const impactStatRefs = useRef<(HTMLDivElement | null)[]>([]);
+  // Mobile has no room to shift the timeline aside and reveal stats beside
+  // it (that requires the ~270px of open page the desktop layout has to
+  // spare) — instead it crossfades the timeline for a stacked stats block
+  // in the same spot, so it needs its own container and item refs.
+  const impactStatsMobileRef = useRef<HTMLDivElement>(null);
+  const impactStatMobileRefs = useRef<(HTMLDivElement | null)[]>([]);
   const impactIndexRef = useRef(0);
   const causesWipeRef = useRef<HTMLDivElement>(null);
   const stage6Ref = useRef<HTMLDivElement>(null);
@@ -873,25 +879,54 @@ export default function IntroSequence() {
           dur ? 0 : "-=0.3",
         );
       } else if (current === 4 && next === 5) {
-        // The timeline (heading stays put) slides right to make room, and
-        // the first impact stat flies up into the space it vacated on the
-        // left — both part of the same scroll that leaves the timeline.
         impactIndexRef.current = 1;
-        gsap.set(impactStatRefs.current.filter(Boolean), { opacity: 0, y: 60 });
         colorInverter(5)();
 
-        tl.to(timelineRef.current, { x: TIMELINE_SHIFT_X, duration: dur ?? 0.6, ease: "power2.inOut" }, 0);
-        tl.fromTo(
-          impactStatRefs.current[0],
-          { opacity: 0, y: 60 },
-          { opacity: 1, y: 0, duration: dur ?? 0.5, ease: "power2.out" },
-          dur ? 0 : 0.15,
-        );
+        if (isMobile) {
+          // No room to shift the timeline aside on a narrow screen — cross-
+          // fade it for a stacked stats block in the same spot instead.
+          gsap.set(impactStatMobileRefs.current.filter(Boolean), { opacity: 0, y: 60 });
+          tl.set(timelineRef.current, { pointerEvents: "none" });
+          tl.to(timelineRef.current, { opacity: 0, duration: dur ?? 0.4, ease: "power2.in" }, 0);
+          tl.set(impactStatsMobileRef.current, { pointerEvents: "auto" });
+          tl.to(impactStatsMobileRef.current, { opacity: 1, duration: dur ?? 0.4, ease: "power2.out" }, 0);
+          tl.fromTo(
+            impactStatMobileRefs.current[0],
+            { opacity: 0, y: 60 },
+            { opacity: 1, y: 0, duration: dur ?? 0.5, ease: "power2.out" },
+            dur ? 0 : 0.15,
+          );
+        } else {
+          // The timeline (heading stays put) slides right to make room, and
+          // the first impact stat flies up into the space it vacated on the
+          // left — both part of the same scroll that leaves the timeline.
+          gsap.set(impactStatRefs.current.filter(Boolean), { opacity: 0, y: 60 });
+          tl.to(timelineRef.current, { x: TIMELINE_SHIFT_X, duration: dur ?? 0.6, ease: "power2.inOut" }, 0);
+          tl.fromTo(
+            impactStatRefs.current[0],
+            { opacity: 0, y: 60 },
+            { opacity: 1, y: 0, duration: dur ?? 0.5, ease: "power2.out" },
+            dur ? 0 : 0.15,
+          );
+        }
       } else if (current === 5 && next === 4) {
         colorInverter(4)();
         impactIndexRef.current = 0;
-        tl.to(timelineRef.current, { x: 0, duration: dur ?? 0.6, ease: "power2.inOut" }, 0);
-        tl.to(impactStatRefs.current.filter(Boolean), { opacity: 0, y: 60, duration: dur ?? 0.3, ease: "power2.in" }, 0);
+
+        if (isMobile) {
+          tl.set(impactStatsMobileRef.current, { pointerEvents: "none" });
+          tl.to(impactStatsMobileRef.current, { opacity: 0, duration: dur ?? 0.3, ease: "power2.in" }, 0);
+          tl.to(
+            impactStatMobileRefs.current.filter(Boolean),
+            { opacity: 0, y: 60, duration: dur ?? 0.3, ease: "power2.in" },
+            0,
+          );
+          tl.set(timelineRef.current, { pointerEvents: "auto" });
+          tl.to(timelineRef.current, { opacity: 1, duration: dur ?? 0.4, ease: "power2.out" }, 0);
+        } else {
+          tl.to(timelineRef.current, { x: 0, duration: dur ?? 0.6, ease: "power2.inOut" }, 0);
+          tl.to(impactStatRefs.current.filter(Boolean), { opacity: 0, y: 60, duration: dur ?? 0.3, ease: "power2.in" }, 0);
+        }
       } else if (current === 5 && next === 6) {
         // A white curtain grows from the bottom-right corner to cover the
         // whole screen in one continuous motion, then retreats the same
@@ -1266,11 +1301,12 @@ export default function IntroSequence() {
       impactIndexRef.current = nextIndex;
       const dur = prefersReducedMotion ? 0.05 : 0.5;
 
+      const refs = isMobile ? impactStatMobileRefs : impactStatRefs;
       if (nextIndex > prevIndex) {
-        const el = impactStatRefs.current[nextIndex - 1];
+        const el = refs.current[nextIndex - 1];
         if (el) gsap.fromTo(el, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: dur, ease: "power2.out" });
       } else if (nextIndex < prevIndex) {
-        const el = impactStatRefs.current[prevIndex - 1];
+        const el = refs.current[prevIndex - 1];
         if (el) gsap.to(el, { opacity: 0, y: 60, duration: dur, ease: "power2.in" });
       }
 
@@ -1995,7 +2031,7 @@ export default function IntroSequence() {
                   box so they always fly in just to its left. */}
               <div
                 ref={impactStatsRef}
-                className="absolute top-0 right-full mr-12 w-56 text-right"
+                className="absolute top-0 right-full mr-12 hidden w-56 text-right md:block"
                 style={{ height: timelineWindowHeight }}
               >
                 {IMPACT_STATS.map((stat, i) => (
@@ -2049,6 +2085,28 @@ export default function IntroSequence() {
                   ))}
                 </div>
               </div>
+            </div>
+
+            {/* Mobile-only: the timeline crossfades into this stacked stats
+                block rather than shifting aside — there's no room beside a
+                near-full-width timeline on a phone screen. Sits in the same
+                slot as the timeline (top-full off the same heading). */}
+            <div
+              ref={impactStatsMobileRef}
+              className="absolute top-full mt-10 flex w-full max-w-xl flex-col gap-6 opacity-0 pointer-events-none md:hidden"
+            >
+              {IMPACT_STATS.map((stat, i) => (
+                <div
+                  key={i}
+                  ref={(el) => {
+                    impactStatMobileRefs.current[i] = el;
+                  }}
+                  className="opacity-0"
+                >
+                  <div className="font-body text-3xl font-bold text-white">{stat.value}</div>
+                  <p className="mt-1 font-body text-sm leading-5 text-white/80">{stat.label}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
