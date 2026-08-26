@@ -185,18 +185,34 @@ const logoStyle = (layout: Layout, isMobile: boolean): CSSProperties =>
         transform: "translate(-50%, -50%)",
       };
 
+// On mobile the hero video stays a horizontal 16:9 band under the header
+// instead of stretching to fill the remaining viewport height — the
+// headline then sits below it rather than overlaid on top.
+const MOBILE_HERO_VIDEO_HEIGHT = "56.25vw";
+
 const videoStyle = (layout: Layout, isMobile: boolean): CSSProperties =>
   layout === "final"
-    ? {
-        position: "fixed",
-        top: HEADER_HEIGHT,
-        left: 0,
-        width: "100vw",
-        height: `calc(100vh - ${HEADER_HEIGHT}px)`,
-        transform: "none",
-        borderRadius: 0,
-        opacity: 1,
-      }
+    ? isMobile
+      ? {
+          position: "fixed",
+          top: HEADER_HEIGHT,
+          left: 0,
+          width: "100vw",
+          height: MOBILE_HERO_VIDEO_HEIGHT,
+          transform: "none",
+          borderRadius: 0,
+          opacity: 1,
+        }
+      : {
+          position: "fixed",
+          top: HEADER_HEIGHT,
+          left: 0,
+          width: "100vw",
+          height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+          transform: "none",
+          borderRadius: 0,
+          opacity: 1,
+        }
     : {
         position: "fixed",
         top: "64%",
@@ -211,18 +227,31 @@ const videoStyle = (layout: Layout, isMobile: boolean): CSSProperties =>
 
 const headlineStyle = (layout: Layout, isMobile: boolean): CSSProperties =>
   layout === "final"
-    ? {
-        position: "fixed",
-        top: "auto",
-        bottom: isMobile ? 28 : 56,
-        left: isMobile ? 20 : 56,
-        width: 820,
-        maxWidth: isMobile ? "calc(100vw - 40px)" : "calc(100vw - 112px)",
-        transform: "none",
-        color: "#FFFFFF",
-        fontSize: isMobile ? 32 : 68,
-        textAlign: "left",
-      }
+    ? isMobile
+      ? {
+          position: "fixed",
+          top: `calc(${HEADER_HEIGHT}px + ${MOBILE_HERO_VIDEO_HEIGHT} + 24px)`,
+          bottom: "auto",
+          left: 20,
+          width: "calc(100vw - 40px)",
+          maxWidth: "calc(100vw - 40px)",
+          transform: "none",
+          color: "#23398D",
+          fontSize: 28,
+          textAlign: "center",
+        }
+      : {
+          position: "fixed",
+          top: "auto",
+          bottom: 56,
+          left: 56,
+          width: 820,
+          maxWidth: "calc(100vw - 112px)",
+          transform: "none",
+          color: "#FFFFFF",
+          fontSize: 68,
+          textAlign: "left",
+        }
     : {
         position: "fixed",
         top: "82%",
