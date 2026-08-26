@@ -1056,10 +1056,12 @@ export default function IntroSequence() {
             left: headlineRect.left,
             width: headlineRect.width,
             color: "#23398D",
-            // Matches the hidden slot's own text-3xl/sm:text-4xl sizing —
+            // Matches the hidden slot's own text-2xl/sm:text-4xl sizing —
             // it was previously a flat 32 regardless of viewport, which ran
-            // noticeably larger than intended on narrow phones.
-            fontSize: isMobile ? 30 : 36,
+            // noticeably larger than intended and, combined with the long
+            // STAGE1_HEADLINE string, pushed the paragraph and CTA buttons
+            // below the visible area on phones.
+            fontSize: isMobile ? 24 : 36,
             textAlign: "center",
           });
         }
@@ -1660,7 +1662,7 @@ export default function IntroSequence() {
           }
           style={
             isMobile
-              ? { position: "fixed", top: "calc(100vh - 56px)", left: 0, width: "100vw", opacity: 0.15 }
+              ? { position: "fixed", top: "calc(100dvh - 56px)", left: 0, width: "100vw", opacity: 0.15 }
               : { position: "fixed", top: "calc(100vh - 64px)", left: 64, opacity: 0.15 }
           }
         >
@@ -1688,7 +1690,11 @@ export default function IntroSequence() {
             top: HEADER_HEIGHT,
             left: 0,
             width: "100vw",
-            height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+            // dvh, not vh: on mobile, vh includes space hidden behind a
+            // collapsible browser toolbar, which oversizes this box and
+            // pushes the centered content's bottom (the CTA buttons) below
+            // the area actually visible on screen.
+            height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
           className="z-10 flex flex-col items-center justify-center overflow-hidden bg-white px-8 opacity-0 pointer-events-none"
         >
@@ -1698,24 +1704,24 @@ export default function IntroSequence() {
                 mobile: the stepper's own line-box extends a bit below its
                 fixed top offset, and mobile's single-column stack puts the
                 photo right underneath with no side column to absorb it. */}
-            <div className="mb-16 h-16 sm:mb-10 sm:h-10" aria-hidden="true" />
+            <div className="mb-20 h-20 sm:mb-10 sm:h-10" aria-hidden="true" />
 
-            <div className="grid items-center gap-4 md:gap-14 md:grid-cols-2">
+            <div className="grid items-center gap-3 md:gap-14 md:grid-cols-2">
               {/* Invisible spacers: reserve the exact rects the video and
                   headline Flip-morph into, measured at transition time. */}
               <div
                 ref={stage1PhotoSlotRef}
-                className="h-[20vh] max-h-[170px] min-h-[120px] w-full rounded-2xl md:h-[50vh] md:max-h-[480px] md:min-h-[280px]"
+                className="h-[15vh] max-h-[130px] min-h-[90px] w-full rounded-2xl md:h-[50vh] md:max-h-[480px] md:min-h-[280px]"
                 style={{ visibility: "hidden" }}
               />
 
               <div className="flex flex-col items-center gap-3 text-center md:gap-6">
                 <div ref={stage1HeadlineSlotRef} style={{ visibility: "hidden" }} className="w-full">
-                  <h2 className="font-heading text-3xl font-bold leading-tight sm:text-4xl">
+                  <h2 className="font-heading text-2xl font-bold leading-tight sm:text-4xl">
                     {STAGE1_HEADLINE}
                   </h2>
                 </div>
-                <p ref={paragraphRef} className="block font-body text-sm text-black/70 opacity-0 leading-6 md:text-base md:leading-7">
+                <p ref={paragraphRef} className="line-clamp-3 font-body text-sm text-black/70 opacity-0 leading-6 md:line-clamp-none md:block md:text-base md:leading-7">
                   An impact driven NGO that has devoted over 30+ years to the
                   wellbeing of visually impaired individuals, right from
                   primary education to family counselling up until
