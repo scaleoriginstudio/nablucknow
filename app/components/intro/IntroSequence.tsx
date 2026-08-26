@@ -806,8 +806,8 @@ export default function IntroSequence() {
             bottom: 40,
             left: "auto",
             right: 40,
-            width: 160,
-            height: 120,
+            width: isMobile ? 70 : 160,
+            height: isMobile ? 52 : 120,
             borderRadius: "16px 0 16px 0",
             duration: dur ?? 0.7,
             ease: "power2.inOut",
@@ -1917,8 +1917,11 @@ export default function IntroSequence() {
             right: 40,
             left: "auto",
             top: "auto",
-            width: 160,
-            height: 120,
+            // Smaller on mobile — at the desktop size this corner preview
+            // is over 40% of the screen width and collides with content
+            // underneath it instead of sitting in unused margin.
+            width: isMobile ? 70 : 160,
+            height: isMobile ? 52 : 120,
             borderRadius: "16px 0 16px 0",
             transform: "scale(0)",
             transformOrigin: "bottom right",
