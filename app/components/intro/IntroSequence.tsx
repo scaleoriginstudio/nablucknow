@@ -2123,7 +2123,7 @@ export default function IntroSequence() {
             top: HEADER_HEIGHT,
             left: 0,
             width: "100vw",
-            height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+            height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
           className="z-[16] flex flex-col items-center overflow-hidden bg-white px-8 pt-16 pb-6 opacity-0 pointer-events-none"
         >
