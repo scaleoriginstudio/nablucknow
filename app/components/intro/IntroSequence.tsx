@@ -145,12 +145,16 @@ type Stage = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
 
 function StageStepper({ active }: { active: number }) {
   return (
-    <div className="flex w-full items-baseline justify-center gap-6 font-body">
+    <div className="flex w-full items-baseline justify-center gap-4 font-body sm:gap-6">
       {Array.from({ length: TOTAL_STAGES }, (_, i) => i + 1).map((n) => (
         <span
           key={n}
           style={{ transition: "color 500ms ease-out, font-size 500ms ease-out" }}
-          className={n === active ? "text-4xl font-bold text-navy" : "text-lg font-semibold text-black/25"}
+          className={
+            n === active
+              ? "text-2xl font-bold text-navy sm:text-4xl"
+              : "text-sm font-semibold text-black/25 sm:text-lg"
+          }
         >
           {String(n).padStart(2, "0")}
         </span>
@@ -655,7 +659,11 @@ export default function IntroSequence() {
         tl.to(stage2Ref.current, { opacity: 1, duration: dur ?? 0.35 }, dur ? 0 : "-=0.1");
         // The word list that was peeking up from the bottom of stage 1
         // is the very same element — it just flies up into its resting spot.
-        if (slotRect) {
+        // On mobile, stage 2's left-column slot is hidden entirely (that
+        // grid layout is desktop-only), so its rect collapses to all
+        // zeroes — flying into it would collapse the ghost list to a
+        // zero-width box. Leave it in its peek position on mobile instead.
+        if (slotRect && !isMobile) {
           tl.to(
             stage2WordsRef.current,
             {
@@ -686,7 +694,7 @@ export default function IntroSequence() {
           stagger: dur ? 0 : 0.06,
           ease: "power2.in",
         });
-        if (slotRect) {
+        if (slotRect && !isMobile) {
           tl.to(
             stage2WordsRef.current,
             {
@@ -1048,7 +1056,10 @@ export default function IntroSequence() {
             left: headlineRect.left,
             width: headlineRect.width,
             color: "#23398D",
-            fontSize: 32,
+            // Matches the hidden slot's own text-3xl/sm:text-4xl sizing —
+            // it was previously a flat 32 regardless of viewport, which ran
+            // noticeably larger than intended on narrow phones.
+            fontSize: isMobile ? 30 : 36,
             textAlign: "center",
           });
         }
@@ -1683,8 +1694,11 @@ export default function IntroSequence() {
         >
           <div className="mx-auto w-full max-w-6xl">
             {/* Spacing reserved for the persistent stepper, which is a
-                separate fixed element overlaid above this content. */}
-            <div className="mb-10 h-10" aria-hidden="true" />
+                separate fixed element overlaid above this content. Taller on
+                mobile: the stepper's own line-box extends a bit below its
+                fixed top offset, and mobile's single-column stack puts the
+                photo right underneath with no side column to absorb it. */}
+            <div className="mb-16 h-16 sm:mb-10 sm:h-10" aria-hidden="true" />
 
             <div className="grid items-center gap-4 md:gap-14 md:grid-cols-2">
               {/* Invisible spacers: reserve the exact rects the video and
