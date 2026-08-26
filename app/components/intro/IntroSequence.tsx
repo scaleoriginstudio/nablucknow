@@ -1696,7 +1696,7 @@ export default function IntroSequence() {
             // the area actually visible on screen.
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-10 flex flex-col items-center justify-center overflow-hidden bg-white px-8 opacity-0 pointer-events-none"
+          className="z-10 flex flex-col items-center justify-center overflow-hidden bg-white px-8 pb-20 opacity-0 pointer-events-none md:pb-0"
         >
           <div className="mx-auto w-full max-w-6xl">
             {/* Spacing reserved for the persistent stepper, which is a
