@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "static-site",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "5533"],
-      "port": 5533
+      "name": "next-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
     }
   ]
 }
