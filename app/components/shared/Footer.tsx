@@ -38,7 +38,14 @@ export const Footer = forwardRef<HTMLDivElement, { active: boolean }>(function F
     >
       <div className="mx-auto grid w-full max-w-6xl grid-cols-2 gap-8 sm:grid-cols-4">
         <div className="col-span-2 flex flex-col gap-3 sm:col-span-1">
-          <Image src="/img/logo.png" alt="" width={48} height={48} className="h-12 w-12 object-contain" />
+          <Image
+            src="/img/logo.png"
+            alt=""
+            width={64}
+            height={64}
+            className="h-16 w-16 object-contain"
+            style={{ filter: "brightness(0) invert(1)" }}
+          />
           <p className="font-heading text-sm font-bold text-white">National Association for the Blind</p>
           <p className="font-body text-xs text-white/60">State Chapter, Lucknow</p>
           <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1">

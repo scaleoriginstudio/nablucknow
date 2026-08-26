@@ -30,21 +30,21 @@ function EventCard({ event }: { event: UpcomingEvent }) {
   const [registered, setRegistered] = useState(false);
 
   return (
-    <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm">
-      <div className="h-32 w-full overflow-hidden">
+    <div className="flex w-full flex-row items-stretch gap-3 overflow-hidden rounded-2xl border border-black/10 bg-white p-2 shadow-sm sm:flex-col sm:gap-0 sm:p-0">
+      <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg sm:h-32 sm:w-full sm:rounded-none">
         <Image src={event.image} alt="" width={400} height={200} className="h-full w-full object-cover" />
       </div>
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <div className="flex items-center gap-2 font-body text-[11px] font-semibold uppercase tracking-wide text-orange">
+      <div className="flex min-w-0 flex-1 flex-col gap-2 sm:p-4">
+        <div className="hidden items-center gap-2 font-body text-[11px] font-semibold uppercase tracking-wide text-orange sm:flex">
           <span>{event.eventCategory}</span>
           <span className="text-black/30">·</span>
           <span>{event.mode}</span>
         </div>
-        <h3 className="font-heading text-base font-bold leading-tight text-navy">{event.title}</h3>
+        <h3 className="font-heading text-sm font-bold leading-tight text-navy sm:text-base">{event.title}</h3>
         <p className="font-body text-xs text-black/60">{formatDate(event.date)}</p>
-        <p className="font-body text-xs leading-5 text-black/70">{event.description}</p>
+        <p className="hidden font-body text-xs leading-5 text-black/70 sm:block">{event.description}</p>
 
-        <div className="mt-auto flex flex-col gap-2 pt-2">
+        <div className="mt-auto flex flex-col gap-2 sm:pt-2">
           {registered ? (
             <>
               <p className="font-body text-xs font-semibold text-navy">You&apos;re registered. See you there!</p>
@@ -59,7 +59,7 @@ function EventCard({ event }: { event: UpcomingEvent }) {
             </>
           ) : open ? (
             <form
-              className="flex flex-col gap-2"
+              className="flex flex-col gap-1.5"
               onSubmit={(e) => {
                 e.preventDefault();
                 setRegistered(true);
@@ -69,21 +69,21 @@ function EventCard({ event }: { event: UpcomingEvent }) {
                 required
                 type="text"
                 placeholder="Full name"
-                className="border-0 border-b border-black/20 bg-transparent pb-1 font-body text-xs placeholder:text-black/40 focus:border-navy focus:outline-none"
+                className="border-0 border-b border-black/20 bg-transparent pb-0.5 font-body text-xs placeholder:text-black/40 focus:border-navy focus:outline-none"
               />
               <input
                 required
                 type="email"
                 placeholder="Email"
-                className="border-0 border-b border-black/20 bg-transparent pb-1 font-body text-xs placeholder:text-black/40 focus:border-navy focus:outline-none"
+                className="border-0 border-b border-black/20 bg-transparent pb-0.5 font-body text-xs placeholder:text-black/40 focus:border-navy focus:outline-none"
               />
               <button
                 type="submit"
-                className="mt-1 rounded-full bg-orange px-4 py-1.5 font-heading text-xs font-semibold text-white transition-colors hover:bg-navy"
+                className="mt-0.5 rounded-full bg-orange px-4 py-1.5 font-heading text-xs font-semibold text-white transition-colors hover:bg-navy"
               >
                 Pay ₹{event.cost} via Razorpay
               </button>
-              <p className="text-center font-body text-[10px] text-black/40">Secured by Razorpay</p>
+              <p className="hidden text-center font-body text-[10px] text-black/40 sm:block">Secured by Razorpay</p>
             </form>
           ) : (
             <button
@@ -102,12 +102,12 @@ function EventCard({ event }: { event: UpcomingEvent }) {
 
 export function UpcomingEventsStage() {
   return (
-    <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-center gap-6">
+    <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-center gap-3 sm:gap-6">
       <div>
-        <h1 className="font-heading text-2xl font-bold text-navy sm:text-3xl">Upcoming Events</h1>
+        <h1 className="font-heading text-xl font-bold text-navy sm:text-3xl">Upcoming Events</h1>
         <p className="mt-1 font-body text-sm text-black/60">Sign up and reserve your spot.</p>
       </div>
-      <div className="grid gap-6 sm:grid-cols-3">
+      <div className="grid gap-2 sm:grid-cols-3 sm:gap-6">
         {UPCOMING_EVENTS.map((event) => (
           <EventCard key={event.slug} event={event} />
         ))}

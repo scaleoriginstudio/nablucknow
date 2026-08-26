@@ -165,10 +165,10 @@ const logoStyle = (layout: Layout): CSSProperties =>
   layout === "final"
     ? {
         position: "fixed",
-        top: 16,
+        top: 8,
         left: 16,
-        width: 64,
-        height: 64,
+        width: 80,
+        height: 80,
         transform: "none",
         backgroundColor: "#FFFFFF",
         borderRadius: 12,
@@ -1628,22 +1628,22 @@ export default function IntroSequence() {
                 separate fixed element overlaid above this content. */}
             <div className="mb-10 h-10" aria-hidden="true" />
 
-            <div className="grid items-center gap-14 md:grid-cols-2">
+            <div className="grid items-center gap-4 md:gap-14 md:grid-cols-2">
               {/* Invisible spacers: reserve the exact rects the video and
                   headline Flip-morph into, measured at transition time. */}
               <div
                 ref={stage1PhotoSlotRef}
-                className="h-[50vh] max-h-[480px] min-h-[280px] w-full rounded-2xl"
+                className="h-[20vh] max-h-[170px] min-h-[120px] w-full rounded-2xl md:h-[50vh] md:max-h-[480px] md:min-h-[280px]"
                 style={{ visibility: "hidden" }}
               />
 
-              <div className="flex flex-col items-center gap-6 text-center">
+              <div className="flex flex-col items-center gap-3 text-center md:gap-6">
                 <div ref={stage1HeadlineSlotRef} style={{ visibility: "hidden" }} className="w-full">
                   <h2 className="font-heading text-3xl font-bold leading-tight sm:text-4xl">
                     {STAGE1_HEADLINE}
                   </h2>
                 </div>
-                <p ref={paragraphRef} className="font-body text-base leading-7 text-black/70 opacity-0">
+                <p ref={paragraphRef} className="hidden font-body text-black/70 opacity-0 md:block md:text-base md:leading-7">
                   An impact driven NGO that has devoted over 30+ years to the
                   wellbeing of visually impaired individuals, right from
                   primary education to family counselling up until
@@ -1697,12 +1697,12 @@ export default function IntroSequence() {
             {/* Spacing reserved for the persistent stepper. */}
             <div className="mb-10 h-10" aria-hidden="true" />
 
-            <div className="grid items-start gap-10 md:grid-cols-[minmax(0,220px)_minmax(0,1fr)_minmax(0,1fr)]">
+            <div className="grid items-start gap-4 md:gap-10 md:grid-cols-[minmax(0,220px)_minmax(0,1fr)_minmax(0,1fr)]">
               {/* Invisible spacer: reserves the exact rect the word list
                   (a persistent, independently-positioned element) flies into. */}
               <div
                 ref={stage2WordsSlotRef}
-                className="flex flex-col gap-1 font-heading text-3xl"
+                className="hidden flex-col gap-1 font-heading text-3xl md:flex"
                 style={{ visibility: "hidden" }}
               >
                 {STAGE2_STORIES.map((story) => (
@@ -1710,7 +1710,10 @@ export default function IntroSequence() {
                 ))}
               </div>
 
-              <div ref={stage2PhotoRef} className="h-[46vh] max-h-[420px] min-h-[260px] overflow-hidden rounded-2xl opacity-0">
+              <div
+                ref={stage2PhotoRef}
+                className="h-[22vh] max-h-[180px] min-h-[140px] overflow-hidden rounded-2xl opacity-0 md:h-[46vh] md:max-h-[420px] md:min-h-[260px]"
+              >
                 <Image
                   ref={stage2PhotoImgRef}
                   src={STAGE2_STORIES[storyIndex].image}
@@ -1723,18 +1726,18 @@ export default function IntroSequence() {
 
               <div
                 ref={stage2TextRef}
-                className="flex h-[46vh] max-h-[420px] min-h-[260px] flex-col gap-6 opacity-0"
+                className="flex flex-col gap-3 opacity-0 md:h-[46vh] md:max-h-[420px] md:min-h-[260px] md:gap-6"
               >
                 <h2
                   ref={stage2HeadlineRef}
-                  className="font-heading text-2xl font-bold leading-tight text-navy sm:text-3xl"
+                  className="font-heading text-xl font-bold leading-tight text-navy sm:text-3xl"
                 >
                   {STAGE2_STORIES[storyIndex].headline}
                 </h2>
-                <p className="font-body text-base leading-7 text-black/70">{STAGE2_PARAGRAPH}</p>
+                <p className="hidden font-body text-base leading-7 text-black/70 md:block">{STAGE2_PARAGRAPH}</p>
                 <a
                   href="#"
-                  className="mt-auto inline-flex items-center gap-2 font-heading text-sm font-semibold text-orange hover:text-navy"
+                  className="inline-flex items-center gap-2 font-heading text-sm font-semibold text-orange hover:text-navy md:mt-auto"
                 >
                   Read More
                   <Image src="/img/arrow.svg" alt="" width={14} height={14} />
@@ -1801,18 +1804,18 @@ export default function IntroSequence() {
           }}
           className="z-[16] flex flex-col items-center justify-center overflow-hidden px-8 pointer-events-none"
         >
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-10">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 md:gap-10">
             <h2
               ref={stage3HeadlineRef}
-              className="text-center font-heading text-3xl leading-tight font-bold whitespace-pre-line text-white opacity-0 sm:text-4xl"
+              className="text-center font-heading text-2xl leading-tight font-bold whitespace-pre-line text-white opacity-0 sm:text-4xl"
             >
               {STAGE3_HEADLINE}
             </h2>
 
-            <div className="grid items-center gap-10 md:grid-cols-3">
+            <div className="grid items-center gap-3 md:gap-10 md:grid-cols-3">
               <div ref={stage3VisionRef} className="opacity-0">
-                <h3 className="mb-3 font-heading text-2xl font-bold text-white">Our Vision</h3>
-                <p className="font-body text-base leading-7 text-white/80">{STAGE3_BODY}</p>
+                <h3 className="font-heading text-lg font-bold text-white md:mb-3 md:text-2xl">Our Vision</h3>
+                <p className="hidden font-body text-base leading-7 text-white/80 md:block">{STAGE3_BODY}</p>
               </div>
 
               <div ref={stage3PhotoRef} className="overflow-hidden rounded-2xl opacity-0">
@@ -1821,13 +1824,13 @@ export default function IntroSequence() {
                   alt=""
                   width={836}
                   height={964}
-                  className="h-[42vh] max-h-[380px] min-h-[240px] w-full object-cover"
+                  className="h-[20vh] max-h-[160px] min-h-[120px] w-full object-cover md:h-[42vh] md:max-h-[380px] md:min-h-[240px]"
                 />
               </div>
 
               <div ref={stage3MissionRef} className="text-right opacity-0">
-                <p className="font-body text-base leading-7 text-white/80">{STAGE3_BODY}</p>
-                <h3 className="mt-3 font-heading text-2xl font-bold text-white">Our Mission</h3>
+                <p className="hidden font-body text-base leading-7 text-white/80 md:block">{STAGE3_BODY}</p>
+                <h3 className="font-heading text-lg font-bold text-white md:mt-3 md:text-2xl">Our Mission</h3>
               </div>
             </div>
           </div>
@@ -1851,7 +1854,7 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100vh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-center overflow-hidden px-8 pb-28 opacity-0 pointer-events-none"
+          className="z-[16] flex flex-col items-center justify-center overflow-hidden px-8 pb-40 opacity-0 pointer-events-none"
         >
           <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center justify-center">
             <h2
@@ -1935,30 +1938,33 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100vh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center overflow-hidden bg-white px-8 pt-36 pb-10 opacity-0 pointer-events-none"
+          className="z-[16] flex flex-col items-center overflow-hidden bg-white px-8 pt-16 pb-6 opacity-0 pointer-events-none"
         >
-          <div className="mx-auto flex w-full max-w-5xl flex-col gap-8">
-            <h2 className="text-center font-heading text-3xl font-bold text-navy sm:text-4xl">Our Causes</h2>
+          <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">
+            <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">Our Causes</h2>
 
-            <div className="grid gap-6 md:grid-cols-3">
+            <div className="grid gap-3 md:gap-6 md:grid-cols-3">
               {CAUSES.map((cause) => (
-                <div key={cause.title} className="flex flex-col overflow-hidden rounded-2xl bg-orange shadow-lg">
-                  <div className="p-2">
+                <div
+                  key={cause.title}
+                  className="flex flex-row items-center overflow-hidden rounded-2xl bg-orange shadow-lg md:flex-col md:items-stretch"
+                >
+                  <div className="p-2 md:w-full">
                     <Image
                       src={cause.image}
                       alt=""
                       width={640}
                       height={520}
-                      className="h-36 w-full rounded-xl object-cover"
+                      className="h-16 w-16 rounded-xl object-cover md:h-36 md:w-full"
                     />
                   </div>
-                  <div className="flex flex-1 flex-col gap-2 px-5 pb-5 text-center text-white">
-                    <h3 className="font-heading text-xl font-bold">{cause.title}</h3>
-                    <p className="font-body text-xs leading-5 text-white/90">{cause.description}</p>
-                    <p className="mt-1 border-b border-white/50 pb-1 font-body text-xs">
-                      Goal Amount: {formatINR(cause.goalAmount)}
+                  <div className="flex flex-1 flex-col gap-1 py-2 pr-4 text-left text-white md:flex-none md:gap-2 md:px-5 md:pb-5 md:pt-0 md:text-center">
+                    <h3 className="font-heading text-sm font-bold md:text-xl">{cause.title}</h3>
+                    <p className="hidden font-body text-xs leading-5 text-white/90 md:block">{cause.description}</p>
+                    <p className="font-body text-xs text-white/90 md:mt-1 md:border-b md:border-white/50 md:pb-1">
+                      Goal: {formatINR(cause.goalAmount)}
                     </p>
-                    <div className="mt-2 flex items-center justify-center gap-2">
+                    <div className="flex items-center gap-2 md:mt-2 md:justify-center">
                       <button
                         type="button"
                         onClick={openVolunteer}
@@ -1997,8 +2003,8 @@ export default function IntroSequence() {
           }}
           className="z-[16] flex flex-col items-center justify-center overflow-hidden bg-white px-8 opacity-0 pointer-events-none"
         >
-          <div className="mx-auto grid w-full max-w-5xl items-center gap-14 md:grid-cols-2">
-            <div ref={stage7PhotoRef} className="opacity-0">
+          <div className="mx-auto grid w-full max-w-5xl items-center gap-6 md:gap-14 md:grid-cols-2">
+            <div ref={stage7PhotoRef} className="hidden opacity-0 md:block">
               <div className="relative mx-auto aspect-[3/4] w-full max-w-xs overflow-hidden rounded-3xl shadow-lg">
                 <Image
                   ref={stage7PhotoImgRef}
@@ -2012,14 +2018,16 @@ export default function IntroSequence() {
               </div>
             </div>
 
-            <div ref={stage7TextRef} className="flex flex-col gap-4 opacity-0">
-              <span aria-hidden="true" className="font-heading text-6xl leading-none text-orange">
+            <div ref={stage7TextRef} className="flex flex-col gap-2 opacity-0 md:gap-4">
+              <span aria-hidden="true" className="hidden font-heading text-6xl leading-none text-orange md:block">
                 &ldquo;
               </span>
-              <div ref={stage7MessageRef} className="-mt-6">
-                <p className="font-body text-xl leading-8 text-black/80 italic">{TEAM_MEMBERS[teamIndex].message}</p>
-                <div className="mt-4">
-                  <p className="font-heading text-xl font-bold text-navy">{TEAM_MEMBERS[teamIndex].name}</p>
+              <div ref={stage7MessageRef} className="md:-mt-6">
+                <p className="font-body text-base leading-6 text-black/80 italic md:text-xl md:leading-8">
+                  {TEAM_MEMBERS[teamIndex].message}
+                </p>
+                <div className="mt-2 md:mt-4">
+                  <p className="font-heading text-lg font-bold text-navy md:text-xl">{TEAM_MEMBERS[teamIndex].name}</p>
                   <p className="font-body text-sm text-black/60">{TEAM_MEMBERS[teamIndex].role}</p>
                 </div>
               </div>
@@ -2047,7 +2055,7 @@ export default function IntroSequence() {
           <div className="relative h-full w-full">
             <div
               ref={stage8MarqueeBlockRef}
-              className="absolute inset-0 flex flex-col items-center justify-center gap-10 px-8 pt-28"
+              className="absolute inset-0 flex flex-col items-center justify-center gap-10 px-8 pt-16 md:pt-28"
             >
               <h2 className="text-center font-heading text-3xl font-bold text-navy sm:text-4xl">Our Sponsors</h2>
 
@@ -2070,12 +2078,12 @@ export default function IntroSequence() {
 
             <div
               ref={stage8CtaBlockRef}
-              className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-8 pt-28 opacity-0 pointer-events-none"
+              className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-8 pt-16 opacity-0 pointer-events-none md:pt-28"
             >
-              <div className="grid w-full max-w-5xl items-center gap-10 md:grid-cols-[1fr_1.3fr]">
+              <div className="grid w-full max-w-5xl items-center gap-4 md:gap-10 md:grid-cols-[1fr_1.3fr]">
                 <div
                   ref={stage8CtaImageRef}
-                  className="relative mx-auto aspect-[4/5] w-full max-w-xs overflow-hidden rounded-3xl shadow-lg"
+                  className="relative mx-auto hidden aspect-[4/5] w-full max-w-xs overflow-hidden rounded-3xl shadow-lg md:block"
                 >
                   <Image src={CTA_TAB_META[ctaTab].image} alt="" fill sizes="320px" className="object-cover" />
                   <span className="absolute bottom-4 left-4 rounded-full bg-white/90 px-3 py-1 font-heading text-xs font-semibold text-black/70">
@@ -2083,8 +2091,8 @@ export default function IntroSequence() {
                   </span>
                 </div>
 
-                <div className="flex flex-col gap-4">
-                  <h2 className="font-heading text-3xl font-bold text-navy sm:text-4xl">Support Our Mission</h2>
+                <div className="flex flex-col gap-3 md:gap-4">
+                  <h2 className="font-heading text-xl font-bold text-navy sm:text-4xl">Support Our Mission</h2>
 
                   <div className="flex gap-2">
                     {(["volunteer", "donate", "csr"] as const).map((tab) => (
@@ -2106,9 +2114,11 @@ export default function IntroSequence() {
 
                   <div ref={stage8CtaFormRef}>
                     {ctaTab === "donate" && (
-                      <form onSubmit={(event) => event.preventDefault()} className="flex flex-col gap-5">
+                      <form onSubmit={(event) => event.preventDefault()} className="flex flex-col gap-3 md:gap-5">
                         <div>
-                          <p className="mb-2 font-heading text-sm font-semibold text-black/70">Choose an amount</p>
+                          <p className="mb-1.5 font-heading text-sm font-semibold text-black/70 md:mb-2">
+                            Choose an amount
+                          </p>
                           <div className="grid grid-cols-4 gap-2">
                             {DONATION_AMOUNTS.map((amount) => (
                               <button
@@ -2117,7 +2127,7 @@ export default function IntroSequence() {
                                 onClick={() => setDonationAmount(amount)}
                                 aria-pressed={donationAmount === amount}
                                 className={
-                                  "rounded-lg border py-2 font-heading text-sm font-semibold transition-colors " +
+                                  "rounded-lg border py-1.5 font-heading text-sm font-semibold transition-colors md:py-2 " +
                                   (donationAmount === amount
                                     ? "border-orange bg-orange text-white"
                                     : "border-navy/30 text-navy hover:bg-navy hover:text-white")
@@ -2128,13 +2138,13 @@ export default function IntroSequence() {
                             ))}
                           </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-5">
+                        <div className="grid grid-cols-2 gap-3 md:gap-5">
                           <label className="flex flex-col">
                             <span className="sr-only">Full name</span>
                             <input
                               type="text"
                               placeholder="Full name"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-2 font-body text-sm text-black outline-none focus:border-navy"
+                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
                             />
                           </label>
                           <label className="flex flex-col">
@@ -2142,18 +2152,18 @@ export default function IntroSequence() {
                             <input
                               type="email"
                               placeholder="Email"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-2 font-body text-sm text-black outline-none focus:border-navy"
+                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
                             />
                           </label>
                         </div>
-                        <div className="flex flex-col gap-4 border-t border-black/10 pt-4 sm:flex-row sm:items-center sm:gap-6">
+                        <div className="flex flex-col gap-3 border-t border-black/10 pt-3 sm:flex-row sm:items-center sm:gap-6 md:gap-4 md:pt-4">
                           <button
                             type="submit"
-                            className="self-start rounded-full bg-orange px-8 py-3 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy"
+                            className="self-start rounded-full bg-orange px-8 py-2.5 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy md:py-3"
                           >
                             Donate Now
                           </button>
-                          <div className="flex items-center gap-3 sm:border-l sm:border-black/10 sm:pl-6">
+                          <div className="hidden items-center gap-3 sm:flex sm:border-l sm:border-black/10 sm:pl-6">
                             <div
                               aria-hidden="true"
                               className="h-12 w-12 shrink-0 rounded-md border border-black/15"
@@ -2175,14 +2185,14 @@ export default function IntroSequence() {
                     )}
 
                     {ctaTab === "volunteer" && (
-                      <form onSubmit={(event) => event.preventDefault()} className="flex flex-col gap-5">
-                        <div className="grid grid-cols-2 gap-5">
+                      <form onSubmit={(event) => event.preventDefault()} className="flex flex-col gap-3 md:gap-5">
+                        <div className="grid grid-cols-2 gap-3 md:gap-5">
                           <label className="flex flex-col">
                             <span className="sr-only">Full name</span>
                             <input
                               type="text"
                               placeholder="Full name"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-2 font-body text-sm text-black outline-none focus:border-navy"
+                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
                             />
                           </label>
                           <label className="flex flex-col">
@@ -2190,7 +2200,7 @@ export default function IntroSequence() {
                             <input
                               type="tel"
                               placeholder="Phone number"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-2 font-body text-sm text-black outline-none focus:border-navy"
+                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
                             />
                           </label>
                         </div>
@@ -2199,7 +2209,7 @@ export default function IntroSequence() {
                           <input
                             type="email"
                             placeholder="Email"
-                            className="border-0 border-b border-black/20 bg-transparent px-0.5 py-2 font-body text-sm text-black outline-none focus:border-navy"
+                            className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
                           />
                         </label>
                         <label className="flex flex-col">
@@ -2207,7 +2217,7 @@ export default function IntroSequence() {
                           <input
                             type="text"
                             placeholder="How would you like to help? (teaching, events, admin...)"
-                            className="border-0 border-b border-black/20 bg-transparent px-0.5 py-2 font-body text-sm text-black outline-none focus:border-navy"
+                            className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
                           />
                         </label>
                         <button
@@ -2220,14 +2230,14 @@ export default function IntroSequence() {
                     )}
 
                     {ctaTab === "csr" && (
-                      <form onSubmit={(event) => event.preventDefault()} className="flex flex-col gap-5">
-                        <div className="grid grid-cols-2 gap-5">
+                      <form onSubmit={(event) => event.preventDefault()} className="flex flex-col gap-3 md:gap-5">
+                        <div className="grid grid-cols-2 gap-3 md:gap-5">
                           <label className="flex flex-col">
                             <span className="sr-only">Company name</span>
                             <input
                               type="text"
                               placeholder="Company name"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-2 font-body text-sm text-black outline-none focus:border-navy"
+                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
                             />
                           </label>
                           <label className="flex flex-col">
@@ -2235,17 +2245,17 @@ export default function IntroSequence() {
                             <input
                               type="text"
                               placeholder="Contact person"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-2 font-body text-sm text-black outline-none focus:border-navy"
+                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
                             />
                           </label>
                         </div>
-                        <div className="grid grid-cols-2 gap-5">
+                        <div className="grid grid-cols-2 gap-3 md:gap-5">
                           <label className="flex flex-col">
                             <span className="sr-only">Work email</span>
                             <input
                               type="email"
                               placeholder="Work email"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-2 font-body text-sm text-black outline-none focus:border-navy"
+                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
                             />
                           </label>
                           <label className="flex flex-col">
@@ -2253,7 +2263,7 @@ export default function IntroSequence() {
                             <input
                               type="tel"
                               placeholder="Phone number"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-2 font-body text-sm text-black outline-none focus:border-navy"
+                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
                             />
                           </label>
                         </div>
@@ -2262,7 +2272,7 @@ export default function IntroSequence() {
                           <input
                             type="text"
                             placeholder="Area of partnership interest"
-                            className="border-0 border-b border-black/20 bg-transparent px-0.5 py-2 font-body text-sm text-black outline-none focus:border-navy"
+                            className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
                           />
                         </label>
                         <button
@@ -2293,18 +2303,20 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100vh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-center overflow-hidden bg-white px-8 pt-28 opacity-0 pointer-events-none"
+          className="z-[16] flex flex-col items-center justify-center overflow-hidden bg-white px-8 pt-12 opacity-0 pointer-events-none md:pt-28"
         >
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-10">
-            <h2 className="text-center font-heading text-3xl font-bold text-navy sm:text-4xl">What People Say</h2>
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 md:gap-10">
+            <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">What People Say</h2>
 
-            <div className="grid gap-8 md:grid-cols-3">
+            <div className="grid gap-3 md:gap-8 md:grid-cols-3">
               {TESTIMONIALS.map((testimonial, i) => (
-                <div key={i} className="flex flex-col gap-4 rounded-2xl border border-black/10 p-6">
-                  <span aria-hidden="true" className="font-heading text-5xl leading-none text-orange">
+                <div key={i} className="flex flex-col gap-2 rounded-2xl border border-black/10 p-3 md:gap-4 md:p-6">
+                  <span aria-hidden="true" className="hidden font-heading text-5xl leading-none text-orange md:block">
                     &ldquo;
                   </span>
-                  <p className="-mt-4 font-body text-sm leading-6 text-black/80 italic">{testimonial.quote}</p>
+                  <p className="font-body text-xs leading-5 text-black/80 italic md:-mt-4 md:text-sm md:leading-6">
+                    {testimonial.quote}
+                  </p>
                   <div className="mt-auto">
                     <p className="font-heading text-sm font-bold text-navy">{testimonial.name}</p>
                     <p className="font-body text-xs text-black/50">{testimonial.role}</p>
@@ -2328,25 +2340,25 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100vh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-center overflow-hidden bg-white px-8 pt-28 opacity-0 pointer-events-none"
+          className="z-[16] flex flex-col items-center justify-center overflow-hidden bg-white px-8 pt-16 opacity-0 pointer-events-none md:pt-28"
         >
-          <div className="mx-auto flex w-full max-w-5xl flex-col gap-4">
-            <h2 className="text-center font-heading text-3xl font-bold text-navy sm:text-4xl">
+          <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 md:gap-4">
+            <h2 className="text-center font-heading text-xl font-bold text-navy sm:text-4xl">
               Aligned with the UN Sustainable Development Goals
             </h2>
-            <p className="mx-auto max-w-2xl text-center font-body text-sm leading-6 text-black/60">
+            <p className="mx-auto hidden max-w-2xl text-center font-body text-sm leading-6 text-black/60 sm:block">
               Our work maps directly onto five of the UN&apos;s Sustainable Development Goals.
             </p>
 
-            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-5">
+            <div className="mt-2 grid grid-cols-5 gap-1.5 sm:mt-4 sm:gap-4">
               {SDG_GOALS.map((goal) => (
                 <div
                   key={goal.number}
-                  className="flex aspect-square flex-col items-center justify-center gap-2 rounded-2xl p-4 text-center text-white shadow-md"
+                  className="flex aspect-square flex-col items-center justify-center gap-0.5 rounded-lg p-1 text-center text-white shadow-md sm:gap-2 sm:rounded-2xl sm:p-4"
                   style={{ backgroundColor: goal.color }}
                 >
-                  <span className="font-heading text-4xl font-bold">{goal.number}</span>
-                  <span className="font-body text-xs leading-tight font-semibold">{goal.title}</span>
+                  <span className="font-heading text-base font-bold sm:text-4xl">{goal.number}</span>
+                  <span className="hidden font-body text-xs leading-tight font-semibold sm:block">{goal.title}</span>
                 </div>
               ))}
             </div>

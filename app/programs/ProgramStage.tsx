@@ -5,7 +5,9 @@ import Image from "next/image";
 import type { Program } from "./programs-data";
 
 const fieldClass =
-  "rounded-lg border border-black/12 bg-white px-3 py-2 font-body text-sm text-black placeholder:text-black/40 transition-colors focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy/10";
+  "border-0 border-b-2 border-black/15 bg-transparent px-0 py-1 font-body text-sm text-black placeholder:text-black/35 transition-colors focus:border-navy focus:outline-none md:py-1.5";
+
+const labelClass = "font-heading text-[11px] font-semibold uppercase tracking-wide text-black/55";
 
 function CheckIcon() {
   return (
@@ -15,7 +17,15 @@ function CheckIcon() {
   );
 }
 
-export function ProgramStage({ program, reverse }: { program: Program; reverse?: boolean }) {
+function ArrowIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" aria-hidden="true">
+      <path d="M5 12h13.5M13 6l6.5 6-6.5 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function ProgramStage({ program }: { program: Program; reverse?: boolean }) {
   const [sent, setSent] = useState(false);
 
   return (
@@ -24,36 +34,34 @@ export function ProgramStage({ program, reverse }: { program: Program; reverse?:
         {/* Spacing reserved for the persistent stepper, which is a separate
             fixed element overlaid above this content — same convention the
             homepage's own stage stepper uses. */}
-        <div className="mb-10 h-10 shrink-0" aria-hidden="true" />
+        <div className="mb-6 h-6 shrink-0 sm:mb-12 sm:h-10" aria-hidden="true" />
 
-        <div className="grid min-h-0 flex-1 gap-8 pb-4 md:grid-cols-2 md:items-stretch">
-          <div className={"relative hidden overflow-hidden rounded-2xl md:block" + (reverse ? " md:order-2" : "")}>
-            <Image
-              src={program.image}
-              alt={program.imageAlt}
-              fill
-              sizes="(min-width: 768px) 45vw, 100vw"
-              className="object-cover"
-            />
-            <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 font-heading text-[11px] font-bold uppercase tracking-wide text-navy shadow-sm backdrop-blur-sm">
-              {program.format}
-            </span>
+        <div className="grid min-h-0 flex-1 items-start gap-5 overflow-hidden pb-2 md:gap-10 md:grid-cols-[0.8fr_1fr_1fr] md:pb-4">
+          {/* Column 1: photo */}
+          <div className="hidden md:flex md:items-start md:justify-center">
+            <div className="relative aspect-[4/5] w-full max-w-[260px] overflow-hidden rounded-2xl shadow-sm">
+              <Image src={program.image} alt={program.imageAlt} fill sizes="260px" className="object-cover" />
+              <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 font-heading text-[11px] font-bold uppercase tracking-wide text-navy shadow-sm backdrop-blur-sm">
+                {program.format}
+              </span>
+            </div>
           </div>
 
-          <div className="flex flex-col justify-center gap-3 overflow-hidden">
-          <div>
-            <span className="mb-1 inline-block rounded-full bg-navy/8 px-2.5 py-0.5 font-heading text-[11px] font-bold uppercase tracking-wide text-navy md:hidden">
+          {/* Column 2: the pitch */}
+          <div className="flex flex-col gap-2 overflow-hidden md:gap-3">
+            <span className="w-fit rounded-full bg-navy/8 px-2.5 py-0.5 font-heading text-[11px] font-bold uppercase tracking-wide text-navy md:hidden">
               {program.format}
             </span>
-            <h2 className="font-heading text-xl font-bold leading-tight text-navy sm:text-2xl md:text-3xl">
-              {program.title}
-            </h2>
-            <p className="mt-1 font-heading text-xs font-semibold text-orange sm:text-sm">{program.subtitle}</p>
-          </div>
+            <div>
+              <h2 className="font-heading text-lg font-bold leading-tight text-navy md:text-2xl">
+                {program.title}
+              </h2>
+              <p className="mt-1 font-heading text-xs font-semibold text-orange md:text-sm">{program.subtitle}</p>
+            </div>
 
-          <div className="hidden flex-col gap-2 sm:flex">
-            <p className="font-body text-sm leading-6 text-black/70">{program.hook}</p>
-            <ul className="flex flex-col gap-1">
+            <p className="hidden font-body text-sm leading-5 text-black/70 md:block">{program.hook}</p>
+
+            <ul className="hidden flex-col gap-1 md:flex">
               {program.highlights.map((point) => (
                 <li key={point} className="flex items-start gap-2 font-body text-sm leading-5 text-black/70">
                   <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-navy/10 text-navy">
@@ -65,61 +73,70 @@ export function ProgramStage({ program, reverse }: { program: Program; reverse?:
             </ul>
           </div>
 
-          <div className="flex flex-col gap-2.5 rounded-xl border border-navy/15 bg-navy/5 p-3">
-            <div className="flex flex-wrap items-center justify-between gap-2">
+          {/* Column 3: the ask */}
+          <div className="flex flex-col gap-3 overflow-hidden md:gap-4">
+            <div className="flex flex-col gap-1.5 md:gap-2">
               <div>
-                <p className="font-body text-[11px] uppercase tracking-wide text-black/50">Suggested contribution</p>
-                <p className="font-heading text-lg font-bold text-navy">{program.contributionAmount}</p>
+                <p className={labelClass}>Program fee</p>
+                <p className="font-heading text-xl font-bold text-navy md:text-2xl">{program.contributionAmount}</p>
               </div>
-              <span className="rounded-full bg-white px-2.5 py-1 font-heading text-[11px] font-semibold text-navy ring-1 ring-navy/15">
-                {program.audience}
-              </span>
+              <div className="hidden flex-wrap items-center gap-2 md:flex">
+                <span className="rounded-full bg-navy/8 px-2.5 py-1 font-heading text-[11px] font-semibold text-navy">
+                  {program.audience}
+                </span>
+                <span className="rounded-full bg-orange/10 px-2.5 py-1 font-heading text-[11px] font-semibold text-orange">
+                  CSR eligible
+                </span>
+              </div>
+              <p className="hidden font-body text-xs leading-5 text-black/55 md:block">{program.impact}</p>
             </div>
-            <p className="font-body text-xs text-black/60">{program.impact}</p>
 
             {sent ? (
-              <p className="font-body text-sm text-navy">
-                Thank you. Our partnerships team will reach out to confirm details.
-              </p>
+              <div className="flex items-start gap-2 border-t border-black/8 pt-3 md:pt-4">
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-navy text-white">
+                  <CheckIcon />
+                </span>
+                <p className="font-body text-sm leading-5 text-navy">
+                  Thank you. Our partnerships team will reach out to confirm details.
+                </p>
+              </div>
             ) : (
               <form
-                className="grid grid-cols-2 gap-x-3 gap-y-1.5 border-t border-navy/10 pt-2.5"
+                className="flex flex-col gap-3 border-t border-black/8 pt-3 md:gap-3 md:pt-4"
                 onSubmit={(event) => {
                   event.preventDefault();
                   setSent(true);
                 }}
               >
-                <label className="col-span-2 flex flex-col gap-1 sm:col-span-1">
-                  <span className="sr-only">Full name</span>
-                  <input required type="text" placeholder="Full name" className={fieldClass} />
-                </label>
-                <label className="col-span-2 flex flex-col gap-1 sm:col-span-1">
-                  <span className="sr-only">Organisation</span>
-                  <input required type="text" placeholder="Organisation" className={fieldClass} />
-                </label>
-                <label className="col-span-2 flex flex-col gap-1 sm:col-span-1">
-                  <span className="sr-only">Position</span>
-                  <input required type="text" placeholder="Position" className={fieldClass} />
-                </label>
-                <label className="col-span-2 flex flex-col gap-1 sm:col-span-1">
-                  <span className="sr-only">Work email</span>
-                  <input required type="email" placeholder="Work email" className={fieldClass} />
-                </label>
-                <label className="col-span-2 flex flex-col gap-1 sm:col-span-1">
-                  <span className="sr-only">Phone number</span>
-                  <input required type="tel" placeholder="Phone number" className={fieldClass} />
-                </label>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+                  <label className="flex flex-col gap-1">
+                    <span className={labelClass}>Name</span>
+                    <input required type="text" placeholder="Jane Doe" className={fieldClass} />
+                  </label>
+                  <label className="flex flex-col gap-1">
+                    <span className={labelClass}>Number</span>
+                    <input required type="tel" placeholder="+91 98765 43210" className={fieldClass} />
+                  </label>
+                  <label className="flex flex-col gap-1">
+                    <span className={labelClass}>Email</span>
+                    <input required type="email" placeholder="you@email.com" className={fieldClass} />
+                  </label>
+                  <label className="flex flex-col gap-1">
+                    <span className={labelClass}>Date</span>
+                    <input required type="date" className={fieldClass} />
+                  </label>
+                </div>
                 <button
                   type="submit"
-                  className="col-span-2 self-end rounded-full bg-orange px-5 py-2 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy sm:col-span-1"
+                  className="mt-1 flex items-center justify-center gap-2 self-start rounded-full bg-orange px-8 py-2.5 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy"
                 >
-                  Request this fundraiser
+                  Enquire
+                  <ArrowIcon />
                 </button>
               </form>
             )}
           </div>
         </div>
-      </div>
       </div>
     </div>
   );

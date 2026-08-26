@@ -11,12 +11,12 @@ import { useOverlay } from "./OverlayContext";
 
 function StageStepper({ active, total }: { active: number; total: number }) {
   return (
-    <div className="flex w-full items-baseline justify-center gap-6 font-body">
+    <div className="flex w-full items-baseline justify-center gap-4 font-body sm:gap-6">
       {Array.from({ length: total }, (_, i) => i + 1).map((n) => (
         <span
           key={n}
           style={{ transition: "color 500ms ease-out, font-size 500ms ease-out" }}
-          className={n === active ? "text-4xl font-bold text-navy" : "text-lg font-semibold text-black/25"}
+          className={n === active ? "text-2xl font-bold text-navy sm:text-4xl" : "text-sm font-semibold text-black/25 sm:text-lg"}
         >
           {String(n).padStart(2, "0")}
         </span>
@@ -195,14 +195,14 @@ export function StagePager({ stages }: { stages: React.ReactNode[] }) {
       <Link
         href="/"
         aria-label="Go to homepage"
-        style={{ position: "fixed", top: 16, left: 16, width: 64, height: 64, ...fade(!onFooter) }}
+        style={{ position: "fixed", top: 8, left: 16, width: 80, height: 80, ...fade(!onFooter) }}
         className="z-40 flex items-center justify-center rounded-xl bg-white p-2"
       >
         <Image
           src="/img/logo.png"
           alt="National Association for the Blind"
-          width={64}
-          height={64}
+          width={80}
+          height={80}
           className="h-full w-full object-contain"
         />
       </Link>

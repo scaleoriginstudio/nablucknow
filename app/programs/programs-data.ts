@@ -13,8 +13,14 @@ export type Program = {
 };
 
 // Every programme below is a fundraiser: corporates and schools book a
-// session for their own people, and the contribution funds NAB's work
+// session for their own people at a flat fee, and it funds NAB's work
 // directly. None of these are open to individual public registration.
+//
+// Each falls under Schedule VII of the Companies Act, 2013 — "promoting
+// education, including special education and employment enhancing
+// vocation skills especially among... the differently abled" — so the
+// fee is eligible CSR spend for companies with a CSR obligation under
+// Section 135, not just a donation.
 export const PROGRAMS: Program[] = [
   {
     slug: "workplace-inclusivity",
@@ -32,7 +38,8 @@ export const PROGRAMS: Program[] = [
       "Live Q&A for HR teams",
     ],
     contributionAmount: "₹25,000 per session",
-    impact: "Proceeds go toward NAB's vocational training programme.",
+    impact:
+      "Proceeds go toward NAB's vocational training programme — eligible CSR spend under Schedule VII of the Companies Act, 2013.",
   },
   {
     slug: "nukkad-naatak",
@@ -50,7 +57,8 @@ export const PROGRAMS: Program[] = [
       "Every line and cue learned by ear, no scripts",
     ],
     contributionAmount: "₹15,000 per performance",
-    impact: "Funds the students' continued theatre training.",
+    impact:
+      "Funds the students' continued theatre training — eligible CSR spend under Schedule VII of the Companies Act, 2013.",
   },
   {
     slug: "walk-for-a-cause",
@@ -68,6 +76,7 @@ export const PROGRAMS: Program[] = [
       "Smart canes provided by NAB",
     ],
     contributionAmount: "₹1,000 per participant",
-    impact: "Contribution funds NAB's work directly.",
+    impact:
+      "Funds NAB's work directly — eligible CSR spend under Schedule VII of the Companies Act, 2013.",
   },
 ];

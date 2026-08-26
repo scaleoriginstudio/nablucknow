@@ -58,22 +58,22 @@ export function DonateStage() {
   };
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-center gap-2 sm:gap-5">
+    <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-center gap-2 md:gap-5">
       <div className="flex flex-col gap-1">
-        <span className="hidden font-heading text-xs font-bold uppercase tracking-wide text-orange sm:block">
+        <span className="hidden font-heading text-xs font-bold uppercase tracking-wide text-orange md:block">
           Donate
         </span>
-        <h1 className="font-heading text-xl font-bold leading-tight text-navy sm:text-2xl md:text-3xl">
+        <h1 className="font-heading text-xl font-bold leading-tight text-navy md:text-3xl">
           Put your gift where you can see it
         </h1>
-        <p className="hidden font-body text-sm leading-6 text-black/60 sm:block">
+        <p className="hidden font-body text-sm leading-6 text-black/60 md:block">
           Choose a cause to see its progress update in real time as you give.
         </p>
       </div>
 
       <div className="grid gap-2 md:grid-cols-[1.15fr_1fr] md:items-start md:gap-5">
         {/* Cause list */}
-        <div className="flex flex-col gap-1.5 sm:gap-2.5">
+        <div className="flex flex-col gap-1.5 md:gap-2.5">
           {causes.map((c) => {
             const pct = Math.min(100, Math.round((c.raisedAmount / c.goalAmount) * 100));
             const isSelected = c.slug === causeSlug;
@@ -84,11 +84,11 @@ export function DonateStage() {
                 onClick={() => selectCause(c.slug)}
                 aria-pressed={isSelected}
                 className={
-                  "flex items-center gap-2 rounded-xl border bg-white p-1.5 text-left transition-all sm:gap-3 sm:p-2.5 " +
+                  "flex items-center gap-2 rounded-xl border bg-white p-1.5 text-left transition-all md:gap-3 md:p-2.5 " +
                   (isSelected ? "border-orange shadow-md ring-2 ring-orange/25" : "border-black/10 hover:border-navy/30 hover:shadow-sm")
                 }
               >
-                <div className="relative h-9 w-11 shrink-0 overflow-hidden rounded-lg sm:h-14 sm:w-16">
+                <div className="relative h-9 w-11 shrink-0 overflow-hidden rounded-lg md:h-14 md:w-16">
                   <Image src={c.image} alt="" fill sizes="64px" className="object-cover" />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -102,7 +102,7 @@ export function DonateStage() {
                       style={{ width: `${pct}%` }}
                     />
                   </div>
-                  <p className="hidden font-body text-[11px] text-black/50 sm:block">
+                  <p className="hidden font-body text-[11px] text-black/50 md:block">
                     {formatINR(c.raisedAmount)} raised of {formatINR(c.goalAmount)} goal
                   </p>
                 </div>
@@ -121,7 +121,7 @@ export function DonateStage() {
         </div>
 
         {/* Donation panel */}
-        <div className="flex flex-col gap-2 rounded-2xl border border-black/10 bg-white p-3 shadow-lg sm:gap-3.5 sm:p-5">
+        <div className="flex flex-col gap-2 rounded-2xl border border-black/10 bg-white p-3 shadow-lg md:gap-3.5 md:p-5">
           <div>
             <p className="font-body text-[11px] uppercase tracking-wide text-black/45">Donating to</p>
             <p className="font-heading text-sm font-bold text-navy">{cause.title}</p>
@@ -146,7 +146,7 @@ export function DonateStage() {
               </button>
             </div>
           ) : (
-            <form className="flex flex-col gap-2 sm:gap-3.5" onSubmit={handleSubmit}>
+            <form className="flex flex-col gap-2 md:gap-3.5" onSubmit={handleSubmit}>
               <div>
                 <p className="mb-1.5 font-heading text-xs font-semibold uppercase tracking-wide text-black/50">
                   Choose an amount
@@ -185,7 +185,7 @@ export function DonateStage() {
               >
                 {amount ? `Pay ₹${amount} via Razorpay` : "Choose an amount"}
               </button>
-              <div className="hidden items-center gap-1.5 font-body text-xs text-black/50 sm:flex">
+              <div className="hidden items-center gap-1.5 font-body text-xs text-black/50 md:flex">
                 <ShieldIcon />
                 Secured by Razorpay
               </div>
