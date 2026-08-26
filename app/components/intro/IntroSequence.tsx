@@ -1060,12 +1060,30 @@ export default function IntroSequence() {
           0,
         );
         tl.to(stage1Ref.current, { opacity: 1, duration: dur ?? 0.35 }, 0);
-        tl.fromTo(
-          [stepperGroupRef.current, ...newTargets],
-          { opacity: 0, y: 60 },
-          { opacity: 1, y: 0, duration: dur ?? 0.6, stagger: dur ? 0 : 0.1, ease: "power2.out" },
-          dur ? 0 : 0.3,
-        );
+        if (isMobile) {
+          // On mobile the stepper drops in from above while the paragraph
+          // and CTA rise from below, a converging entrance instead of the
+          // single bottom-up fly used on desktop.
+          tl.fromTo(
+            stepperGroupRef.current,
+            { opacity: 0, y: -60 },
+            { opacity: 1, y: 0, duration: dur ?? 0.6, ease: "power2.out" },
+            dur ? 0 : 0.3,
+          );
+          tl.fromTo(
+            newTargets,
+            { opacity: 0, y: 60 },
+            { opacity: 1, y: 0, duration: dur ?? 0.6, stagger: dur ? 0 : 0.1, ease: "power2.out" },
+            dur ? 0 : 0.3,
+          );
+        } else {
+          tl.fromTo(
+            [stepperGroupRef.current, ...newTargets],
+            { opacity: 0, y: 60 },
+            { opacity: 1, y: 0, duration: dur ?? 0.6, stagger: dur ? 0 : 0.1, ease: "power2.out" },
+            dur ? 0 : 0.3,
+          );
+        }
       } else if (next === 0 && current === 1) {
         const flipState = Flip.getState(flipTargets, { props: "color,fontSize,borderRadius" });
 
@@ -1625,8 +1643,15 @@ export default function IntroSequence() {
         <div
           ref={stage2WordsRef}
           aria-hidden={activeStage !== 2}
-          className="z-[11] flex flex-col gap-1 font-heading text-3xl"
-          style={{ position: "fixed", top: "calc(100vh - 64px)", left: 64, opacity: 0.15 }}
+          className={
+            "z-[11] font-heading " +
+            (isMobile ? "flex flex-row flex-wrap justify-center gap-3 text-lg" : "flex flex-col gap-1 text-3xl")
+          }
+          style={
+            isMobile
+              ? { position: "fixed", top: "calc(100vh - 56px)", left: 0, width: "100vw", opacity: 0.15 }
+              : { position: "fixed", top: "calc(100vh - 64px)", left: 64, opacity: 0.15 }
+          }
         >
           {STAGE2_STORIES.map((story, i) => (
             <span
@@ -1676,7 +1701,7 @@ export default function IntroSequence() {
                     {STAGE1_HEADLINE}
                   </h2>
                 </div>
-                <p ref={paragraphRef} className="hidden font-body text-black/70 opacity-0 md:block md:text-base md:leading-7">
+                <p ref={paragraphRef} className="block font-body text-sm text-black/70 opacity-0 leading-6 md:text-base md:leading-7">
                   An impact driven NGO that has devoted over 30+ years to the
                   wellbeing of visually impaired individuals, right from
                   primary education to family counselling up until
