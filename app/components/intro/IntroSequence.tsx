@@ -1923,7 +1923,7 @@ export default function IntroSequence() {
             // dvh, not vh — see the equivalent note on stage 1's container.
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-center overflow-hidden px-8 pointer-events-none"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden px-8 pt-16 pointer-events-none md:justify-center md:pt-0"
         >
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 md:gap-10">
             <h2
@@ -1977,9 +1977,9 @@ export default function IntroSequence() {
             top: HEADER_HEIGHT,
             left: 0,
             width: "100vw",
-            height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+            height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-center overflow-hidden px-8 pb-40 opacity-0 pointer-events-none"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden px-8 pt-16 pb-40 opacity-0 pointer-events-none md:justify-center md:pt-0"
         >
           <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center justify-center">
             <h2
@@ -2130,7 +2130,7 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-center overflow-hidden bg-white px-8 opacity-0 pointer-events-none"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-16 opacity-0 pointer-events-none md:justify-center md:pt-0"
         >
           <div className="mx-auto grid w-full max-w-5xl items-center gap-6 md:gap-14 md:grid-cols-2">
             <div ref={stage7PhotoRef} className="opacity-0">
@@ -2184,7 +2184,7 @@ export default function IntroSequence() {
           <div className="relative h-full w-full">
             <div
               ref={stage8MarqueeBlockRef}
-              className="absolute inset-0 flex flex-col items-center justify-center gap-10 px-8 pt-16 md:pt-28"
+              className="absolute inset-0 flex flex-col items-center justify-start gap-10 px-8 pt-16 md:justify-center md:pt-28"
             >
               <h2 className="text-center font-heading text-3xl font-bold text-navy sm:text-4xl">Our Sponsors</h2>
 
@@ -2207,7 +2207,7 @@ export default function IntroSequence() {
 
             <div
               ref={stage8CtaBlockRef}
-              className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-8 pt-16 opacity-0 pointer-events-none md:pt-28"
+              className="absolute inset-0 flex flex-col items-center justify-start gap-6 px-8 pt-16 opacity-0 pointer-events-none md:justify-center md:pt-28"
             >
               <div className="grid w-full max-w-5xl items-center gap-4 md:gap-10 md:grid-cols-[1fr_1.3fr]">
                 <div
@@ -2430,9 +2430,9 @@ export default function IntroSequence() {
             top: HEADER_HEIGHT,
             left: 0,
             width: "100vw",
-            height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+            height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-center overflow-hidden bg-white px-8 pt-12 opacity-0 pointer-events-none md:pt-28"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-12 opacity-0 pointer-events-none md:justify-center md:pt-28"
         >
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 md:gap-10">
             <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">What People Say</h2>
@@ -2467,9 +2467,9 @@ export default function IntroSequence() {
             top: HEADER_HEIGHT,
             left: 0,
             width: "100vw",
-            height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+            height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-center overflow-hidden bg-white px-8 pt-16 opacity-0 pointer-events-none md:pt-28"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-16 opacity-0 pointer-events-none md:justify-center md:pt-28"
         >
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 md:gap-4">
             <h2 className="text-center font-heading text-xl font-bold text-navy sm:text-4xl">
