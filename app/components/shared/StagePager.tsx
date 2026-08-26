@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { HEADER_HEIGHT, NAV_LINKS } from "./constants";
 import { Footer } from "./Footer";
+import { MobileNav } from "./MobileNav";
 import { useOverlay } from "./OverlayContext";
 
 function StageStepper({ active, total }: { active: number; total: number }) {
@@ -155,7 +156,7 @@ export function StagePager({ stages }: { stages: React.ReactNode[] }) {
         style={fade(!onFooter)}
         className="fixed inset-x-0 top-0 z-30 flex h-24 items-center justify-end gap-8 bg-white px-8"
       >
-        <nav aria-label="Primary" className="flex items-center gap-7">
+        <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
           {NAV_LINKS.map((link) => {
             const isCurrent = link.href === "/" ? pathname === "/" : pathname?.startsWith(link.href);
             return (
@@ -173,7 +174,7 @@ export function StagePager({ stages }: { stages: React.ReactNode[] }) {
             );
           })}
         </nav>
-        <div className="flex items-center gap-3">
+        <div className="hidden items-center gap-3 lg:flex">
           <Link
             href="/volunteer"
             className="rounded-full border border-navy px-5 py-2 font-heading text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-white"
@@ -187,6 +188,7 @@ export function StagePager({ stages }: { stages: React.ReactNode[] }) {
             Donate
           </Link>
         </div>
+        <MobileNav />
       </header>
 
       {/* The logo is a "go home" control everywhere outside the homepage

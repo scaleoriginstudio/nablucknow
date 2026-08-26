@@ -16,9 +16,11 @@ import gsap from "gsap";
 import { Flip } from "gsap/Flip";
 import { useGSAP } from "@gsap/react";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
+import { useIsMobile } from "../../hooks/useIsMobile";
 import { SIGHT_STAGES, stageForValue, type SightStage } from "./stages";
 import { NAV_LINKS } from "../shared/constants";
 import { Footer } from "../shared/Footer";
+import { MobileNav } from "../shared/MobileNav";
 import { CAUSES, formatINR } from "../../lib/causes-data";
 import { useOverlay } from "../shared/OverlayContext";
 
@@ -161,7 +163,7 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-const logoStyle = (layout: Layout): CSSProperties =>
+const logoStyle = (layout: Layout, isMobile: boolean): CSSProperties =>
   layout === "final"
     ? {
         position: "fixed",
@@ -178,12 +180,12 @@ const logoStyle = (layout: Layout): CSSProperties =>
         position: "fixed",
         top: "38%",
         left: "50%",
-        width: 200,
-        height: 200,
+        width: isMobile ? 130 : 200,
+        height: isMobile ? 130 : 200,
         transform: "translate(-50%, -50%)",
       };
 
-const videoStyle = (layout: Layout): CSSProperties =>
+const videoStyle = (layout: Layout, isMobile: boolean): CSSProperties =>
   layout === "final"
     ? {
         position: "fixed",
@@ -199,26 +201,26 @@ const videoStyle = (layout: Layout): CSSProperties =>
         position: "fixed",
         top: "64%",
         left: "50%",
-        width: 260,
-        height: 146,
+        width: isMobile ? 200 : 260,
+        height: isMobile ? 112 : 146,
         transform: "translate(-50%, -50%)",
         borderRadius: 16,
         opacity: layout === "compact" ? 1 : 0,
         pointerEvents: "none",
       };
 
-const headlineStyle = (layout: Layout): CSSProperties =>
+const headlineStyle = (layout: Layout, isMobile: boolean): CSSProperties =>
   layout === "final"
     ? {
         position: "fixed",
         top: "auto",
-        bottom: 56,
-        left: 56,
+        bottom: isMobile ? 28 : 56,
+        left: isMobile ? 20 : 56,
         width: 820,
-        maxWidth: "calc(100vw - 112px)",
+        maxWidth: isMobile ? "calc(100vw - 40px)" : "calc(100vw - 112px)",
         transform: "none",
         color: "#FFFFFF",
-        fontSize: 68,
+        fontSize: isMobile ? 32 : 68,
         textAlign: "left",
       }
     : {
@@ -229,7 +231,7 @@ const headlineStyle = (layout: Layout): CSSProperties =>
         maxWidth: "calc(100vw - 48px)",
         transform: "translate(-50%, -50%)",
         color: "#23398D",
-        fontSize: 22,
+        fontSize: isMobile ? 18 : 22,
         textAlign: "center",
         opacity: layout === "compact" ? 1 : 0,
         pointerEvents: "none",
@@ -237,6 +239,7 @@ const headlineStyle = (layout: Layout): CSSProperties =>
 
 export default function IntroSequence() {
   const prefersReducedMotion = usePrefersReducedMotion();
+  const isMobile = useIsMobile();
   const panelId = useId();
 
   const [layout, setLayout] = useState<Layout>("countdown");
@@ -1038,8 +1041,8 @@ export default function IntroSequence() {
         const flipState = Flip.getState(flipTargets, { props: "color,fontSize,borderRadius" });
 
         if (headlineRef.current) headlineRef.current.textContent = HERO_HEADLINE;
-        gsap.set(videoBoxRef.current, videoStyle("final"));
-        gsap.set(headlineRef.current, headlineStyle("final"));
+        gsap.set(videoBoxRef.current, videoStyle("final", isMobile));
+        gsap.set(headlineRef.current, headlineStyle("final", isMobile));
 
         tl.set(stage1Ref.current, { pointerEvents: "none" });
         tl.to([...newTargets, stepperGroupRef.current].reverse(), {
@@ -1304,7 +1307,7 @@ export default function IntroSequence() {
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchend", onTouchEnd);
     };
-  }, [prefersReducedMotion, setStory, setTeam]);
+  }, [prefersReducedMotion, isMobile, setStory, setTeam]);
 
   useEffect(() => {
     if (isPaused) panelHeadingRef.current?.focus();
@@ -1450,7 +1453,7 @@ export default function IntroSequence() {
         ref={headerRef}
         className="fixed inset-x-0 top-0 z-30 flex h-24 items-center justify-end gap-8 bg-white px-8 opacity-0"
       >
-        <nav aria-label="Primary" className="flex items-center gap-7">
+        <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.label}
@@ -1465,7 +1468,7 @@ export default function IntroSequence() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-3">
+        <div className="hidden items-center gap-3 lg:flex">
           <Link
             href="/volunteer"
             className="rounded-full border border-navy px-5 py-2 font-heading text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-white"
@@ -1479,12 +1482,13 @@ export default function IntroSequence() {
             Donate
           </Link>
         </div>
+        <MobileNav />
       </header>
 
       {/* The persistent logo — one continuous element from the countdown through to the header. */}
       <div
         ref={logoWrapRef}
-        style={logoStyle(layout)}
+        style={logoStyle(layout, isMobile)}
         className={"z-40 flex items-center justify-center" + (layout === "final" ? " cursor-pointer" : "")}
         onClick={layout === "final" ? handleLogoClick : undefined}
         role={layout === "final" ? "button" : undefined}
@@ -1533,7 +1537,7 @@ export default function IntroSequence() {
 
       <div
         ref={videoBoxRef}
-        style={videoStyle(layout)}
+        style={videoStyle(layout, isMobile)}
         className="z-20 overflow-hidden"
         inert={layout === "final" && activeStage !== 0}
       >
@@ -1567,7 +1571,7 @@ export default function IntroSequence() {
         )}
       </div>
 
-      <h1 ref={headlineRef} style={headlineStyle(layout)} className="z-20 font-heading font-semibold leading-tight">
+      <h1 ref={headlineRef} style={headlineStyle(layout, isMobile)} className="z-20 font-heading font-semibold leading-tight">
         {HERO_HEADLINE}
       </h1>
 
