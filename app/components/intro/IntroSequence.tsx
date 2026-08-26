@@ -310,6 +310,7 @@ export default function IntroSequence() {
   const stage2Ref = useRef<HTMLDivElement>(null);
   const stage2WordsRef = useRef<HTMLDivElement>(null);
   const stage2WordsSlotRef = useRef<HTMLDivElement>(null);
+  const stage2WordsMobileSlotRef = useRef<HTMLDivElement>(null);
   const stage2PhotoRef = useRef<HTMLDivElement>(null);
   const stage2PhotoImgRef = useRef<HTMLImageElement>(null);
   const stage2TextRef = useRef<HTMLDivElement>(null);
@@ -644,7 +645,10 @@ export default function IntroSequence() {
 
       if (current === 1 && next === 2) {
         setStory(0);
-        const slotRect = stage2WordsSlotRef.current?.getBoundingClientRect();
+        // Desktop lands the word list as a left column beside the photo;
+        // mobile lands it as a horizontal row above the photo instead —
+        // each has its own reserved slot, measured here.
+        const slotRect = (isMobile ? stage2WordsMobileSlotRef : stage2WordsSlotRef).current?.getBoundingClientRect();
 
         tl.set(stage1Ref.current, { pointerEvents: "none" });
         tl.to([...newTargets, videoBoxRef.current, headlineRef.current], {
@@ -659,11 +663,7 @@ export default function IntroSequence() {
         tl.to(stage2Ref.current, { opacity: 1, duration: dur ?? 0.35 }, dur ? 0 : "-=0.1");
         // The word list that was peeking up from the bottom of stage 1
         // is the very same element — it just flies up into its resting spot.
-        // On mobile, stage 2's left-column slot is hidden entirely (that
-        // grid layout is desktop-only), so its rect collapses to all
-        // zeroes — flying into it would collapse the ghost list to a
-        // zero-width box. Leave it in its peek position on mobile instead.
-        if (slotRect && !isMobile) {
+        if (slotRect) {
           tl.to(
             stage2WordsRef.current,
             {
@@ -694,7 +694,22 @@ export default function IntroSequence() {
           stagger: dur ? 0 : 0.06,
           ease: "power2.in",
         });
-        if (slotRect && !isMobile) {
+        if (isMobile) {
+          // Back to the same peek spot it rests at ahead of stage 1 —
+          // full width, centered, bottom-anchored.
+          tl.to(
+            stage2WordsRef.current,
+            {
+              top: window.innerHeight - 56,
+              left: 0,
+              width: window.innerWidth,
+              opacity: 0.15,
+              duration: dur ?? 0.5,
+              ease: "power2.in",
+            },
+            0,
+          );
+        } else if (slotRect) {
           tl.to(
             stage2WordsRef.current,
             {
@@ -1777,10 +1792,25 @@ export default function IntroSequence() {
 
             <div className="grid items-start gap-4 md:gap-10 md:grid-cols-[minmax(0,220px)_minmax(0,1fr)_minmax(0,1fr)]">
               {/* Invisible spacer: reserves the exact rect the word list
-                  (a persistent, independently-positioned element) flies into. */}
+                  (a persistent, independently-positioned element) flies into
+                  on desktop, where it's a left column beside the photo. */}
               <div
                 ref={stage2WordsSlotRef}
                 className="hidden flex-col gap-1 font-heading text-3xl md:flex"
+                style={{ visibility: "hidden" }}
+              >
+                {STAGE2_STORIES.map((story) => (
+                  <span key={story.word}>{story.word}</span>
+                ))}
+              </div>
+
+              {/* Same, but for mobile: the word list lands as a horizontal
+                  row above the photo instead of a left column beside it.
+                  `display:none` on desktop drops it from grid placement
+                  entirely, so it doesn't disturb the 3-column layout above. */}
+              <div
+                ref={stage2WordsMobileSlotRef}
+                className="flex flex-row flex-wrap justify-center gap-3 font-heading text-lg md:hidden"
                 style={{ visibility: "hidden" }}
               >
                 {STAGE2_STORIES.map((story) => (
