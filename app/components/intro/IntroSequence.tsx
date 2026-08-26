@@ -1830,13 +1830,15 @@ export default function IntroSequence() {
             top: HEADER_HEIGHT,
             left: 0,
             width: "100vw",
-            height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+            // dvh, not vh — see the equivalent note on stage 1's container.
+            height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-10 flex flex-col items-center justify-center overflow-hidden bg-white px-8 opacity-0 pointer-events-none"
+          className="z-10 flex flex-col items-center justify-start overflow-hidden bg-white px-8 opacity-0 pointer-events-none md:justify-center"
         >
           <div className="mx-auto w-full max-w-6xl">
-            {/* Spacing reserved for the persistent stepper. */}
-            <div className="mb-10 h-10" aria-hidden="true" />
+            {/* Spacing reserved for the persistent stepper. Taller on
+                mobile — see the equivalent note on stage 1's spacer. */}
+            <div className="mb-20 h-20 sm:mb-10 sm:h-10" aria-hidden="true" />
 
             <div className="grid items-start gap-4 md:gap-10 md:grid-cols-[minmax(0,220px)_minmax(0,1fr)_minmax(0,1fr)]">
               {/* Invisible spacer: reserves the exact rect the word list
