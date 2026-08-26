@@ -62,7 +62,6 @@ const JOURNEY_ENTRIES = [
 ];
 const JOURNEY_ENTRY_HEIGHT = 96;
 const VISIBLE_JOURNEY_ROWS = 3;
-const TIMELINE_WINDOW_HEIGHT = VISIBLE_JOURNEY_ROWS * JOURNEY_ENTRY_HEIGHT;
 const IMPACT_STATS = [
   { value: "5,000+", label: "Individuals supported since 1997" },
   { value: "200+", label: "Students educated through our schools" },
@@ -274,6 +273,13 @@ export default function IntroSequence() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const isMobile = useIsMobile();
   const panelId = useId();
+
+  // The desktop-tuned 96px-per-entry budget wraps mobile's narrower text
+  // column into more lines than that allows, so consecutive journey entries
+  // overlap. Mobile also gets a smaller entry font (set on the <p> below),
+  // shrinking how much height each entry actually needs.
+  const journeyEntryHeight = isMobile ? 120 : JOURNEY_ENTRY_HEIGHT;
+  const timelineWindowHeight = VISIBLE_JOURNEY_ROWS * journeyEntryHeight;
 
   const [layout, setLayout] = useState<Layout>("countdown");
   const [isPaused, setIsPaused] = useState(false);
@@ -1034,16 +1040,22 @@ export default function IntroSequence() {
         tl.set(stage10Ref.current, { pointerEvents: "none" });
         tl.set(headerRef.current, { pointerEvents: "none" });
         tl.set(stepperGroupRef.current, { pointerEvents: "none" });
+        tl.set(logoWrapRef.current, { pointerEvents: "none" });
         tl.to(stage10Ref.current, { opacity: 0, duration: dur ?? 0.3 }, 0);
         tl.to(headerRef.current, { opacity: 0, duration: dur ?? 0.3 }, 0);
         tl.to(stepperGroupRef.current, { opacity: 0, duration: dur ?? 0.3 }, 0);
+        // The footer renders its own logo — without this, the persistent
+        // "go home" logo stays fixed on top of it, reading as a duplicate.
+        tl.to(logoWrapRef.current, { opacity: 0, duration: dur ?? 0.3 }, 0);
       } else if (current === 11 && next === 10) {
         tl.set(stage10Ref.current, { pointerEvents: "auto" });
         tl.set(headerRef.current, { pointerEvents: "auto" });
         tl.set(stepperGroupRef.current, { pointerEvents: "auto" });
+        tl.set(logoWrapRef.current, { pointerEvents: "auto" });
         tl.to(stage10Ref.current, { opacity: 1, duration: dur ?? 0.3 }, 0);
         tl.to(headerRef.current, { opacity: 1, duration: dur ?? 0.3 }, 0);
         tl.to(stepperGroupRef.current, { opacity: 1, duration: dur ?? 0.3 }, 0);
+        tl.to(logoWrapRef.current, { opacity: 1, duration: dur ?? 0.3 }, 0);
       } else if (next === 1 && current === 0) {
         // The hero video shrinks and snaps into the photo slot; the hero
         // heading carries over into the stage 1 heading position — one
@@ -1213,7 +1225,7 @@ export default function IntroSequence() {
       journeyIndexRef.current = nextIndex;
       const dur = prefersReducedMotion ? 0.05 : 0.5;
 
-      const scrollOffset = Math.max(0, nextIndex - VISIBLE_JOURNEY_ROWS) * JOURNEY_ENTRY_HEIGHT;
+      const scrollOffset = Math.max(0, nextIndex - VISIBLE_JOURNEY_ROWS) * journeyEntryHeight;
       gsap.to(timelineListRef.current, {
         y: -scrollOffset,
         duration: dur,
@@ -1908,7 +1920,8 @@ export default function IntroSequence() {
             top: HEADER_HEIGHT,
             left: 0,
             width: "100vw",
-            height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+            // dvh, not vh — see the equivalent note on stage 1's container.
+            height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
           className="z-[16] flex flex-col items-center justify-center overflow-hidden px-8 pointer-events-none"
         >
@@ -1923,7 +1936,9 @@ export default function IntroSequence() {
             <div className="grid items-center gap-3 md:gap-10 md:grid-cols-3">
               <div ref={stage3VisionRef} className="opacity-0">
                 <h3 className="font-heading text-lg font-bold text-white md:mb-3 md:text-2xl">Our Vision</h3>
-                <p className="hidden font-body text-base leading-7 text-white/80 md:block">{STAGE3_BODY}</p>
+                <p className="line-clamp-3 font-body text-sm leading-6 text-white/80 md:line-clamp-none md:block md:text-base md:leading-7">
+                  {STAGE3_BODY}
+                </p>
               </div>
 
               <div ref={stage3PhotoRef} className="overflow-hidden rounded-2xl opacity-0">
@@ -1937,7 +1952,9 @@ export default function IntroSequence() {
               </div>
 
               <div ref={stage3MissionRef} className="text-right opacity-0">
-                <p className="hidden font-body text-base leading-7 text-white/80 md:block">{STAGE3_BODY}</p>
+                <p className="line-clamp-3 font-body text-sm leading-6 text-white/80 md:line-clamp-none md:block md:text-base md:leading-7">
+                  {STAGE3_BODY}
+                </p>
                 <h3 className="font-heading text-lg font-bold text-white md:mt-3 md:text-2xl">Our Mission</h3>
               </div>
             </div>
@@ -1979,7 +1996,7 @@ export default function IntroSequence() {
               <div
                 ref={impactStatsRef}
                 className="absolute top-0 right-full mr-12 w-56 text-right"
-                style={{ height: TIMELINE_WINDOW_HEIGHT }}
+                style={{ height: timelineWindowHeight }}
               >
                 {IMPACT_STATS.map((stat, i) => (
                   <div
@@ -1988,7 +2005,7 @@ export default function IntroSequence() {
                       impactStatRefs.current[i] = el;
                     }}
                     className="absolute inset-x-0 opacity-0"
-                    style={{ top: i * JOURNEY_ENTRY_HEIGHT }}
+                    style={{ top: i * journeyEntryHeight }}
                   >
                     <div className="font-body text-3xl font-bold text-white">{stat.value}</div>
                     <p className="mt-1 font-body text-xs leading-5 text-white/80">{stat.label}</p>
@@ -1996,7 +2013,7 @@ export default function IntroSequence() {
                 ))}
               </div>
 
-              <div className="overflow-hidden" style={{ height: TIMELINE_WINDOW_HEIGHT }}>
+              <div className="overflow-hidden" style={{ height: timelineWindowHeight }}>
                 <div ref={timelineListRef} className="relative">
                   {JOURNEY_ENTRIES.map((entry, i) => (
                     <div
@@ -2004,8 +2021,8 @@ export default function IntroSequence() {
                       ref={(el) => {
                         journeyEntryRefs.current[i] = el;
                       }}
-                      className="absolute left-8 flex items-start gap-6 opacity-0"
-                      style={{ top: i * JOURNEY_ENTRY_HEIGHT }}
+                      className="absolute left-8 flex items-start gap-3 opacity-0 md:gap-6"
+                      style={{ top: i * journeyEntryHeight }}
                     >
                       {i > 0 && (
                         <span
@@ -2014,7 +2031,7 @@ export default function IntroSequence() {
                           }}
                           aria-hidden="true"
                           className="absolute w-px origin-top scale-y-0 bg-white/30"
-                          style={{ left: -26.5, top: -JOURNEY_ENTRY_HEIGHT + 9, height: JOURNEY_ENTRY_HEIGHT }}
+                          style={{ left: -26.5, top: -journeyEntryHeight + 9, height: journeyEntryHeight }}
                         />
                       )}
                       <span
@@ -2022,8 +2039,12 @@ export default function IntroSequence() {
                         className="absolute top-1.5 h-1.5 w-1.5 rounded-full bg-white"
                         style={{ left: -29 }}
                       />
-                      <span className="w-16 shrink-0 font-body text-lg text-white">{entry.year}</span>
-                      <p className="max-w-md font-body text-base leading-6 text-white">{entry.text}</p>
+                      <span className="w-12 shrink-0 font-body text-base text-white md:w-16 md:text-lg">
+                        {entry.year}
+                      </span>
+                      <p className="max-w-md font-body text-sm leading-5 text-white md:text-base md:leading-6">
+                        {entry.text}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -2107,13 +2128,13 @@ export default function IntroSequence() {
             top: HEADER_HEIGHT,
             left: 0,
             width: "100vw",
-            height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+            height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
           className="z-[16] flex flex-col items-center justify-center overflow-hidden bg-white px-8 opacity-0 pointer-events-none"
         >
           <div className="mx-auto grid w-full max-w-5xl items-center gap-6 md:gap-14 md:grid-cols-2">
-            <div ref={stage7PhotoRef} className="hidden opacity-0 md:block">
-              <div className="relative mx-auto aspect-[3/4] w-full max-w-xs overflow-hidden rounded-3xl shadow-lg">
+            <div ref={stage7PhotoRef} className="opacity-0">
+              <div className="relative mx-auto aspect-[3/4] w-full max-w-[140px] overflow-hidden rounded-3xl shadow-lg md:max-w-xs">
                 <Image
                   ref={stage7PhotoImgRef}
                   src={TEAM_MEMBERS[teamIndex].photo}
