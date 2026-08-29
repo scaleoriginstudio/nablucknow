@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { FOOTER_CONTACT } from "../components/shared/constants";
+import { ContactCarousel } from "./ContactCarousel";
 
 const MAPS_HREF = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(FOOTER_CONTACT.address)}`;
 const MAPS_EMBED_SRC = `https://maps.google.com/maps?q=${encodeURIComponent(FOOTER_CONTACT.address)}&output=embed`;
@@ -11,11 +12,7 @@ export function ContactStage() {
 
   return (
     <div className="relative h-full w-full overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url(/img/placeholders/contact-phone.jpg)" }}
-      />
+      <ContactCarousel />
       <div aria-hidden="true" className="absolute inset-0 bg-navy/85" />
 
       <div className="relative mx-auto flex h-full w-full max-w-6xl flex-col justify-center gap-10 py-10 md:flex-row md:items-center md:gap-16">

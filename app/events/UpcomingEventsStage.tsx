@@ -28,21 +28,47 @@ function googleCalendarUrl(event: UpcomingEvent) {
 function EventCard({ event }: { event: UpcomingEvent }) {
   const [open, setOpen] = useState(false);
   const [registered, setRegistered] = useState(false);
+  // The sign-up form needs real width to be readable — squeezed into the
+  // narrow text column next to a fixed 64px thumbnail (the compact
+  // browsing layout), it looked lopsided. Once it's open, stack the card
+  // full-width on mobile too, same shape as desktop always uses.
+  const stacked = open || registered;
 
   return (
-    <div className="flex w-full flex-row items-stretch gap-3 overflow-hidden rounded-2xl border border-black/10 bg-white p-2 shadow-sm sm:flex-col sm:gap-0 sm:p-0">
-      <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg sm:h-32 sm:w-full sm:rounded-none">
+    <div
+      className={
+        "flex w-full items-stretch gap-3 overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm sm:flex-col sm:items-stretch sm:gap-0 sm:p-0 " +
+        (stacked ? "flex-col p-3" : "flex-row p-2")
+      }
+    >
+      <div
+        className={
+          "shrink-0 overflow-hidden rounded-lg sm:h-32 sm:w-full sm:rounded-none " +
+          (stacked ? "h-28 w-full" : "h-16 w-16")
+        }
+      >
         <Image src={event.image} alt="" width={400} height={200} className="h-full w-full object-cover" />
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-2 sm:p-4">
-        <div className="hidden items-center gap-2 font-body text-[11px] font-semibold uppercase tracking-wide text-orange sm:flex">
+        <div
+          className={
+            "items-center gap-2 font-body text-[11px] font-semibold uppercase tracking-wide text-orange sm:flex " +
+            (stacked ? "flex" : "hidden")
+          }
+        >
           <span>{event.eventCategory}</span>
           <span className="text-black/30">·</span>
           <span>{event.mode}</span>
         </div>
         <h3 className="font-heading text-sm font-bold leading-tight text-navy sm:text-base">{event.title}</h3>
         <p className="font-body text-xs text-black/60">{formatDate(event.date)}</p>
-        <p className="hidden font-body text-xs leading-5 text-black/70 sm:block">{event.description}</p>
+        <p
+          className={
+            "font-body text-xs leading-5 text-black/70 sm:block " + (stacked ? "block" : "hidden")
+          }
+        >
+          {event.description}
+        </p>
 
         <div className="mt-auto flex flex-col gap-2 sm:pt-2">
           {registered ? (
@@ -83,7 +109,7 @@ function EventCard({ event }: { event: UpcomingEvent }) {
               >
                 Pay ₹{event.cost} via Razorpay
               </button>
-              <p className="hidden text-center font-body text-[10px] text-black/40 sm:block">Secured by Razorpay</p>
+              <p className="text-center font-body text-[10px] text-black/40">Secured by Razorpay</p>
             </form>
           ) : (
             <button

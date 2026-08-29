@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { POSTS, getPostBySlug } from "../../lib/posts-data";
 import { NAV_LINKS, FOOTER_CONTACT, FOOTER_SOCIALS } from "../../components/shared/constants";
+import { ScrollUnlock } from "../../components/shared/ScrollUnlock";
 
 export function generateStaticParams() {
   return POSTS.map((post) => ({ slug: post.slug }));
@@ -27,6 +28,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   return (
     <main className="min-h-screen bg-white">
+      <ScrollUnlock />
       <header className="flex h-24 items-center justify-between gap-8 px-8">
         <Link href="/" className="flex h-16 w-16 items-center justify-center rounded-xl bg-white">
           <Image

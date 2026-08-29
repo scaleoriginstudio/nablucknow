@@ -21,6 +21,7 @@ import { SIGHT_STAGES, stageForValue, type SightStage } from "./stages";
 import { NAV_LINKS } from "../shared/constants";
 import { Footer } from "../shared/Footer";
 import { MobileNav } from "../shared/MobileNav";
+import { Icon } from "../shared/Icon";
 import { CAUSES, formatINR } from "../../lib/causes-data";
 import { useOverlay } from "../shared/OverlayContext";
 
@@ -132,11 +133,36 @@ const TESTIMONIALS = [
 // Official UN SDG brand colors — the goals most directly tied to what NAB
 // actually does, not a generic "all 17" claim.
 const SDG_GOALS = [
-  { number: 3, title: "Good Health & Well-being", color: "#4C9F38" },
-  { number: 4, title: "Quality Education", color: "#C5192D" },
-  { number: 8, title: "Decent Work & Economic Growth", color: "#A21942" },
-  { number: 10, title: "Reduced Inequalities", color: "#DD1367" },
-  { number: 17, title: "Partnerships for the Goals", color: "#19486A" },
+  {
+    number: 3,
+    title: "Good Health & Well-being",
+    color: "#4C9F38",
+    description: "Free eye-care screenings and health support for visually impaired individuals and their families.",
+  },
+  {
+    number: 4,
+    title: "Quality Education",
+    color: "#C5192D",
+    description: "Free primary education and braille literacy for blind and low-vision children.",
+  },
+  {
+    number: 8,
+    title: "Decent Work & Economic Growth",
+    color: "#A21942",
+    description: "Vocational training and job placement that lead to real, independent careers.",
+  },
+  {
+    number: 10,
+    title: "Reduced Inequalities",
+    color: "#DD1367",
+    description: "Family counselling and support so disability never decides a family's future.",
+  },
+  {
+    number: 17,
+    title: "Partnerships for the Goals",
+    color: "#19486A",
+    description: "Corporate and community partnerships that fund and scale our programmes.",
+  },
 ];
 
 type Layout = "countdown" | "compact" | "final";
@@ -287,6 +313,7 @@ export default function IntroSequence() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [ctaTab, setCtaTab] = useState<"volunteer" | "donate" | "csr">("donate");
   const [donationAmount, setDonationAmount] = useState<number | null>(null);
+  const [selectedSdg, setSelectedSdg] = useState<number>(SDG_GOALS[0].number);
   const [activeStage, setActiveStage] = useState<Stage>(0);
   const { open: overlayOpen, openVolunteer, openDonate } = useOverlay();
   const overlayOpenRef = useRef(false);
@@ -1964,7 +1991,7 @@ export default function IntroSequence() {
             // dvh, not vh — see the equivalent note on stage 1's container.
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-start overflow-hidden px-8 pt-16 pointer-events-none md:justify-center md:pt-0"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden px-8 pt-20 pointer-events-none md:justify-center md:pt-0"
         >
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 md:gap-10">
             <h2
@@ -1976,21 +2003,7 @@ export default function IntroSequence() {
 
             <div className="grid items-center gap-3 md:gap-10 md:grid-cols-3">
               <div ref={stage3VisionRef} className="opacity-0">
-                <svg
-                  viewBox="0 0 24 24"
-                  width="28"
-                  height="28"
-                  fill="none"
-                  stroke="#FFFFFF"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                  className="mb-2 md:mb-3"
-                >
-                  <path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z" />
-                  <circle cx="12" cy="12" r="2.75" />
-                </svg>
+                <Icon name="visibility" size={28} className="mb-2 text-white md:mb-3" />
                 <h3 className="font-heading text-lg font-bold text-white md:mb-3 md:text-2xl">Our Vision</h3>
                 <p className="font-body text-sm leading-6 text-white/80 md:text-base md:leading-7">
                   {STAGE3_VISION_TEXT}
@@ -2008,21 +2021,7 @@ export default function IntroSequence() {
               </div>
 
               <div ref={stage3MissionRef} className="opacity-0 md:text-right">
-                <svg
-                  viewBox="0 0 24 24"
-                  width="28"
-                  height="28"
-                  fill="none"
-                  stroke="#FFFFFF"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                  className="mb-2 md:mb-3 md:ml-auto"
-                >
-                  <circle cx="12" cy="12" r="9" />
-                  <path d="M15 9l-2 6-6 2 2-6 6-2Z" />
-                </svg>
+                <Icon name="target" size={28} className="mb-2 text-white md:mb-3" />
                 <p className="font-body text-sm leading-6 text-white/80 md:text-base md:leading-7">
                   {STAGE3_MISSION_TEXT}
                 </p>
@@ -2050,7 +2049,7 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-start overflow-hidden px-8 pt-16 pb-40 opacity-0 pointer-events-none md:justify-center md:pt-0"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden px-8 pt-20 pb-40 opacity-0 pointer-events-none md:justify-center md:pt-0"
         >
           <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center justify-center">
             <h2
@@ -2160,7 +2159,7 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center overflow-hidden bg-white px-8 pt-16 pb-6 opacity-0 pointer-events-none"
+          className="z-[16] flex flex-col items-center overflow-hidden bg-white px-8 pt-20 pb-6 opacity-0 pointer-events-none"
         >
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">
             <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">Our Causes</h2>
@@ -2223,34 +2222,39 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-16 opacity-0 pointer-events-none md:justify-center md:pt-0"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-center md:pt-0"
         >
-          <div className="mx-auto grid w-full max-w-5xl items-center gap-6 md:gap-14 md:grid-cols-2">
-            <div ref={stage7PhotoRef} className="opacity-0">
-              <div className="relative mx-auto aspect-[3/4] w-full max-w-[140px] overflow-hidden rounded-3xl shadow-lg md:max-w-xs">
-                <Image
-                  ref={stage7PhotoImgRef}
-                  src={TEAM_MEMBERS[teamIndex].photo}
-                  alt=""
-                  fill
-                  sizes="320px"
-                  className="object-cover"
-                />
-                <span aria-hidden="true" className="absolute bottom-0 left-0 h-1.5 w-full bg-orange" />
+          <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-4 md:gap-8">
+            <h2 className="text-center font-heading text-xl font-bold text-navy sm:text-3xl">Meet the Dream Team</h2>
+            <div className="grid w-full items-center gap-6 md:gap-14 md:grid-cols-2">
+              <div ref={stage7PhotoRef} className="opacity-0">
+                <div className="relative mx-auto aspect-[3/4] w-full max-w-[140px] overflow-hidden rounded-3xl shadow-lg md:max-w-xs">
+                  <Image
+                    ref={stage7PhotoImgRef}
+                    src={TEAM_MEMBERS[teamIndex].photo}
+                    alt=""
+                    fill
+                    sizes="320px"
+                    className="object-cover"
+                  />
+                  <span aria-hidden="true" className="absolute bottom-0 left-0 h-1.5 w-full bg-orange" />
+                </div>
               </div>
-            </div>
 
-            <div ref={stage7TextRef} className="flex flex-col gap-2 opacity-0 md:gap-4">
-              <span aria-hidden="true" className="hidden font-heading text-6xl leading-none text-orange md:block">
-                &ldquo;
-              </span>
-              <div ref={stage7MessageRef} className="md:-mt-6">
-                <p className="font-body text-base leading-6 text-black/80 italic md:text-xl md:leading-8">
-                  {TEAM_MEMBERS[teamIndex].message}
-                </p>
-                <div className="mt-2 md:mt-4">
-                  <p className="font-heading text-lg font-bold text-navy md:text-xl">{TEAM_MEMBERS[teamIndex].name}</p>
-                  <p className="font-body text-sm text-black/60">{TEAM_MEMBERS[teamIndex].role}</p>
+              <div ref={stage7TextRef} className="flex flex-col gap-2 opacity-0 md:gap-4">
+                <span aria-hidden="true" className="hidden font-heading text-6xl leading-none text-orange md:block">
+                  &ldquo;
+                </span>
+                <div ref={stage7MessageRef} className="md:-mt-6">
+                  <p className="font-body text-base leading-6 text-black/80 italic md:text-xl md:leading-8">
+                    {TEAM_MEMBERS[teamIndex].message}
+                  </p>
+                  <div className="mt-2 md:mt-4">
+                    <p className="font-heading text-lg font-bold text-navy md:text-xl">
+                      {TEAM_MEMBERS[teamIndex].name}
+                    </p>
+                    <p className="font-body text-sm text-black/60">{TEAM_MEMBERS[teamIndex].role}</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2277,7 +2281,7 @@ export default function IntroSequence() {
           <div className="relative h-full w-full">
             <div
               ref={stage8MarqueeBlockRef}
-              className="absolute inset-0 flex flex-col items-center justify-start gap-10 px-8 pt-16 md:justify-center md:pt-28"
+              className="absolute inset-0 flex flex-col items-center justify-start gap-10 px-8 pt-20 md:justify-center md:pt-28"
             >
               <h2 className="text-center font-heading text-3xl font-bold text-navy sm:text-4xl">Our Sponsors</h2>
 
@@ -2300,7 +2304,7 @@ export default function IntroSequence() {
 
             <div
               ref={stage8CtaBlockRef}
-              className="absolute inset-0 flex flex-col items-center justify-start gap-6 px-8 pt-16 opacity-0 pointer-events-none md:justify-center md:pt-28"
+              className="absolute inset-0 flex flex-col items-center justify-start gap-6 px-8 pt-20 opacity-0 pointer-events-none md:justify-center md:pt-28"
             >
               <div className="grid w-full max-w-5xl items-center gap-4 md:gap-10 md:grid-cols-[1fr_1.3fr]">
                 <div
@@ -2525,7 +2529,7 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-12 opacity-0 pointer-events-none md:justify-center md:pt-28"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-center md:pt-28"
         >
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 md:gap-10">
             <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">What People Say</h2>
@@ -2562,7 +2566,7 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-16 opacity-0 pointer-events-none md:justify-center md:pt-28"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-center md:pt-28"
         >
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 md:gap-4">
             <h2 className="text-center font-heading text-xl font-bold text-navy sm:text-4xl">
@@ -2573,17 +2577,43 @@ export default function IntroSequence() {
             </p>
 
             <div className="mt-2 grid grid-cols-5 gap-1.5 sm:mt-4 sm:gap-4">
-              {SDG_GOALS.map((goal) => (
-                <div
-                  key={goal.number}
-                  className="flex aspect-square flex-col items-center justify-center gap-0.5 rounded-lg p-1 text-center text-white shadow-md sm:gap-2 sm:rounded-2xl sm:p-4"
-                  style={{ backgroundColor: goal.color }}
-                >
-                  <span className="font-heading text-base font-bold sm:text-4xl">{goal.number}</span>
-                  <span className="hidden font-body text-xs leading-tight font-semibold sm:block">{goal.title}</span>
-                </div>
-              ))}
+              {SDG_GOALS.map((goal) => {
+                const isSelected = goal.number === selectedSdg;
+                return (
+                  <button
+                    key={goal.number}
+                    type="button"
+                    onClick={() => setSelectedSdg(goal.number)}
+                    aria-pressed={isSelected}
+                    className={
+                      "flex aspect-square flex-col items-center justify-center gap-0.5 rounded-lg p-1 text-center text-white shadow-md transition-all sm:gap-2 sm:rounded-2xl sm:p-4 " +
+                      (isSelected ? "scale-105 shadow-lg" : "opacity-70 hover:opacity-100")
+                    }
+                    style={{ backgroundColor: goal.color }}
+                  >
+                    <span className="font-heading text-base font-bold sm:text-4xl">{goal.number}</span>
+                    <span className="hidden font-body text-xs leading-tight font-semibold sm:block">
+                      {goal.title}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
+
+            {(() => {
+              const active = SDG_GOALS.find((goal) => goal.number === selectedSdg) ?? SDG_GOALS[0];
+              return (
+                <div
+                  className="mt-3 rounded-xl border-2 p-3 text-center sm:mt-4 sm:p-4"
+                  style={{ borderColor: active.color }}
+                >
+                  <p className="font-heading text-sm font-bold sm:text-base" style={{ color: active.color }}>
+                    Goal {active.number}: {active.title}
+                  </p>
+                  <p className="mt-1 font-body text-xs leading-5 text-black/70 sm:text-sm">{active.description}</p>
+                </div>
+              );
+            })()}
           </div>
         </div>
       )}

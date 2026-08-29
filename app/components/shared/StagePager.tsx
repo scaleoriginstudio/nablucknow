@@ -233,17 +233,20 @@ export function StagePager({ stages }: { stages: React.ReactNode[] }) {
                 top: HEADER_HEIGHT,
                 left: 0,
                 width: "100vw",
-                height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+                // dvh, not vh: on mobile, vh includes space hidden behind a
+                // collapsible browser toolbar, which pushes centered content
+                // below what's actually visible on screen.
+                height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
                 ...fade(isActive),
               }}
-              className="z-10 flex flex-col items-center justify-center overflow-hidden bg-white px-8"
+              className="z-10 flex flex-col items-center justify-start overflow-hidden bg-white px-8 md:justify-center"
             >
               <div
                 ref={(el) => {
                   stageHeadingRefs.current[i] = el;
                 }}
                 tabIndex={-1}
-                className="flex h-full w-full flex-col items-center justify-center outline-none"
+                className="flex h-full w-full flex-col items-center justify-start pt-20 outline-none md:justify-center md:pt-0"
               >
                 {content}
               </div>

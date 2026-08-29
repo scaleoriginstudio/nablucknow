@@ -21,9 +21,36 @@ body {
   overscroll-behavior: none;
 }
 
+/* Opt-out for pages that are normal long-form scrolling documents rather
+   than the pinned, wheel-stepped stage experience the rule above is for
+   (e.g. a blog article) — the global overflow:hidden left nothing to
+   scroll no matter how long the article was. */
+body.scroll-unlocked {
+  overflow: auto;
+  overscroll-behavior: auto;
+}
+
 body {
   background: var(--color-white);
   color: var(--color-black);
+}
+
+/* Google's Material Symbols icon font — base rule from Google's own setup
+   guide. Render a glyph with <span className="material-symbols-outlined">
+   name</span>; the ligature turns the plain-text ligature name into the
+   icon glyph. Weight/fill are tuned per-use via inline fontVariationSettings. */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Respect the OS-level motion preference everywhere by default. Components

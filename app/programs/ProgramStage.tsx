@@ -31,11 +31,6 @@ export function ProgramStage({ program }: { program: Program; reverse?: boolean 
   return (
     <div className="relative h-full w-full overflow-hidden">
       <div className="mx-auto flex h-full w-full max-w-6xl flex-col">
-        {/* Spacing reserved for the persistent stepper, which is a separate
-            fixed element overlaid above this content — same convention the
-            homepage's own stage stepper uses. */}
-        <div className="mb-6 h-6 shrink-0 sm:mb-12 sm:h-10" aria-hidden="true" />
-
         <div className="grid min-h-0 flex-1 items-start gap-5 overflow-hidden pb-2 md:gap-10 md:grid-cols-[0.8fr_1fr_1fr] md:pb-4">
           {/* Column 1: photo */}
           <div className="hidden md:flex md:items-start md:justify-center">

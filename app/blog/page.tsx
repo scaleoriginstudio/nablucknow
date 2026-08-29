@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 import { StagePager } from "../components/shared/StagePager";
-import { BlogGridStage } from "./BlogGridStage";
-import { InstagramStage } from "./InstagramStage";
+import { EventsStage } from "./EventsStage";
+import { LinkedInStage } from "./LinkedInStage";
 
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Awareness articles and event recaps from National Association for the Blind, State Chapter, Lucknow.",
+    "Event recaps and LinkedIn updates from National Association for the Blind, State Chapter, Lucknow.",
 };
 
 export default function BlogPage() {
   return (
     <main>
-      <StagePager stages={[<BlogGridStage key="grid" />, <InstagramStage key="instagram" />]} />
+      <StagePager stages={[<EventsStage key="events" />, <LinkedInStage key="linkedin" />]} />
     </main>
   );
 }

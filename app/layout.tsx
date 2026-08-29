@@ -85,6 +85,14 @@ const organizationJsonLd = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${heading.variable} ${body.variable}`}>
+      <head>
+        {/* Material Symbols — Google's icon set, used site-wide instead of
+            hand-drawn SVGs wherever an icon is needed. */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+        />
+      </head>
       <body className="min-h-full bg-white font-body text-black antialiased">
         <OverlayProvider>
           {children}
