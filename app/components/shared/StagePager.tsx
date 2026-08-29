@@ -121,6 +121,16 @@ export function StagePager({
       return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || el.isContentEditable;
     };
 
+    // A scroll gesture that starts inside a form/list that is actually
+    // overflowing right now (marked data-stage-scroll) must scroll that,
+    // not step the stage.
+    const inScrollableRegion = (target: EventTarget | null) => {
+      if (!(target instanceof Element)) return false;
+      const el = target.closest<HTMLElement>("[data-stage-scroll]");
+      if (!el) return false;
+      return el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1;
+    };
+
     const step = (delta: 1 | -1) => {
       if (overlayOpenRef.current) return;
       goTo(Math.min(lastStage, Math.max(1, activeRef.current + delta)));
@@ -138,6 +148,7 @@ export function StagePager({
 
     const onWheel = (event: WheelEvent) => {
       if (overlayOpenRef.current) return;
+      if (inScrollableRegion(event.target)) return;
       if (Math.abs(event.deltaY) < 10) return;
       event.preventDefault();
       gatedStep(event.deltaY > 0 ? 1 : -1);
@@ -154,10 +165,13 @@ export function StagePager({
       }
     };
     let touchStartY = 0;
+    let touchInScroll = false;
     const onTouchStart = (event: TouchEvent) => {
       touchStartY = event.touches[0]?.clientY ?? 0;
+      touchInScroll = inScrollableRegion(event.target);
     };
     const onTouchEnd = (event: TouchEvent) => {
+      if (touchInScroll) return;
       const dy = touchStartY - (event.changedTouches[0]?.clientY ?? 0);
       if (Math.abs(dy) < 40) return;
       gatedStep(dy > 0 ? 1 : -1);
@@ -297,10 +311,10 @@ export function StagePager({
                 tabIndex={-1}
                 className={
                   "flex h-full w-full flex-col items-center justify-start outline-none md:justify-center " +
-                  // Leave room for the fixed stepper strip above the content.
-                  // On desktop the pages are vertically centred so a small
-                  // top pad is enough; without a stepper, almost none is needed.
-                  (hasStepper ? "pt-20 md:pt-14" : "pt-3 md:pt-0")
+                  // Leave room for the fixed stepper strip (top: 136, ~50px
+                  // tall) above the content. Without a stepper, almost none
+                  // is needed.
+                  (hasStepper ? "pt-20 md:pt-24" : "pt-3 md:pt-0")
                 }
               >
                 {content}

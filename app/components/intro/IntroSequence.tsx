@@ -1457,8 +1457,20 @@ export default function IntroSequence() {
       step(dir);
     };
 
+    // A gesture that begins inside something that is actually scrolling on
+    // its own right now (marked data-stage-scroll and currently overflowing
+    // — the CTA form on a phone, the sponsor row) scrolls that, and must
+    // not also step the stage.
+    const inScrollableRegion = (target: EventTarget | null) => {
+      if (!(target instanceof Element)) return false;
+      const el = target.closest<HTMLElement>("[data-stage-scroll]");
+      if (!el) return false;
+      return el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1;
+    };
+
     const onWheel = (event: WheelEvent) => {
       if (!introSettledRef.current) return;
+      if (inScrollableRegion(event.target)) return;
       if (Math.abs(event.deltaY) < 10) return;
       event.preventDefault();
       gatedStep(event.deltaY > 0 ? 1 : -1);
@@ -1476,11 +1488,14 @@ export default function IntroSequence() {
     };
 
     let touchStartY = 0;
+    let touchInScroll = false;
     const onTouchStart = (event: TouchEvent) => {
       touchStartY = event.touches[0]?.clientY ?? 0;
+      touchInScroll = inScrollableRegion(event.target);
     };
     const onTouchEnd = (event: TouchEvent) => {
       if (!introSettledRef.current) return;
+      if (touchInScroll) return;
       const dy = touchStartY - (event.changedTouches[0]?.clientY ?? 0);
       if (Math.abs(dy) < 40) return;
       gatedStep(dy > 0 ? 1 : -1);
@@ -2217,9 +2232,7 @@ export default function IntroSequence() {
                 with a visible scrollbar; the page still steps down to stage 7
                 on a vertical swipe. On desktop it is a plain 3-up grid. */}
             <div
-              onWheel={(e) => {
-                if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) e.stopPropagation();
-              }}
+              data-stage-scroll=""
               className="-mx-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-8 pb-3 md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 md:pb-0"
               style={{ scrollbarWidth: "thin" }}
             >
@@ -2332,7 +2345,7 @@ export default function IntroSequence() {
             top: HEADER_HEIGHT,
             left: 0,
             width: "100vw",
-            height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+            height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
           className="z-[16] overflow-hidden bg-white opacity-0 pointer-events-none"
         >
@@ -2362,7 +2375,8 @@ export default function IntroSequence() {
 
             <div
               ref={stage8CtaBlockRef}
-              className="absolute inset-0 flex flex-col items-center justify-start gap-6 overflow-y-auto px-8 pb-10 pt-20 opacity-0 pointer-events-none md:justify-center md:overflow-hidden md:pb-0 md:pt-28"
+              data-stage-scroll=""
+              className="absolute inset-0 flex flex-col items-center justify-start gap-6 overflow-y-auto overscroll-contain px-8 pb-10 pt-20 opacity-0 pointer-events-none md:justify-center md:overflow-hidden md:pb-0 md:pt-28"
             >
               <div className="grid w-full max-w-5xl items-center gap-4 md:gap-10 md:grid-cols-[1fr_1.3fr]">
                 <div

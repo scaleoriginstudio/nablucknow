@@ -91,13 +91,11 @@ function Split({
       </div>
 
       {/* min-h-0 lets overflow-y-auto actually scroll inside the flex column
-          instead of the form spilling out and being clipped. The pointer
-          handlers keep a scroll gesture inside the form from bubbling to the
-          window listener that steps between stages. */}
+          instead of the form spilling out and being clipped. data-stage-scroll
+          tells the page's wheel/touch stepper to leave this region alone so a
+          scroll gesture here doesn't jump to the next stage. */}
       <div
-        onWheel={(e) => e.stopPropagation()}
-        onTouchStart={(e) => e.stopPropagation()}
-        onTouchEnd={(e) => e.stopPropagation()}
+        data-stage-scroll=""
         className="flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain p-6 md:p-9"
       >
         <div className="flex flex-col gap-1.5">
@@ -170,11 +168,13 @@ function ModalShell({ titleId, onClose, ...rest }: ModalProps) {
 function PageShell({ imageSide = "left", ...rest }: PageProps) {
   return (
     <div className="relative flex h-full w-full items-stretch justify-center py-2 md:items-center">
-      {/* h-full (not max-h-full) so the card has a definite height on mobile
-          too, which the inner form column needs before it will scroll. */}
+      {/* h-full (not max-h-full) so the card has a definite height the inner
+          form column can scroll against. max-h caps it on tall screens; on
+          short laptops it just fills the space and never overflows the
+          stepper above it. */}
       <div
         className={
-          "flex h-full min-h-0 w-full max-w-5xl flex-col overflow-hidden rounded-3xl border border-white/40 bg-white/85 shadow-2xl backdrop-blur-2xl md:h-[560px] " +
+          "flex h-full min-h-0 w-full max-w-5xl flex-col overflow-hidden rounded-3xl border border-white/40 bg-white/85 shadow-2xl backdrop-blur-2xl md:max-h-[560px] " +
           (imageSide === "right" ? "md:flex-row-reverse" : "md:flex-row")
         }
       >
