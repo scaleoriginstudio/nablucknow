@@ -52,8 +52,8 @@ const STAGE2_STORIES = [
   },
 ];
 const STAGE3_HEADLINE = "Stories beyond Passion.\nStories about Resilience.";
-const STAGE3_BODY =
-  "An impact driven NGO that has devoted over 30+ years to the wellbeing of visually impaired individuals, right from primary education to family counselling up until employment support. And we strive to do it while giving them an environment as normal to their upbringing as possible.";
+const STAGE3_VISION_TEXT = "A world where visual impairment never limits what someone can become.";
+const STAGE3_MISSION_TEXT = "Educating, counselling, and training — from childhood to independent careers.";
 const JOURNEY_ENTRIES = [
   { year: "1997", text: "National Association for the Blind, State Chapter, Lucknow, is founded to serve visually impaired individuals across Uttar Pradesh." },
   { year: "2005", text: "Our first residential school opens, offering free primary education to visually impaired children." },
@@ -1976,9 +1976,24 @@ export default function IntroSequence() {
 
             <div className="grid items-center gap-3 md:gap-10 md:grid-cols-3">
               <div ref={stage3VisionRef} className="opacity-0">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="28"
+                  height="28"
+                  fill="none"
+                  stroke="#FFFFFF"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  className="mb-2 md:mb-3"
+                >
+                  <path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z" />
+                  <circle cx="12" cy="12" r="2.75" />
+                </svg>
                 <h3 className="font-heading text-lg font-bold text-white md:mb-3 md:text-2xl">Our Vision</h3>
-                <p className="line-clamp-3 font-body text-sm leading-6 text-white/80 md:line-clamp-none md:block md:text-base md:leading-7">
-                  {STAGE3_BODY}
+                <p className="font-body text-sm leading-6 text-white/80 md:text-base md:leading-7">
+                  {STAGE3_VISION_TEXT}
                 </p>
               </div>
 
@@ -1992,9 +2007,24 @@ export default function IntroSequence() {
                 />
               </div>
 
-              <div ref={stage3MissionRef} className="text-right opacity-0">
-                <p className="line-clamp-3 font-body text-sm leading-6 text-white/80 md:line-clamp-none md:block md:text-base md:leading-7">
-                  {STAGE3_BODY}
+              <div ref={stage3MissionRef} className="opacity-0 md:text-right">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="28"
+                  height="28"
+                  fill="none"
+                  stroke="#FFFFFF"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  className="mb-2 md:mb-3 md:ml-auto"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M15 9l-2 6-6 2 2-6 6-2Z" />
+                </svg>
+                <p className="font-body text-sm leading-6 text-white/80 md:text-base md:leading-7">
+                  {STAGE3_MISSION_TEXT}
                 </p>
                 <h3 className="font-heading text-lg font-bold text-white md:mt-3 md:text-2xl">Our Mission</h3>
               </div>
