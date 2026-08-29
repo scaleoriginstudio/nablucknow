@@ -73,10 +73,9 @@ function Split({
 }: CommonProps & { headingId?: string }) {
   return (
     <>
-      <div className="relative h-40 w-full shrink-0 overflow-hidden md:h-auto md:w-2/5">
-        <Image src={image} alt={imageAlt} fill sizes="(min-width: 768px) 40vw, 100vw" className="object-cover" />
-        {/* Only the bottom is darkened, and only enough to seat the aside
-            text; the rest of the photo stays readable. */}
+      {/* Desktop only: the photo is a fixed side panel next to the form. */}
+      <div className="relative hidden shrink-0 overflow-hidden md:block md:w-2/5">
+        <Image src={image} alt={imageAlt} fill sizes="40vw" className="object-cover" />
         <div
           className={
             "absolute inset-0 " +
@@ -86,30 +85,37 @@ function Split({
           }
         />
         {aside && (
-          <div className="absolute inset-x-0 bottom-0 hidden flex-col gap-3 p-6 text-white md:flex">{aside}</div>
+          <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-6 text-white">{aside}</div>
         )}
       </div>
 
-      {/* min-h-0 lets overflow-y-auto actually scroll inside the flex column
-          instead of the form spilling out and being clipped. data-stage-scroll
-          tells the page's wheel/touch stepper to leave this region alone so a
-          scroll gesture here doesn't jump to the next stage. */}
+      {/* The single scroll surface. On mobile the photo lives inside it and
+          scrolls away with the content, so a drag anywhere on the card
+          scrolls the form. data-stage-scroll tells the page's wheel/touch
+          stepper to leave this region alone. */}
       <div
         data-stage-scroll=""
-        className="flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain p-6 md:p-9"
+        className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]"
       >
-        <div className="flex flex-col gap-1.5">
-          {eyebrow && (
-            <span className="font-heading text-[11px] font-bold uppercase tracking-wide text-orange">{eyebrow}</span>
-          )}
-          <h2 id={headingId} className="font-heading text-2xl font-bold leading-tight text-navy sm:text-3xl">
-            {title}
-          </h2>
-          {intro && <p className="font-body text-sm leading-6 text-black/65">{intro}</p>}
-          {meta && <p className="font-body text-sm text-black/55">{meta}</p>}
+        <div className="relative h-44 w-full shrink-0 overflow-hidden md:hidden">
+          <Image src={image} alt={imageAlt} fill sizes="100vw" className="object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-navy/25 to-transparent" />
         </div>
 
-        {children}
+        <div className="flex flex-col gap-4 p-6 md:p-9">
+          <div className="flex flex-col gap-1.5">
+            {eyebrow && (
+              <span className="font-heading text-[11px] font-bold uppercase tracking-wide text-orange">{eyebrow}</span>
+            )}
+            <h2 id={headingId} className="font-heading text-2xl font-bold leading-tight text-navy sm:text-3xl">
+              {title}
+            </h2>
+            {intro && <p className="font-body text-sm leading-6 text-black/65">{intro}</p>}
+            {meta && <p className="font-body text-sm text-black/55">{meta}</p>}
+          </div>
+
+          {children}
+        </div>
       </div>
     </>
   );
