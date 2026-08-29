@@ -1,198 +1,90 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { GlassFormShell } from "../components/shared/GlassFormShell";
+import { LeadForm } from "../components/shared/LeadForm";
 import { CAUSES, formatINR, type Cause } from "../lib/causes-data";
 
 const DONATION_AMOUNTS = [500, 1000, 2500, 5000];
 
-function CheckIcon() {
-  return (
-    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" aria-hidden="true">
-      <path d="M5 12.5 9.5 17 19 7" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function ShieldIcon() {
-  return (
-    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" aria-hidden="true">
-      <path
-        d="M12 3.5 5 6.3v5.1c0 4.5 3 7.8 7 9.1 4-1.3 7-4.6 7-9.1V6.3L12 3.5Z"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinejoin="round"
-      />
-      <path d="M9 12.2l2.1 2.1L15.5 10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-const fieldClass =
-  "rounded-lg border border-black/12 bg-white px-3 py-2 font-body text-sm text-black placeholder:text-black/40 transition-colors focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy/10";
-
 export function DonateStage() {
   const [causes, setCauses] = useState<Cause[]>(CAUSES);
-  const [causeSlug, setCauseSlug] = useState(CAUSES[0].slug);
+  const [causeTitle, setCauseTitle] = useState(CAUSES[0].title);
   const [amount, setAmount] = useState<number | null>(null);
-  const [confirmedAmount, setConfirmedAmount] = useState<number | null>(null);
-  const cause = causes.find((c) => c.slug === causeSlug) ?? causes[0];
-
-  const selectCause = (slug: string) => {
-    setCauseSlug(slug);
-    setConfirmedAmount(null);
-    setAmount(null);
-  };
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!amount) return;
-    // No real payment gateway in this build — a confirmed donation just
-    // credits the cause's running total locally, so the progress bar and
-    // raised-amount figure reflect it immediately.
-    setCauses((prev) =>
-      prev.map((c) => (c.slug === causeSlug ? { ...c, raisedAmount: c.raisedAmount + amount } : c)),
-    );
-    setConfirmedAmount(amount);
-    setAmount(null);
-  };
+  const cause = causes.find((c) => c.title === causeTitle) ?? causes[0];
+  const pct = Math.min(100, Math.round((cause.raisedAmount / cause.goalAmount) * 100));
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-center gap-2 md:gap-5">
-      <div className="flex flex-col gap-1">
-        <span className="hidden font-heading text-xs font-bold uppercase tracking-wide text-orange md:block">
-          Donate
-        </span>
-        <h1 className="font-heading text-xl font-bold leading-tight text-navy md:text-3xl">
-          Put your gift where you can see it
-        </h1>
-        <p className="hidden font-body text-sm leading-6 text-black/60 md:block">
-          Choose a cause to see its progress update in real time as you give.
-        </p>
-      </div>
-
-      <div className="grid gap-2 md:grid-cols-[1.15fr_1fr] md:items-start md:gap-5">
-        {/* Cause list */}
-        <div className="flex flex-col gap-1.5 md:gap-2.5">
-          {causes.map((c) => {
-            const pct = Math.min(100, Math.round((c.raisedAmount / c.goalAmount) * 100));
-            const isSelected = c.slug === causeSlug;
-            return (
-              <button
-                key={c.slug}
-                type="button"
-                onClick={() => selectCause(c.slug)}
-                aria-pressed={isSelected}
-                className={
-                  "flex items-center gap-2 rounded-xl border bg-white p-1.5 text-left transition-all md:gap-3 md:p-2.5 " +
-                  (isSelected ? "border-orange shadow-md ring-2 ring-orange/25" : "border-black/10 hover:border-navy/30 hover:shadow-sm")
-                }
-              >
-                <div className="relative h-9 w-11 shrink-0 overflow-hidden rounded-lg md:h-14 md:w-16">
-                  <Image src={c.image} alt="" fill sizes="64px" className="object-cover" />
-                </div>
-                <div className="flex min-w-0 flex-1 flex-col gap-1">
-                  <div className="flex items-center justify-between gap-2">
-                    <h3 className="truncate font-heading text-sm font-bold text-navy">{c.title}</h3>
-                    <span className="shrink-0 font-heading text-xs font-bold text-orange">{pct}%</span>
-                  </div>
-                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/8">
-                    <div
-                      className="h-full rounded-full bg-orange transition-[width] duration-500 ease-out"
-                      style={{ width: `${pct}%` }}
-                    />
-                  </div>
-                  <p className="hidden font-body text-[11px] text-black/50 md:block">
-                    {formatINR(c.raisedAmount)} raised of {formatINR(c.goalAmount)} goal
-                  </p>
-                </div>
-                <span
-                  aria-hidden="true"
+    <GlassFormShell
+      variant="page"
+      image={cause.image}
+      imageAlt=""
+      eyebrow="Donate"
+      title="Put your gift where you can see it"
+      intro="Choose a cause and an amount, then leave your details. Online payment is not live yet, so our team will send UPI and bank transfer options to complete your gift."
+      meta={`${formatINR(cause.raisedAmount)} raised of ${formatINR(cause.goalAmount)} goal`}
+      aside={
+        <div className="flex flex-col gap-2">
+          <p className="font-heading text-sm font-bold">{cause.title}</p>
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/25">
+            <div className="h-full rounded-full bg-orange transition-[width] duration-500" style={{ width: `${pct}%` }} />
+          </div>
+          <p className="font-body text-xs text-white/80">
+            {formatINR(cause.raisedAmount)} raised of {formatINR(cause.goalAmount)} goal
+          </p>
+        </div>
+      }
+    >
+      <LeadForm
+        formType="Donate"
+        select={{
+          name: "cause",
+          label: "Which cause?",
+          placeholder: "Choose a cause",
+          options: causes.map((c) => c.title),
+          value: causeTitle,
+          onChange: (v) => {
+            setCauseTitle(v);
+            setAmount(null);
+          },
+        }}
+        extra={
+          <div className="flex flex-col gap-1.5">
+            <span className="font-heading text-[11px] font-semibold uppercase tracking-wide text-black/55">Amount</span>
+            <div className="grid grid-cols-4 gap-2">
+              {DONATION_AMOUNTS.map((value) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setAmount(value)}
+                  aria-pressed={amount === value}
                   className={
-                    "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors " +
-                    (isSelected ? "border-orange bg-orange text-white" : "border-black/15 text-transparent")
+                    "rounded-lg border py-1.5 font-heading text-sm font-semibold transition-colors " +
+                    (amount === value
+                      ? "border-navy bg-navy text-white"
+                      : "border-black/15 text-black/60 hover:border-navy hover:text-navy")
                   }
                 >
-                  <CheckIcon />
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Donation panel */}
-        <div className="flex flex-col gap-2 rounded-2xl border border-black/10 bg-white p-3 shadow-lg md:gap-3.5 md:p-5">
-          <div>
-            <p className="font-body text-[11px] uppercase tracking-wide text-black/45">Donating to</p>
-            <p className="font-heading text-sm font-bold text-navy">{cause.title}</p>
-          </div>
-
-          {confirmedAmount ? (
-            <div className="flex flex-col gap-3">
-              <div className="flex items-start gap-2.5 rounded-lg border border-navy/15 bg-navy/5 p-3">
-                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-navy text-white">
-                  <CheckIcon />
-                </span>
-                <p className="font-body text-sm leading-5 text-navy">
-                  Thank you! Your {formatINR(confirmedAmount)} gift to {cause.title} is already reflected above.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setConfirmedAmount(null)}
-                className="self-start font-heading text-xs font-semibold text-navy underline-offset-2 hover:underline"
-              >
-                Make another donation
-              </button>
+                  ₹{value}
+                </button>
+              ))}
             </div>
-          ) : (
-            <form className="flex flex-col gap-2 md:gap-3.5" onSubmit={handleSubmit}>
-              <div>
-                <p className="mb-1.5 font-heading text-xs font-semibold uppercase tracking-wide text-black/50">
-                  Choose an amount
-                </p>
-                <div className="grid grid-cols-4 gap-1.5">
-                  {DONATION_AMOUNTS.map((value) => (
-                    <button
-                      key={value}
-                      type="button"
-                      onClick={() => setAmount(value)}
-                      aria-pressed={amount === value}
-                      className={
-                        "rounded-lg border py-1.5 font-heading text-sm font-semibold transition-colors " +
-                        (amount === value
-                          ? "border-navy bg-navy text-white"
-                          : "border-black/15 text-black/60 hover:border-navy hover:text-navy")
-                      }
-                    >
-                      ₹{value}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <label className="flex flex-col gap-1">
-                <span className="font-heading text-xs font-semibold text-black/50">Full name</span>
-                <input required type="text" placeholder="Full name" className={fieldClass} />
-              </label>
-              <label className="flex flex-col gap-1">
-                <span className="font-heading text-xs font-semibold text-black/50">Phone number</span>
-                <input required type="tel" placeholder="Phone number (for Razorpay)" className={fieldClass} />
-              </label>
-              <button
-                type="submit"
-                disabled={!amount}
-                className="mt-0.5 flex items-center justify-center rounded-full bg-orange px-6 py-2.5 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                {amount ? `Pay ₹${amount} via Razorpay` : "Choose an amount"}
-              </button>
-              <div className="hidden items-center gap-1.5 font-body text-xs text-black/50 md:flex">
-                <ShieldIcon />
-                Secured by Razorpay
-              </div>
-            </form>
-          )}
-        </div>
-      </div>
-    </div>
+          </div>
+        }
+        extraPayload={amount ? { amount } : undefined}
+        disabled={!amount}
+        submitLabel={amount ? `Pay ₹${amount} via Razorpay` : "Choose an amount"}
+        feeNote="Online payment is not live yet. We will email you UPI and bank transfer details to complete the donation."
+        successTitle="Pledge recorded"
+        successBody="Thank you. We have your details and will send payment options shortly."
+        onSubmitted={(payload) => {
+          const value = Number(payload.amount);
+          if (!value) return;
+          setCauses((prev) =>
+            prev.map((c) => (c.title === causeTitle ? { ...c, raisedAmount: c.raisedAmount + value } : c)),
+          );
+        }}
+      />
+    </GlassFormShell>
   );
 }

@@ -3,8 +3,9 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { POSTS, getPostBySlug } from "../../lib/posts-data";
-import { NAV_LINKS, FOOTER_CONTACT, FOOTER_SOCIALS } from "../../components/shared/constants";
+import { NAV_LINKS } from "../../components/shared/constants";
 import { ScrollUnlock } from "../../components/shared/ScrollUnlock";
+import { SiteFooterContent } from "../../components/shared/SiteFooterContent";
 
 export function generateStaticParams() {
   return POSTS.map((post) => ({ slug: post.slug }));
@@ -80,24 +81,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
       </article>
 
-      <footer className="flex flex-col items-center gap-3 bg-navy px-8 py-10 text-center">
-        <p className="font-body text-xs text-white/60">{FOOTER_CONTACT.email}</p>
-        <div className="flex flex-wrap justify-center gap-x-3 gap-y-1">
-          {FOOTER_SOCIALS.map((social) => (
-            <a
-              key={social.name}
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-body text-xs text-white/70 hover:text-white hover:underline"
-            >
-              {social.name}
-            </a>
-          ))}
-        </div>
-        <p className="font-body text-xs text-white/40">
-          © 2026 National Association for the Blind, State Chapter, Lucknow.
-        </p>
+      <footer className="bg-navy px-8 py-10">
+        <SiteFooterContent />
       </footer>
     </main>
   );

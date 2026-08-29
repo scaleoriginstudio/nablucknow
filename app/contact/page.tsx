@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { StagePager } from "../components/shared/StagePager";
 import { ContactStage } from "./ContactStage";
+import { ContactCarousel } from "./ContactCarousel";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -11,7 +12,15 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <main>
-      <StagePager stages={[<ContactStage key="contact" />]} />
+      <StagePager
+        background={
+          <>
+            <ContactCarousel />
+            <div className="absolute inset-0 bg-navy/80" />
+          </>
+        }
+        stages={[<ContactStage key="contact" />]}
+      />
     </main>
   );
 }

@@ -2,8 +2,8 @@ export type LinkedInPost = {
   title: string;
   excerpt: string;
   image: string;
-  // No confirmed NAB Lucknow LinkedIn page exists yet — every href is a
-  // placeholder until real published posts are linked here, same pattern
+  // No confirmed NAB Lucknow LinkedIn page exists yet, so every href is a
+  // placeholder until real published posts are linked here, the same pattern
   // as the LinkedIn entry in FOOTER_SOCIALS.
   href: string;
 };
@@ -16,8 +16,8 @@ export const LINKEDIN_POSTS: LinkedInPost[] = [
     href: "#",
   },
   {
-    title: "Braille Literacy Hasn't Gone Away — It's Changed Shape",
-    excerpt: "Screen readers didn't replace braille. Here's what our classrooms look like today.",
+    title: "Braille Literacy Has Not Gone Away. It Has Changed Shape",
+    excerpt: "Screen readers did not replace braille. This is what our classrooms look like today.",
     image: "/img/nab/care.jpg",
     href: "#",
   },

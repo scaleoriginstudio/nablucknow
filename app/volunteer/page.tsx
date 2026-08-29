@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { StagePager } from "../components/shared/StagePager";
+import { GlassBackdrop } from "../components/shared/GlassFormShell";
 import { VolunteerStage } from "./VolunteerStage";
 
 export const metadata: Metadata = {
@@ -11,7 +12,10 @@ export const metadata: Metadata = {
 export default function VolunteerPage() {
   return (
     <main>
-      <StagePager stages={[<VolunteerStage key="volunteer" />]} />
+      <StagePager
+        background={<GlassBackdrop image="/img/nab/dance.jpg" priority />}
+        stages={[<VolunteerStage key="volunteer" />]}
+      />
     </main>
   );
 }

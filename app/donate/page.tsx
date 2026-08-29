@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { StagePager } from "../components/shared/StagePager";
+import { GlassBackdrop } from "../components/shared/GlassFormShell";
 import { DonateStage } from "./DonateStage";
 
 export const metadata: Metadata = {
@@ -11,7 +12,10 @@ export const metadata: Metadata = {
 export default function DonatePage() {
   return (
     <main>
-      <StagePager stages={[<DonateStage key="donate" />]} />
+      <StagePager
+        background={<GlassBackdrop image="/img/nab/cover-page.jpg" priority />}
+        stages={[<DonateStage key="donate" />]}
+      />
     </main>
   );
 }

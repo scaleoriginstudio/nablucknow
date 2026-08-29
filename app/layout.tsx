@@ -3,7 +3,7 @@ import { Montserrat, Libre_Baskerville } from "next/font/google";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "./lib/site";
 import { OverlayProvider } from "./components/shared/OverlayContext";
 import { Overlays } from "./components/shared/Overlays";
-import { FloatingWidgets } from "./components/shared/FloatingWidgets";
+import { FloatingActions } from "./components/shared/FloatingActions";
 import "./globals.css";
 
 const heading = Montserrat({
@@ -87,7 +87,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${heading.variable} ${body.variable}`}>
       <head>
-        {/* Material Symbols — Google's icon set, used site-wide instead of
+        {/* Material Symbols, Google's icon set, used site-wide instead of
             hand-drawn SVGs wherever an icon is needed. */}
         <link
           rel="stylesheet"
@@ -98,7 +98,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <OverlayProvider>
           {children}
           <Overlays />
-          <FloatingWidgets />
+          <FloatingActions />
         </OverlayProvider>
         <script
           type="application/ld+json"

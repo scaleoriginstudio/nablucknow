@@ -39,7 +39,7 @@ export const PROGRAMS: Program[] = [
     ],
     contributionAmount: "₹25,000 per session",
     impact:
-      "Proceeds go toward NAB's vocational training programme — eligible CSR spend under Schedule VII of the Companies Act, 2013.",
+      "Proceeds fund NAB's vocational training programme. The fee is eligible CSR spend under Schedule VII of the Companies Act, 2013.",
   },
   {
     slug: "nukkad-naatak",
@@ -58,7 +58,7 @@ export const PROGRAMS: Program[] = [
     ],
     contributionAmount: "₹15,000 per performance",
     impact:
-      "Funds the students' continued theatre training — eligible CSR spend under Schedule VII of the Companies Act, 2013.",
+      "Funds the students' continued theatre training. The fee is eligible CSR spend under Schedule VII of the Companies Act, 2013.",
   },
   {
     slug: "walk-for-a-cause",
@@ -77,6 +77,6 @@ export const PROGRAMS: Program[] = [
     ],
     contributionAmount: "₹1,000 per participant",
     impact:
-      "Funds NAB's work directly — eligible CSR spend under Schedule VII of the Companies Act, 2013.",
+      "Funds NAB's work directly. The fee is eligible CSR spend under Schedule VII of the Companies Act, 2013.",
   },
 ];

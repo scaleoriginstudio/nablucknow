@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { UPCOMING_EVENTS, type UpcomingEvent } from "./events-data";
-import { ModalShell } from "../components/shared/ModalShell";
+import { GlassFormShell } from "../components/shared/GlassFormShell";
+import { LeadForm } from "../components/shared/LeadForm";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
@@ -26,65 +27,41 @@ function googleCalendarUrl(event: UpcomingEvent) {
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
-// The sign-up form used to expand inline inside the card, which — on this
-// pinned, non-scrolling page — pushed the other cards below the visible
-// viewport with no way to reach them. It's a modal now (same ModalShell
-// used for the Volunteer/Donate overlays), so the card itself never
-// changes size.
+// The sign-up form is a modal (the shared glass shell), so on this pinned,
+// non-scrolling page the card itself never changes size. It collects
+// details only: no payment is taken here, the entry fee is shown as a note.
 function SignUpModal({ event, onClose, onRegistered }: { event: UpcomingEvent; onClose: () => void; onRegistered: () => void }) {
+  const [selected, setSelected] = useState(event.title);
+
   return (
-    <ModalShell titleId={`event-${event.slug}-title`} onClose={onClose}>
-      <div className="hidden w-2/5 md:block">
-        <Image src={event.image} alt="" width={600} height={800} className="h-full w-full object-cover" />
-      </div>
-      <div className="flex w-full flex-col gap-4 p-8 md:w-3/5">
-        <div>
-          <p className="font-body text-xs font-semibold uppercase tracking-wide text-orange">
-            {event.eventCategory} · {event.mode}
-          </p>
-          <h2 id={`event-${event.slug}-title`} className="mt-1 font-heading text-2xl font-bold text-navy">
-            {event.title}
-          </h2>
-          <p className="mt-1 font-body text-sm text-black/60">{formatDate(event.date)}</p>
-        </div>
-        <p className="font-body text-sm leading-6 text-black/70">{event.description}</p>
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={(e) => {
-            e.preventDefault();
-            onRegistered();
-          }}
-        >
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="flex flex-col gap-1">
-              <span className="sr-only">Full name</span>
-              <input
-                required
-                type="text"
-                placeholder="Full name"
-                className="border-0 border-b border-black/20 bg-transparent pb-2 font-body text-sm placeholder:text-black/40 focus:border-navy focus:outline-none"
-              />
-            </label>
-            <label className="flex flex-col gap-1">
-              <span className="sr-only">Email</span>
-              <input
-                required
-                type="email"
-                placeholder="Email"
-                className="border-0 border-b border-black/20 bg-transparent pb-2 font-body text-sm placeholder:text-black/40 focus:border-navy focus:outline-none"
-              />
-            </label>
-          </div>
-          <button
-            type="submit"
-            className="mt-1 self-start rounded-full bg-orange px-6 py-2.5 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy"
-          >
-            Pay ₹{event.cost} via Razorpay
-          </button>
-          <p className="font-body text-[11px] text-black/40">Secured by Razorpay</p>
-        </form>
-      </div>
-    </ModalShell>
+    <GlassFormShell
+      variant="modal"
+      titleId={`event-${event.slug}-title`}
+      onClose={onClose}
+      image={event.image}
+      imageAlt=""
+      eyebrow={`${event.eventCategory} · ${event.mode}`}
+      title={event.title}
+      intro={event.description}
+      meta={`${formatDate(event.date)} · ${event.time}`}
+    >
+      <LeadForm
+        formType="EventSignup"
+        select={{
+          name: "event",
+          label: "Which event?",
+          placeholder: "Choose an event",
+          options: UPCOMING_EVENTS.map((e) => e.title),
+          value: selected,
+          onChange: setSelected,
+        }}
+        feeNote={`Entry fee: ₹${event.cost}. We will share payment details once your place is confirmed.`}
+        submitLabel="Register"
+        successTitle="You are registered"
+        successBody="Thank you for signing up. We will email you the details and payment options shortly."
+        onSubmitted={onRegistered}
+      />
+    </GlassFormShell>
   );
 }
 

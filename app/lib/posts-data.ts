@@ -13,39 +13,39 @@ export type Post = {
 export const POSTS: Post[] = [
   {
     slug: "why-accessible-hiring-matters",
-    title: "Why Accessible Hiring Isn't Just a CSR Checkbox",
+    title: "What Changes After a Company's First Visually Impaired Hire",
     excerpt:
-      "What actually changes when a company hires its first visually impaired employee, and what usually goes wrong.",
+      "Accessible hiring does not end at the offer letter. Here is what the first few months usually require.",
     image: "/img/nab/computer-training.jpg",
     date: "2026-06-02",
     section: "Awareness",
     body: [
-      "Every year, a handful of the corporate partners we work with ask the same question once a hire is made: what now? Accessible hiring doesn't end at the offer letter. Screen readers, document formats, and a manager briefed on what independence actually looks like matter as much as the interview itself.",
-      "The organisations that get this right treat accessibility as infrastructure, not accommodation. They build once, and every future hire benefits without a special request being filed.",
+      "Once a hire is made, corporate partners tend to ask the same question: what now? Accessible hiring does not end at the offer letter. Screen readers, document formats, and a manager who understands what independence looks like matter as much as the interview.",
+      "Organisations that get this right treat accessibility as infrastructure rather than accommodation. They build it once, and every future hire benefits without filing a special request.",
     ],
   },
   {
     slug: "braille-literacy-in-2026",
-    title: "Braille Literacy Hasn't Gone Away: It's Changed Shape",
-    excerpt: "Screen readers didn't replace braille. Here's what our classrooms actually look like today.",
+    title: "Braille Literacy Has Not Gone Away. It Has Changed Shape",
+    excerpt: "Screen readers did not replace braille. This is what our classrooms look like today.",
     image: "/img/nab/care.jpg",
     date: "2026-04-18",
     section: "Awareness",
     body: [
-      "There's a common assumption that text-to-speech has made braille redundant. In our own classrooms, the opposite has held true: braille remains the fastest route to spelling, grammar, and the kind of reading fluency that audio alone doesn't build.",
-      "What has changed is the hardware: refreshable braille displays paired with a phone are now a normal part of a student's kit by the time they finish school with us.",
+      "It is often assumed that text-to-speech has made braille redundant. In our classrooms the opposite holds true. Braille is still the fastest route to spelling, grammar, and reading fluency that audio alone does not build.",
+      "What has changed is the hardware. By the time a student finishes school with us, a refreshable braille display paired with a phone is a normal part of their kit.",
     ],
   },
   {
     slug: "csr-partner-playbook",
-    title: "A Short Playbook for Corporates Starting Their First Disability-Inclusion CSR Programme",
-    excerpt: "The three questions we ask every new CSR partner before we design a programme together.",
+    title: "Three Questions We Ask Before Designing a CSR Programme",
+    excerpt: "What we ask every new corporate partner before any programme is planned.",
     image: "/img/nab/cover-page.jpg",
     date: "2026-02-10",
     section: "Awareness",
     body: [
-      "Most CSR conversations start with a budget and a deadline. We've found the programmes that last start with three questions instead: who is this for, what does success look like in a year, and who on your side owns it after the ribbon-cutting.",
-      "The partnerships that skip this step tend to fund a single event. The ones that don't tend to fund infrastructure that outlives the financial year.",
+      "Most CSR conversations open with a budget and a deadline. The programmes that last tend to open with three questions instead: who is this for, what does success look like in a year, and who on your side owns it once the launch is over.",
+      "Partners who skip that step usually fund a single event. Partners who do not usually fund something that outlives the financial year.",
     ],
   },
   {

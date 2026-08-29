@@ -10,7 +10,21 @@ import { Footer } from "./Footer";
 import { MobileNav } from "./MobileNav";
 import { useOverlay } from "./OverlayContext";
 
-function StageStepper({ active, total, onSelect }: { active: number; total: number; onSelect: (n: number) => void }) {
+function StageStepper({
+  active,
+  total,
+  onSelect,
+  onDark = false,
+}: {
+  active: number;
+  total: number;
+  onSelect: (n: number) => void;
+  onDark?: boolean;
+}) {
+  const activeClass = onDark ? "text-2xl font-bold text-white sm:text-4xl" : "text-2xl font-bold text-navy sm:text-4xl";
+  const idleClass = onDark
+    ? "text-sm font-semibold text-white/40 sm:text-lg"
+    : "text-sm font-semibold text-black/25 sm:text-lg";
   return (
     <div className="flex w-full items-baseline justify-center gap-4 font-body sm:gap-6">
       {Array.from({ length: total }, (_, i) => i + 1).map((n) => (
@@ -23,7 +37,7 @@ function StageStepper({ active, total, onSelect }: { active: number; total: numb
         >
           <span
             style={{ transition: "color 500ms ease-out, font-size 500ms ease-out" }}
-            className={n === active ? "text-2xl font-bold text-navy sm:text-4xl" : "text-sm font-semibold text-black/25 sm:text-lg"}
+            className={n === active ? activeClass : idleClass}
           >
             {String(n).padStart(2, "0")}
           </span>
@@ -45,7 +59,16 @@ function StageStepper({ active, total, onSelect }: { active: number; total: numb
     the timeline, silently leaving the footer's pointer-events — and on a
     misfire, its opacity — stuck at rest. Plain state-driven CSS transitions
     can't drift out of sync with the state that owns them. */
-export function StagePager({ stages }: { stages: React.ReactNode[] }) {
+export function StagePager({
+  stages,
+  background,
+}: {
+  stages: React.ReactNode[];
+  /** A full-bleed layer painted behind every stage (below the header and
+      stepper). When set, the stages themselves render transparent so it
+      shows through, and the glass panels on them have something to blur. */
+  background?: React.ReactNode;
+}) {
   const total = stages.length;
   const lastStage = total + 1;
   const hasStepper = total > 1;
@@ -103,11 +126,21 @@ export function StagePager({ stages }: { stages: React.ReactNode[] }) {
       goTo(Math.min(lastStage, Math.max(1, activeRef.current + delta)));
     };
 
+    // One scroll gesture fires a burst of wheel/touch events; a cooldown
+    // keeps that burst to a single stage step.
+    let lastGesture = 0;
+    const gatedStep = (delta: 1 | -1) => {
+      const now = Date.now();
+      if (now - lastGesture < 620) return;
+      lastGesture = now;
+      step(delta);
+    };
+
     const onWheel = (event: WheelEvent) => {
       if (overlayOpenRef.current) return;
-      if (Math.abs(event.deltaY) < 4) return;
+      if (Math.abs(event.deltaY) < 10) return;
       event.preventDefault();
-      step(event.deltaY > 0 ? 1 : -1);
+      gatedStep(event.deltaY > 0 ? 1 : -1);
     };
     const onKeyDown = (event: KeyboardEvent) => {
       if (overlayOpenRef.current) return;
@@ -127,7 +160,7 @@ export function StagePager({ stages }: { stages: React.ReactNode[] }) {
     const onTouchEnd = (event: TouchEvent) => {
       const dy = touchStartY - (event.changedTouches[0]?.clientY ?? 0);
       if (Math.abs(dy) < 40) return;
-      step(dy > 0 ? 1 : -1);
+      gatedStep(dy > 0 ? 1 : -1);
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
@@ -158,6 +191,12 @@ export function StagePager({ stages }: { stages: React.ReactNode[] }) {
         Skip to content
       </a>
       <div aria-live="polite" className="sr-only" ref={announceRef} />
+
+      {background && (
+        <div aria-hidden="true" className="fixed inset-0 z-0">
+          {background}
+        </div>
+      )}
 
       <header
         style={fade(!onFooter)}
@@ -222,7 +261,7 @@ export function StagePager({ stages }: { stages: React.ReactNode[] }) {
           className="z-20 px-8 pointer-events-none"
         >
           <div className="mx-auto max-w-6xl">
-            <StageStepper active={active} total={total} onSelect={goTo} />
+            <StageStepper active={active} total={total} onSelect={goTo} onDark={!!background} />
           </div>
         </div>
       )}
@@ -246,14 +285,23 @@ export function StagePager({ stages }: { stages: React.ReactNode[] }) {
                 height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
                 ...fade(isActive),
               }}
-              className="z-10 flex flex-col items-center justify-start overflow-hidden bg-white px-8 md:justify-center"
+              className={
+                "z-10 flex flex-col items-center justify-start overflow-hidden px-8 md:justify-center " +
+                (background ? "" : "bg-white")
+              }
             >
               <div
                 ref={(el) => {
                   stageHeadingRefs.current[i] = el;
                 }}
                 tabIndex={-1}
-                className="flex h-full w-full flex-col items-center justify-start pt-20 outline-none md:justify-center md:pt-0"
+                className={
+                  "flex h-full w-full flex-col items-center justify-start outline-none md:justify-center " +
+                  // Leave room for the fixed stepper strip above the content.
+                  // On desktop the pages are vertically centred so a small
+                  // top pad is enough; without a stepper, none is needed.
+                  (hasStepper ? "pt-20 md:pt-14" : "pt-20 md:pt-0")
+                }
               >
                 {content}
               </div>

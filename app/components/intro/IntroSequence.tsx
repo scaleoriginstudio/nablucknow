@@ -18,10 +18,11 @@ import { useGSAP } from "@gsap/react";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { SIGHT_STAGES, stageForValue, type SightStage } from "./stages";
-import { NAV_LINKS } from "../shared/constants";
+import { NAV_LINKS, VOLUNTEER_AREAS } from "../shared/constants";
 import { Footer } from "../shared/Footer";
 import { MobileNav } from "../shared/MobileNav";
 import { Icon } from "../shared/Icon";
+import { LeadForm } from "../shared/LeadForm";
 import { CAUSES, formatINR } from "../../lib/causes-data";
 import { useOverlay } from "../shared/OverlayContext";
 
@@ -32,9 +33,9 @@ const HEADER_HEIGHT = 96;
 const TOTAL_STAGES = 10;
 const HERO_HEADLINE = "Seeing the world differently, together.";
 const STAGE1_HEADLINE =
-  "Seeing the world differently with National Association for the Blind, State Chapter, Lucknow branch";
+  "National Association for the Blind, State Chapter, Lucknow";
 const STAGE2_PARAGRAPH =
-  "An impact driven NGO that has devoted over 30+ years to the wellbeing of visually impaired individuals, right from primary education to family counselling up until employment support. And we strive to do it while giving them an environment as normal to their upbringing as possible.";
+  "For more than 30 years we have worked with visually impaired people in Lucknow and across Uttar Pradesh, from primary schooling through family counselling to employment. The aim is a full, ordinary life for every person we support, not a lesser version of one.";
 const STAGE2_STORIES = [
   {
     word: "Educate.",
@@ -52,9 +53,9 @@ const STAGE2_STORIES = [
     image: "/img/nab/vocational.jpg",
   },
 ];
-const STAGE3_HEADLINE = "Stories beyond Passion.\nStories about Resilience.";
-const STAGE3_VISION_TEXT = "A world where visual impairment never limits what someone can become.";
-const STAGE3_MISSION_TEXT = "Educating, counselling, and training — from childhood to independent careers.";
+const STAGE3_HEADLINE = "Our vision,\nand the work behind it.";
+const STAGE3_VISION_TEXT = "A world where visual impairment never decides what a person can become.";
+const STAGE3_MISSION_TEXT = "Education, counselling, and training, from childhood to an independent career.";
 const JOURNEY_ENTRIES = [
   { year: "1997", text: "National Association for the Blind, State Chapter, Lucknow, is founded to serve visually impaired individuals across Uttar Pradesh." },
   { year: "2005", text: "Our first residential school opens, offering free primary education to visually impaired children." },
@@ -64,9 +65,9 @@ const JOURNEY_ENTRIES = [
 const JOURNEY_ENTRY_HEIGHT = 96;
 const VISIBLE_JOURNEY_ROWS = 3;
 const IMPACT_STATS = [
-  { value: "5,000+", label: "Individuals supported since 1997" },
-  { value: "200+", label: "Students educated through our schools" },
-  { value: "1,000+", label: "Families counselled and empowered" },
+  { value: "5,000+", label: "People supported since 1997" },
+  { value: "200+", label: "Students taught in our schools" },
+  { value: "1,000+", label: "Families supported through counselling" },
 ];
 const TIMELINE_SHIFT_X = 180;
 const TEAM_MEMBERS = [
@@ -75,21 +76,21 @@ const TEAM_MEMBERS = [
     name: "Anjali Verma",
     role: "Programme Director",
     message:
-      "Every child who walks into our school for the first time reminds me why we do this. Watching them read braille independently, months later, is the moment that keeps this team going.",
+      "Most children arrive at our school unable to read. A few months later they are reading braille on their own. That is the part of this work I have never got used to.",
   },
   {
     photo: "/img/placeholderimg.png",
     name: "Rohit Malhotra",
     role: "Head of Vocational Training",
     message:
-      "We don't just teach skills. We open doors people assumed were shut for good. Every placement letter our students receive is proof that assumption was wrong.",
+      "We teach a trade, then we help our students get hired. Every placement letter is a job someone was told they would never hold.",
   },
   {
     photo: "/img/placeholderimg.png",
     name: "Kavita Nair",
     role: "Family Counsellor",
     message:
-      "Parents often arrive here more afraid than their children. My job starts with them: once a family believes in their child's future, everything else becomes possible.",
+      "Parents often arrive more anxious than their children. Most of my work is with them. Once a family expects their child to have a future, the child usually does.",
   },
 ];
 const SPONSORS = [
@@ -119,19 +120,19 @@ const TESTIMONIALS = [
   },
   {
     quote:
-      "The vocational training didn't just teach me a skill. It gave me back my independence. I have a job now, and I got there on my own terms.",
+      "The training gave me a skill and then a job. More than that, it gave me back my independence.",
     name: "Programme graduate",
-    role: "Vocational Training batch of 2022",
+    role: "Vocational training, 2022 batch",
   },
   {
     quote:
-      "I've supported a lot of causes over the years. Few show you, as clearly as NAB does, exactly where your contribution goes and what it changes.",
+      "I have supported many causes. Few show you as plainly where the money goes and what it changes.",
     name: "Long-time donor",
     role: "Supporter since 2019",
   },
 ];
-// Official UN SDG brand colors — the goals most directly tied to what NAB
-// actually does, not a generic "all 17" claim.
+// Official UN SDG brand colours, limited to the goals NAB's work maps to
+// directly rather than a generic "all 17" claim.
 const SDG_GOALS = [
   {
     number: 3,
@@ -275,6 +276,11 @@ const headlineStyle = (layout: Layout, isMobile: boolean): CSSProperties =>
           color: "#23398D",
           fontSize: 28,
           textAlign: "center",
+          // Never interactive, and once the visitor is past the hero it sits
+          // faded (opacity 0) on top of later stages at z-20. Without this it
+          // silently swallows taps on whatever is beneath it — the SDG grid
+          // and its description box on mobile.
+          pointerEvents: "none",
         }
       : {
           position: "fixed",
@@ -287,6 +293,7 @@ const headlineStyle = (layout: Layout, isMobile: boolean): CSSProperties =>
           color: "#FFFFFF",
           fontSize: 68,
           textAlign: "left",
+          pointerEvents: "none",
         }
     : {
         position: "fixed",
@@ -320,6 +327,7 @@ export default function IntroSequence() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [ctaTab, setCtaTab] = useState<"volunteer" | "donate" | "csr">("donate");
   const [donationAmount, setDonationAmount] = useState<number | null>(null);
+  const [ctaArea, setCtaArea] = useState("");
   const [selectedSdg, setSelectedSdg] = useState<number>(SDG_GOALS[0].number);
   const [activeStage, setActiveStage] = useState<Stage>(0);
   const { open: overlayOpen, openVolunteer, openDonate } = useOverlay();
@@ -515,24 +523,21 @@ export default function IntroSequence() {
     (target: Stage) => {
       if (layout !== "final" || activeStageRef.current === target) return;
       forceInstantRef.current = true;
+      // Each forced-instant hop's timeline flushes within a frame or two, so
+      // rather than poll isTransitioningRef (which a late onComplete can leave
+      // stuck, stranding the cascade with no active stage) just clear the
+      // lock and take the next hop on a fixed short delay. 8 hops land in
+      // well under a second and read as one sweep.
+      const HOP_MS = 90;
       const advance = () => {
         const current = activeStageRef.current;
         if (current === target) {
           forceInstantRef.current = false;
           return;
         }
+        isTransitioningRef.current = false;
         goToStageRef.current((current < target ? current + 1 : current - 1) as Stage);
-        // Polled with setTimeout, not requestAnimationFrame — rAF can stall
-        // in a backgrounded/throttled tab, which would strand this cascade
-        // partway through. setTimeout always fires, just slower when throttled.
-        const waitForRelease = () => {
-          if (isTransitioningRef.current) {
-            window.setTimeout(waitForRelease, 16);
-          } else {
-            advance();
-          }
-        };
-        window.setTimeout(waitForRelease, 16);
+        window.setTimeout(advance, HOP_MS);
       };
       advance();
     },
@@ -1439,11 +1444,24 @@ export default function IntroSequence() {
       goToStage(target);
     };
 
+    // One physical scroll gesture (a wheel notch, a trackpad flick, a
+    // swipe) fires a burst of events. Without a cooldown that burst steps
+    // several stages at once — most visibly it blew straight past the
+    // Sponsors sub-section on the way into stage 8.
+    let lastGesture = 0;
+    const GESTURE_COOLDOWN = 620;
+    const gatedStep = (dir: 1 | -1) => {
+      const now = Date.now();
+      if (now - lastGesture < GESTURE_COOLDOWN) return;
+      lastGesture = now;
+      step(dir);
+    };
+
     const onWheel = (event: WheelEvent) => {
       if (!introSettledRef.current) return;
-      if (Math.abs(event.deltaY) < 4) return;
+      if (Math.abs(event.deltaY) < 10) return;
       event.preventDefault();
-      step(event.deltaY > 0 ? 1 : -1);
+      gatedStep(event.deltaY > 0 ? 1 : -1);
     };
 
     const onKeyDown = (event: globalThis.KeyboardEvent) => {
@@ -1465,7 +1483,7 @@ export default function IntroSequence() {
       if (!introSettledRef.current) return;
       const dy = touchStartY - (event.changedTouches[0]?.clientY ?? 0);
       if (Math.abs(dy) < 40) return;
-      step(dy > 0 ? 1 : -1);
+      gatedStep(dy > 0 ? 1 : -1);
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
@@ -2189,14 +2207,26 @@ export default function IntroSequence() {
           }}
           className="z-[16] flex flex-col items-center overflow-hidden bg-white px-8 pt-20 pb-6 opacity-0 pointer-events-none"
         >
-          <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">
-            <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">Our Causes</h2>
+          <div className="mx-auto flex w-full max-w-5xl flex-col gap-4 md:gap-5">
+            <div className="flex flex-col gap-1">
+              <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">Our Causes</h2>
+              <p className="text-center font-body text-xs text-black/45 md:hidden">Swipe to browse</p>
+            </div>
 
-            <div className="grid gap-3 md:gap-6 md:grid-cols-3">
+            {/* On phones the three cards are a horizontal, snap-scrolling row
+                with a visible scrollbar; the page still steps down to stage 7
+                on a vertical swipe. On desktop it is a plain 3-up grid. */}
+            <div
+              onWheel={(e) => {
+                if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) e.stopPropagation();
+              }}
+              className="-mx-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-8 pb-3 md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 md:pb-0"
+              style={{ scrollbarWidth: "thin" }}
+            >
               {CAUSES.map((cause) => (
                 <div
                   key={cause.title}
-                  className="flex flex-row items-center overflow-hidden rounded-2xl bg-orange shadow-lg md:flex-col md:items-stretch"
+                  className="flex w-[78%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl bg-orange shadow-lg md:w-auto"
                 >
                   <div className="p-2 md:w-full">
                     <Image
@@ -2204,16 +2234,16 @@ export default function IntroSequence() {
                       alt=""
                       width={640}
                       height={520}
-                      className="h-16 w-16 rounded-xl object-cover md:h-36 md:w-full"
+                      className="h-32 w-full rounded-xl object-cover md:h-36"
                     />
                   </div>
-                  <div className="flex flex-1 flex-col gap-1 py-2 pr-4 text-left text-white md:flex-none md:gap-2 md:px-5 md:pb-5 md:pt-0 md:text-center">
-                    <h3 className="font-heading text-sm font-bold md:text-xl">{cause.title}</h3>
-                    <p className="hidden font-body text-xs leading-5 text-white/90 md:block">{cause.description}</p>
+                  <div className="flex flex-1 flex-col gap-1.5 px-4 pb-4 text-left text-white md:gap-2 md:px-5 md:pb-5 md:text-center">
+                    <h3 className="font-heading text-base font-bold md:text-xl">{cause.title}</h3>
+                    <p className="font-body text-xs leading-5 text-white/90">{cause.description}</p>
                     <p className="font-body text-xs text-white/90 md:mt-1 md:border-b md:border-white/50 md:pb-1">
                       Goal: {formatINR(cause.goalAmount)}
                     </p>
-                    <div className="flex items-center gap-2 md:mt-2 md:justify-center">
+                    <div className="mt-1 flex items-center gap-2 md:mt-2 md:justify-center">
                       <button
                         type="button"
                         onClick={openVolunteer}
@@ -2250,7 +2280,7 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-center md:pt-0"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-center md:pt-28"
         >
           <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-4 md:gap-8">
             <h2 className="text-center font-heading text-xl font-bold text-navy sm:text-3xl">Meet the Dream Team</h2>
@@ -2368,174 +2398,64 @@ export default function IntroSequence() {
 
                   <div ref={stage8CtaFormRef}>
                     {ctaTab === "donate" && (
-                      <form onSubmit={(event) => event.preventDefault()} className="flex flex-col gap-3 md:gap-5">
-                        <div>
-                          <p className="mb-1.5 font-heading text-sm font-semibold text-black/70 md:mb-2">
-                            Choose an amount
-                          </p>
-                          <div className="grid grid-cols-4 gap-2">
-                            {DONATION_AMOUNTS.map((amount) => (
-                              <button
-                                key={amount}
-                                type="button"
-                                onClick={() => setDonationAmount(amount)}
-                                aria-pressed={donationAmount === amount}
-                                className={
-                                  "rounded-lg border py-1.5 font-heading text-sm font-semibold transition-colors md:py-2 " +
-                                  (donationAmount === amount
-                                    ? "border-orange bg-orange text-white"
-                                    : "border-navy/30 text-navy hover:bg-navy hover:text-white")
-                                }
-                              >
-                                ₹{amount}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3 md:gap-5">
-                          <label className="flex flex-col">
-                            <span className="sr-only">Full name</span>
-                            <input
-                              type="text"
-                              placeholder="Full name"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
-                            />
-                          </label>
-                          <label className="flex flex-col">
-                            <span className="sr-only">Email</span>
-                            <input
-                              type="email"
-                              placeholder="Email"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
-                            />
-                          </label>
-                        </div>
-                        <div className="flex flex-col gap-3 border-t border-black/10 pt-3 sm:flex-row sm:items-center sm:gap-6 md:gap-4 md:pt-4">
-                          <button
-                            type="submit"
-                            className="self-start rounded-full bg-orange px-8 py-2.5 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy md:py-3"
-                          >
-                            Donate Now
-                          </button>
-                          <div className="hidden items-center gap-3 sm:flex sm:border-l sm:border-black/10 sm:pl-6">
-                            <div
-                              aria-hidden="true"
-                              className="h-12 w-12 shrink-0 rounded-md border border-black/15"
-                              style={{
-                                backgroundImage:
-                                  "repeating-linear-gradient(0deg, black 0 3px, transparent 3px 6px), repeating-linear-gradient(90deg, black 0 3px, transparent 3px 6px)",
-                                backgroundBlendMode: "multiply",
-                                backgroundColor: "white",
-                                opacity: 0.8,
-                              }}
-                            />
-                            <div className="font-body text-xs leading-snug text-black/50">
-                              <p>Scan to pay via UPI</p>
-                              <p>Secured by Razorpay</p>
+                      <LeadForm
+                        formType="Donate"
+                        extra={
+                          <div className="flex flex-col gap-1.5">
+                            <span className="font-heading text-[11px] font-semibold uppercase tracking-wide text-black/55">
+                              Amount
+                            </span>
+                            <div className="grid grid-cols-4 gap-2">
+                              {DONATION_AMOUNTS.map((value) => (
+                                <button
+                                  key={value}
+                                  type="button"
+                                  onClick={() => setDonationAmount(value)}
+                                  aria-pressed={donationAmount === value}
+                                  className={
+                                    "rounded-lg border py-1.5 font-heading text-sm font-semibold transition-colors " +
+                                    (donationAmount === value
+                                      ? "border-navy bg-navy text-white"
+                                      : "border-black/15 text-black/60 hover:border-navy hover:text-navy")
+                                  }
+                                >
+                                  ₹{value}
+                                </button>
+                              ))}
                             </div>
                           </div>
-                        </div>
-                      </form>
+                        }
+                        extraPayload={donationAmount ? { amount: donationAmount } : undefined}
+                        disabled={!donationAmount}
+                        submitLabel={donationAmount ? `Pay ₹${donationAmount} via Razorpay` : "Choose an amount"}
+                        feeNote="Online payment is not live yet. We will email you UPI and bank transfer details to complete the donation."
+                        successTitle="Pledge recorded"
+                        successBody="Thank you. We have your details and will send payment options shortly."
+                      />
                     )}
 
                     {ctaTab === "volunteer" && (
-                      <form onSubmit={(event) => event.preventDefault()} className="flex flex-col gap-3 md:gap-5">
-                        <div className="grid grid-cols-2 gap-3 md:gap-5">
-                          <label className="flex flex-col">
-                            <span className="sr-only">Full name</span>
-                            <input
-                              type="text"
-                              placeholder="Full name"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
-                            />
-                          </label>
-                          <label className="flex flex-col">
-                            <span className="sr-only">Phone number</span>
-                            <input
-                              type="tel"
-                              placeholder="Phone number"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
-                            />
-                          </label>
-                        </div>
-                        <label className="flex flex-col">
-                          <span className="sr-only">Email</span>
-                          <input
-                            type="email"
-                            placeholder="Email"
-                            className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
-                          />
-                        </label>
-                        <label className="flex flex-col">
-                          <span className="sr-only">How would you like to help?</span>
-                          <input
-                            type="text"
-                            placeholder="How would you like to help? (teaching, events, admin...)"
-                            className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
-                          />
-                        </label>
-                        <button
-                          type="submit"
-                          className="self-start rounded-full bg-orange px-6 py-2.5 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy"
-                        >
-                          Sign Up to Volunteer
-                        </button>
-                      </form>
+                      <LeadForm
+                        formType="Volunteer"
+                        select={{
+                          name: "area",
+                          label: "Which area?",
+                          placeholder: "Choose an area",
+                          options: VOLUNTEER_AREAS,
+                          value: ctaArea,
+                          onChange: setCtaArea,
+                        }}
+                        submitLabel="Sign up to volunteer"
+                        successBody="Thank you for offering your time. Our volunteer coordinator will be in touch shortly."
+                      />
                     )}
 
                     {ctaTab === "csr" && (
-                      <form onSubmit={(event) => event.preventDefault()} className="flex flex-col gap-3 md:gap-5">
-                        <div className="grid grid-cols-2 gap-3 md:gap-5">
-                          <label className="flex flex-col">
-                            <span className="sr-only">Company name</span>
-                            <input
-                              type="text"
-                              placeholder="Company name"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
-                            />
-                          </label>
-                          <label className="flex flex-col">
-                            <span className="sr-only">Contact person</span>
-                            <input
-                              type="text"
-                              placeholder="Contact person"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
-                            />
-                          </label>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3 md:gap-5">
-                          <label className="flex flex-col">
-                            <span className="sr-only">Work email</span>
-                            <input
-                              type="email"
-                              placeholder="Work email"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
-                            />
-                          </label>
-                          <label className="flex flex-col">
-                            <span className="sr-only">Phone number</span>
-                            <input
-                              type="tel"
-                              placeholder="Phone number"
-                              className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
-                            />
-                          </label>
-                        </div>
-                        <label className="flex flex-col">
-                          <span className="sr-only">Area of partnership interest</span>
-                          <input
-                            type="text"
-                            placeholder="Area of partnership interest"
-                            className="border-0 border-b border-black/20 bg-transparent px-0.5 py-1 font-body text-sm text-black outline-none focus:border-navy md:py-2"
-                          />
-                        </label>
-                        <button
-                          type="submit"
-                          className="self-start rounded-full bg-orange px-6 py-2.5 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy"
-                        >
-                          Submit CSR Inquiry
-                        </button>
-                      </form>
+                      <LeadForm
+                        formType="CSR"
+                        submitLabel="Submit enquiry"
+                        successBody="Thank you. Our partnerships team will be in touch to discuss how we can work together."
+                      />
                     )}
                   </div>
                 </div>
