@@ -18,7 +18,7 @@ import { useGSAP } from "@gsap/react";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { SIGHT_STAGES, stageForValue, type SightStage } from "./stages";
-import { NAV_LINKS, VOLUNTEER_AREAS } from "../shared/constants";
+import { NAV_LINKS, VOLUNTEER_AREAS, TAX_EXEMPTION_NOTE } from "../shared/constants";
 import { Footer } from "../shared/Footer";
 import { MobileNav } from "../shared/MobileNav";
 import { Icon } from "../shared/Icon";
@@ -2362,7 +2362,7 @@ export default function IntroSequence() {
 
             <div
               ref={stage8CtaBlockRef}
-              className="absolute inset-0 flex flex-col items-center justify-start gap-6 px-8 pt-20 opacity-0 pointer-events-none md:justify-center md:pt-28"
+              className="absolute inset-0 flex flex-col items-center justify-start gap-6 overflow-y-auto px-8 pb-10 pt-20 opacity-0 pointer-events-none md:justify-center md:overflow-hidden md:pb-0 md:pt-28"
             >
               <div className="grid w-full max-w-5xl items-center gap-4 md:gap-10 md:grid-cols-[1fr_1.3fr]">
                 <div
@@ -2385,7 +2385,7 @@ export default function IntroSequence() {
                         type="button"
                         onClick={() => setCtaTab(tab)}
                         className={
-                          "rounded-full px-4 py-1.5 font-heading text-sm font-semibold transition-colors " +
+                          "flex-1 rounded-full px-3 py-1.5 font-heading text-sm font-semibold transition-colors sm:flex-none sm:px-4 " +
                           (ctaTab === tab
                             ? "bg-navy text-white"
                             : "border border-navy/30 text-navy hover:bg-navy/10")
@@ -2428,7 +2428,7 @@ export default function IntroSequence() {
                         extraPayload={donationAmount ? { amount: donationAmount } : undefined}
                         disabled={!donationAmount}
                         submitLabel={donationAmount ? `Pay ₹${donationAmount} via Razorpay` : "Choose an amount"}
-                        feeNote="Online payment is not live yet. We will email you UPI and bank transfer details to complete the donation."
+                        feeNote={`Online payment is not live yet. We will email you UPI and bank transfer details to complete the donation. ${TAX_EXEMPTION_NOTE}`}
                         successTitle="Pledge recorded"
                         successBody="Thank you. We have your details and will send payment options shortly."
                       />

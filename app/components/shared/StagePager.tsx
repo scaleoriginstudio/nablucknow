@@ -299,8 +299,8 @@ export function StagePager({
                   "flex h-full w-full flex-col items-center justify-start outline-none md:justify-center " +
                   // Leave room for the fixed stepper strip above the content.
                   // On desktop the pages are vertically centred so a small
-                  // top pad is enough; without a stepper, none is needed.
-                  (hasStepper ? "pt-20 md:pt-14" : "pt-20 md:pt-0")
+                  // top pad is enough; without a stepper, almost none is needed.
+                  (hasStepper ? "pt-20 md:pt-14" : "pt-3 md:pt-0")
                 }
               >
                 {content}

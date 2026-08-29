@@ -4,6 +4,7 @@ import { useState } from "react";
 import { GlassFormShell } from "../components/shared/GlassFormShell";
 import { LeadForm } from "../components/shared/LeadForm";
 import { CAUSES, formatINR, type Cause } from "../lib/causes-data";
+import { TAX_EXEMPTION_NOTE } from "../components/shared/constants";
 
 const DONATION_AMOUNTS = [500, 1000, 2500, 5000];
 
@@ -74,7 +75,7 @@ export function DonateStage() {
         extraPayload={amount ? { amount } : undefined}
         disabled={!amount}
         submitLabel={amount ? `Pay ₹${amount} via Razorpay` : "Choose an amount"}
-        feeNote="Online payment is not live yet. We will email you UPI and bank transfer details to complete the donation."
+        feeNote={`Online payment is not live yet. We will email you UPI and bank transfer details to complete the donation. ${TAX_EXEMPTION_NOTE}`}
         successTitle="Pledge recorded"
         successBody="Thank you. We have your details and will send payment options shortly."
         onSubmitted={(payload) => {

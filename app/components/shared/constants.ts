@@ -18,6 +18,11 @@ export const FOOTER_QUICK_LINKS = [
 
 export const FOOTER_GET_INVOLVED = ["Volunteer", "Donate", "CSR Partnerships"];
 
+// Shown wherever the site asks for a donation. NAB Lucknow is registered
+// under Section 12A, and gifts qualify for a deduction under Section 80G.
+export const TAX_EXEMPTION_NOTE =
+  "NAB Lucknow is registered under Section 12A. Donations are eligible for a tax deduction under Section 80G of the Income Tax Act, 1961.";
+
 // The single source for the "which area?" choice on every volunteer form
 // (the overlay, the /volunteer page, and the homepage CTA tab).
 export const VOLUNTEER_AREAS = [

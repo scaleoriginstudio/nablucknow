@@ -90,7 +90,16 @@ function Split({
         )}
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-4 overflow-y-auto p-6 md:p-9">
+      {/* min-h-0 lets overflow-y-auto actually scroll inside the flex column
+          instead of the form spilling out and being clipped. The pointer
+          handlers keep a scroll gesture inside the form from bubbling to the
+          window listener that steps between stages. */}
+      <div
+        onWheel={(e) => e.stopPropagation()}
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
+        className="flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain p-6 md:p-9"
+      >
         <div className="flex flex-col gap-1.5">
           {eyebrow && (
             <span className="font-heading text-[11px] font-bold uppercase tracking-wide text-orange">{eyebrow}</span>
@@ -160,10 +169,12 @@ function ModalShell({ titleId, onClose, ...rest }: ModalProps) {
 
 function PageShell({ imageSide = "left", ...rest }: PageProps) {
   return (
-    <div className="relative flex h-full w-full items-center justify-center py-2">
+    <div className="relative flex h-full w-full items-stretch justify-center py-2 md:items-center">
+      {/* h-full (not max-h-full) so the card has a definite height on mobile
+          too, which the inner form column needs before it will scroll. */}
       <div
         className={
-          "flex max-h-full min-h-0 w-full max-w-5xl flex-col overflow-hidden rounded-3xl border border-white/40 bg-white/85 shadow-2xl backdrop-blur-2xl md:h-[560px] " +
+          "flex h-full min-h-0 w-full max-w-5xl flex-col overflow-hidden rounded-3xl border border-white/40 bg-white/85 shadow-2xl backdrop-blur-2xl md:h-[560px] " +
           (imageSide === "right" ? "md:flex-row-reverse" : "md:flex-row")
         }
       >
