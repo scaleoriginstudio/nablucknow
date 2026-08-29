@@ -168,21 +168,28 @@ const SDG_GOALS = [
 type Layout = "countdown" | "compact" | "final";
 type Stage = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
 
-function StageStepper({ active }: { active: number }) {
+function StageStepper({ active, onSelect }: { active: number; onSelect?: (n: number) => void }) {
   return (
     <div className="flex w-full items-baseline justify-center gap-4 font-body sm:gap-6">
       {Array.from({ length: TOTAL_STAGES }, (_, i) => i + 1).map((n) => (
-        <span
+        <button
           key={n}
-          style={{ transition: "color 500ms ease-out, font-size 500ms ease-out" }}
-          className={
-            n === active
-              ? "text-2xl font-bold text-navy sm:text-4xl"
-              : "text-sm font-semibold text-black/25 sm:text-lg"
-          }
+          type="button"
+          onClick={() => onSelect?.(n)}
+          aria-label={`Go to step ${n}`}
+          aria-current={n === active ? "step" : undefined}
         >
-          {String(n).padStart(2, "0")}
-        </span>
+          <span
+            style={{ transition: "color 500ms ease-out, font-size 500ms ease-out" }}
+            className={
+              n === active
+                ? "text-2xl font-bold text-navy sm:text-4xl"
+                : "text-sm font-semibold text-black/25 sm:text-lg"
+            }
+          >
+            {String(n).padStart(2, "0")}
+          </span>
+        </button>
       ))}
     </div>
   );
@@ -499,29 +506,43 @@ export default function IntroSequence() {
   // goToStage only knows how to move one adjacent stage at a time, so this
   // walks that same path back to stage 1, forced instant so it reads as a
   // single jump rather than a rewind through every stage in between.
-  const handleLogoClick = useCallback(() => {
-    if (layout !== "final" || activeStageRef.current <= 1) return;
-    forceInstantRef.current = true;
-    const advance = () => {
-      if (activeStageRef.current <= 1) {
-        forceInstantRef.current = false;
-        return;
-      }
-      goToStageRef.current((activeStageRef.current - 1) as Stage);
-      // Polled with setTimeout, not requestAnimationFrame — rAF can stall
-      // in a backgrounded/throttled tab, which would strand this cascade
-      // partway through. setTimeout always fires, just slower when throttled.
-      const waitForRelease = () => {
-        if (isTransitioningRef.current) {
-          window.setTimeout(waitForRelease, 16);
-        } else {
-          advance();
+  // Walks one adjacent stage at a time toward an arbitrary target — the
+  // only transition shape goToStage knows how to run — forced instant so
+  // it reads as a single jump rather than a rewind through every stage in
+  // between. Used by both the logo (always target 1) and the clickable
+  // stepper numbers (any target).
+  const jumpToStage = useCallback(
+    (target: Stage) => {
+      if (layout !== "final" || activeStageRef.current === target) return;
+      forceInstantRef.current = true;
+      const advance = () => {
+        const current = activeStageRef.current;
+        if (current === target) {
+          forceInstantRef.current = false;
+          return;
         }
+        goToStageRef.current((current < target ? current + 1 : current - 1) as Stage);
+        // Polled with setTimeout, not requestAnimationFrame — rAF can stall
+        // in a backgrounded/throttled tab, which would strand this cascade
+        // partway through. setTimeout always fires, just slower when throttled.
+        const waitForRelease = () => {
+          if (isTransitioningRef.current) {
+            window.setTimeout(waitForRelease, 16);
+          } else {
+            advance();
+          }
+        };
+        window.setTimeout(waitForRelease, 16);
       };
-      window.setTimeout(waitForRelease, 16);
-    };
-    advance();
-  }, [layout]);
+      advance();
+    },
+    [layout],
+  );
+
+  const handleLogoClick = useCallback(() => {
+    if (activeStageRef.current <= 1) return;
+    jumpToStage(1);
+  }, [jumpToStage]);
 
   // Phase 1: the sight-loss countdown — the homepage's default landing
   // experience, simulating vision loss before it "returns" into stage 1.
@@ -1733,8 +1754,15 @@ export default function IntroSequence() {
           className="z-20 px-8 pointer-events-none"
         >
           <div className="mx-auto max-w-6xl">
-            <div ref={stepperGroupRef} style={{ opacity: 0 }}>
-              <StageStepper active={activeStage === 0 ? 0 : activeStage} />
+            <div
+              ref={stepperGroupRef}
+              style={{ opacity: 0 }}
+              className={activeStage === 0 ? "pointer-events-none" : "pointer-events-auto"}
+            >
+              <StageStepper
+                active={activeStage === 0 ? 0 : activeStage}
+                onSelect={(n) => jumpToStage(n as Stage)}
+              />
             </div>
           </div>
         </div>

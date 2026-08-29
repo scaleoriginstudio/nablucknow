@@ -66,6 +66,13 @@ export function ProgramStage({ program }: { program: Program; reverse?: boolean 
                 </li>
               ))}
             </ul>
+
+            {/* Mobile only: the photo column above is hidden entirely below
+                md, which left the gap between the program name and the form
+                empty. Fills it instead of just being cropped out. */}
+            <div className="relative mt-1 aspect-[16/9] w-full overflow-hidden rounded-xl shadow-sm md:hidden">
+              <Image src={program.image} alt={program.imageAlt} fill sizes="100vw" className="object-cover" />
+            </div>
           </div>
 
           {/* Column 3: the ask */}

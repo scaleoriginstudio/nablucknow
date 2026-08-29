@@ -3,6 +3,7 @@ import { Montserrat, Libre_Baskerville } from "next/font/google";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "./lib/site";
 import { OverlayProvider } from "./components/shared/OverlayContext";
 import { Overlays } from "./components/shared/Overlays";
+import { FloatingWidgets } from "./components/shared/FloatingWidgets";
 import "./globals.css";
 
 const heading = Montserrat({
@@ -97,6 +98,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <OverlayProvider>
           {children}
           <Overlays />
+          <FloatingWidgets />
         </OverlayProvider>
         <script
           type="application/ld+json"

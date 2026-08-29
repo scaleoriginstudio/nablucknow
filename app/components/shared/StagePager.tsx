@@ -10,17 +10,24 @@ import { Footer } from "./Footer";
 import { MobileNav } from "./MobileNav";
 import { useOverlay } from "./OverlayContext";
 
-function StageStepper({ active, total }: { active: number; total: number }) {
+function StageStepper({ active, total, onSelect }: { active: number; total: number; onSelect: (n: number) => void }) {
   return (
     <div className="flex w-full items-baseline justify-center gap-4 font-body sm:gap-6">
       {Array.from({ length: total }, (_, i) => i + 1).map((n) => (
-        <span
+        <button
           key={n}
-          style={{ transition: "color 500ms ease-out, font-size 500ms ease-out" }}
-          className={n === active ? "text-2xl font-bold text-navy sm:text-4xl" : "text-sm font-semibold text-black/25 sm:text-lg"}
+          type="button"
+          onClick={() => onSelect(n)}
+          aria-label={`Go to step ${n}`}
+          aria-current={n === active ? "step" : undefined}
         >
-          {String(n).padStart(2, "0")}
-        </span>
+          <span
+            style={{ transition: "color 500ms ease-out, font-size 500ms ease-out" }}
+            className={n === active ? "text-2xl font-bold text-navy sm:text-4xl" : "text-sm font-semibold text-black/25 sm:text-lg"}
+          >
+            {String(n).padStart(2, "0")}
+          </span>
+        </button>
       ))}
     </div>
   );
@@ -215,7 +222,7 @@ export function StagePager({ stages }: { stages: React.ReactNode[] }) {
           className="z-20 px-8 pointer-events-none"
         >
           <div className="mx-auto max-w-6xl">
-            <StageStepper active={active} total={total} />
+            <StageStepper active={active} total={total} onSelect={goTo} />
           </div>
         </div>
       )}
