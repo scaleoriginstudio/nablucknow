@@ -57,9 +57,16 @@ const STAGE2_STORIES = [
     image: "/img/nab/vocational.jpg",
   },
 ];
-const STAGE3_HEADLINE = "Our vision,\nand the work behind it.";
-const STAGE3_VISION_TEXT = "A world where visual impairment never decides what a person can become.";
 const STAGE3_MISSION_TEXT = "Education, counselling, and training, from childhood to an independent career.";
+// The vision, told as the five threads of work that carry it. Each icon
+// grows into place as its line flies in (see the stage-3 choreographer).
+const STAGE3_POINTS = [
+  { icon: "school", text: "Free primary schooling and braille literacy from the earliest years." },
+  { icon: "diversity_3", text: "Early-intervention and family counselling that steadies the whole household." },
+  { icon: "construction", text: "Hands-on vocational training in a trade that leads somewhere real." },
+  { icon: "work", text: "Job placement and on-the-job support into independent careers." },
+  { icon: "handshake", text: "CSR and community partnerships that fund and scale every programme." },
+];
 const JOURNEY_ENTRIES = [
   { year: "1997", text: "National Association for the Blind, State Chapter, Lucknow, is founded to serve visually impaired individuals across Uttar Pradesh." },
   { year: "2005", text: "Our first residential school opens, offering free primary education to visually impaired children." },
@@ -68,10 +75,12 @@ const JOURNEY_ENTRIES = [
 ];
 const JOURNEY_ENTRY_HEIGHT = 96;
 const VISIBLE_JOURNEY_ROWS = 3;
+// Each pointer reads as a single sentence: the figure sits inline at the
+// head of the line rather than stacked above a separate label.
 const IMPACT_STATS = [
-  { value: "5,000+", label: "People supported since 1997" },
-  { value: "200+", label: "Students taught in our schools" },
-  { value: "1,000+", label: "Families supported through counselling" },
+  { value: "5,000+", text: "people supported since we began in 1997." },
+  { value: "200+", text: "students taught to read and learn in our schools." },
+  { value: "1,000+", text: "families steadied through counselling and early help." },
 ];
 const TIMELINE_SHIFT_X = 180;
 const TEAM_MEMBERS = [
@@ -380,6 +389,13 @@ export default function IntroSequence() {
     setTeamIndexState(index);
   }, []);
 
+  const [stage6Index, setStage6IndexState] = useState(0);
+  const stage6IndexRef = useRef(0);
+  const setStage6Index = useCallback((index: number) => {
+    stage6IndexRef.current = index;
+    setStage6IndexState(index);
+  }, []);
+
   const stage8SubIndexRef = useRef(0);
   const stage8MarqueeBlockRef = useRef<HTMLDivElement>(null);
   const stage8CtaBlockRef = useRef<HTMLDivElement>(null);
@@ -390,9 +406,10 @@ export default function IntroSequence() {
   const stepperGroupRef = useRef<HTMLDivElement>(null);
   const stage3Ref = useRef<HTMLDivElement>(null);
   const stage3VisionRef = useRef<HTMLDivElement>(null);
-  const stage3PhotoRef = useRef<HTMLDivElement>(null);
   const stage3HeadlineRef = useRef<HTMLHeadingElement>(null);
   const stage3MissionRef = useRef<HTMLDivElement>(null);
+  const stage3PointRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const stage3PointIconRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const stage4Ref = useRef<HTMLDivElement>(null);
   const journeyHeadingRef = useRef<HTMLHeadingElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
@@ -412,10 +429,7 @@ export default function IntroSequence() {
   const causesWipeRef = useRef<HTMLDivElement>(null);
   const stage6Ref = useRef<HTMLDivElement>(null);
   const stage7Ref = useRef<HTMLDivElement>(null);
-  const stage7PhotoRef = useRef<HTMLDivElement>(null);
   const stage7TextRef = useRef<HTMLDivElement>(null);
-  const stage7PhotoImgRef = useRef<HTMLImageElement>(null);
-  const stage7MessageRef = useRef<HTMLDivElement>(null);
   const stage8Ref = useRef<HTMLDivElement>(null);
   const stage9Ref = useRef<HTMLDivElement>(null);
   const stage10Ref = useRef<HTMLDivElement>(null);
@@ -698,6 +712,42 @@ export default function IntroSequence() {
       });
     };
 
+    // Stage 3's signature entrance, shared by the forward (2->3) and back
+    // (4->3) paths: the "Our Vision" label appears, then each pointer line
+    // flies in from the left while its icon grows from nothing in the same
+    // beat, and finally the mission block rises in.
+    const revealStage3 = (tl: gsap.core.Timeline, instant: boolean) => {
+      const lines = stage3PointRefs.current.filter(Boolean);
+      const icons = stage3PointIconRefs.current.filter(Boolean);
+      const d = instant ? 0.001 : undefined;
+      // Prime every start state at the head of the timeline so nothing is
+      // reset mid-flight by a late .set() (which stranded the list at
+      // opacity 0 when the whole transition ran instant).
+      tl.set(stage3VisionRef.current, { opacity: 1, y: 0 }, 0);
+      tl.set(stage3HeadlineRef.current, { opacity: 0, y: instant ? 0 : 12 }, 0);
+      tl.set(lines, { opacity: 0, x: instant ? 0 : -24 }, 0);
+      tl.set(icons, { scale: instant ? 1 : 0 }, 0);
+      tl.set(stage3MissionRef.current, { opacity: 0, y: instant ? 0 : 24 }, 0);
+      // Then play them in: label, then each line flying in from the left as
+      // its icon grows in the same beat, then the mission block.
+      tl.to(stage3HeadlineRef.current, { opacity: 1, y: 0, duration: d ?? 0.4, ease: "power2.out" });
+      tl.to(
+        lines,
+        { opacity: 1, x: 0, duration: d ?? 0.45, stagger: instant ? 0 : 0.13, ease: "power2.out" },
+        instant ? ">" : "-=0.15",
+      );
+      tl.to(
+        icons,
+        { scale: 1, duration: d ?? 0.4, stagger: instant ? 0 : 0.13, ease: "back.out(1.7)" },
+        "<",
+      );
+      tl.to(
+        stage3MissionRef.current,
+        { opacity: 1, y: 0, duration: d ?? 0.5, ease: "power2.out" },
+        instant ? ">" : "-=0.1",
+      );
+    };
+
     const goToStage = (next: Stage) => {
       const current = activeStageRef.current;
       if (isTransitioningRef.current || next === current) return;
@@ -821,12 +871,6 @@ export default function IntroSequence() {
         // stepper invert to white exactly where the navy edge has reached —
         // checked against real geometry every frame, not just timed to hope
         // it lines up.
-        const stage3Targets = [
-          stage3HeadlineRef.current,
-          stage3VisionRef.current,
-          stage3PhotoRef.current,
-          stage3MissionRef.current,
-        ];
         const invert = colorInverter(3);
 
         tl.set(stage2Ref.current, { pointerEvents: "none" });
@@ -847,19 +891,13 @@ export default function IntroSequence() {
           0,
         );
         tl.set(stage3Ref.current, { pointerEvents: "auto" });
-        tl.fromTo(
-          stage3Targets,
-          { opacity: 0, y: 40 },
-          { opacity: 1, y: 0, duration: dur ?? 0.6, stagger: dur ? 0 : 0.12, ease: "power2.out" },
-          dur ? 0 : "-=0.2",
-        );
+        revealStage3(tl, !!dur);
         tl.call(invert);
       } else if (current === 3 && next === 2) {
         setStory(STAGE2_STORIES.length - 1);
         const stage3Targets = [
           stage3HeadlineRef.current,
           stage3VisionRef.current,
-          stage3PhotoRef.current,
           stage3MissionRef.current,
         ];
         const invert = colorInverter(3);
@@ -903,10 +941,10 @@ export default function IntroSequence() {
           if (headerRef.current) gsap.set(headerRef.current, { clearProps: "backgroundColor" });
         });
       } else if (current === 3 && next === 4) {
-        // Same navy field as stage 3 — the Vision/Photo/Mission row clears
-        // out and "Our Journey" flies into the exact spot the "Stories
-        // beyond Passion" headline just vacated.
-        const stage3Grid = [stage3VisionRef.current, stage3PhotoRef.current, stage3MissionRef.current];
+        // Same navy field as stage 3 — the vision list and mission block
+        // clear out and "Our Journey, Quantified" flies into the spot the
+        // "Our Vision" label just vacated.
+        const stage3Grid = [stage3VisionRef.current, stage3MissionRef.current];
 
         // Always arrive at the Journey timeline fresh, heading-only —
         // any previously revealed entries collapse back instantly, and the
@@ -932,25 +970,12 @@ export default function IntroSequence() {
           dur ? 0 : "-=0.25",
         );
       } else if (current === 4 && next === 3) {
-        const stage3Grid = [stage3VisionRef.current, stage3PhotoRef.current, stage3MissionRef.current];
-
         colorInverter(3)();
         tl.set(stage4Ref.current, { pointerEvents: "none" });
         tl.to(journeyHeadingRef.current, { opacity: 0, y: 30, duration: dur ?? 0.35, ease: "power2.in" });
         tl.to(stage4Ref.current, { opacity: 0, duration: dur ?? 0.3 }, dur ? 0 : "-=0.2");
         tl.set(stage3Ref.current, { pointerEvents: "auto" });
-        tl.fromTo(
-          stage3HeadlineRef.current,
-          { opacity: 0, y: -30 },
-          { opacity: 1, y: 0, duration: dur ?? 0.5, ease: "power2.out" },
-          dur ? 0 : "-=0.2",
-        );
-        tl.fromTo(
-          stage3Grid,
-          { opacity: 0, y: -20 },
-          { opacity: 1, y: 0, duration: dur ?? 0.5, stagger: dur ? 0 : 0.06, ease: "power2.out" },
-          dur ? 0 : "-=0.3",
-        );
+        revealStage3(tl, !!dur);
       } else if (current === 4 && next === 5) {
         impactIndexRef.current = 1;
         colorInverter(5)();
@@ -1001,6 +1026,7 @@ export default function IntroSequence() {
           tl.to(impactStatRefs.current.filter(Boolean), { opacity: 0, y: 60, duration: dur ?? 0.3, ease: "power2.in" }, 0);
         }
       } else if (current === 5 && next === 6) {
+        setStage6Index(0);
         // A white curtain grows from the bottom-right corner to cover the
         // whole screen in one continuous motion, then retreats the same
         // way — no separate scale-in step, so it reads as one sweep, not
@@ -1072,15 +1098,16 @@ export default function IntroSequence() {
         tl.to(stage6Ref.current, { opacity: 0, y: -40, duration: dur ?? 0.4, ease: "power2.in" });
         tl.set(stage7Ref.current, { opacity: 1, pointerEvents: "auto" });
         tl.fromTo(
-          [stage7PhotoRef.current, stage7TextRef.current],
+          stage7TextRef.current,
           { opacity: 0, y: 40 },
           { opacity: 1, y: 0, duration: dur ?? 0.6, stagger: dur ? 0 : 0.1, ease: "power2.out" },
           dur ? 0 : "-=0.15",
         );
       } else if (current === 7 && next === 6) {
+        setStage6Index(0);
         tl.set(stage7Ref.current, { pointerEvents: "none" });
         tl.to(
-          [stage7PhotoRef.current, stage7TextRef.current],
+          stage7TextRef.current,
           { opacity: 0, y: 40, duration: dur ?? 0.35, stagger: dur ? 0 : 0.06, ease: "power2.in" },
         );
         tl.set(stage7Ref.current, { opacity: 0 }, dur ? 0 : "+=0.05");
@@ -1097,7 +1124,7 @@ export default function IntroSequence() {
         gsap.set(stage8CtaBlockRef.current, { yPercent: 55, opacity: 0.35, pointerEvents: "none" });
         tl.set(stage7Ref.current, { pointerEvents: "none" });
         tl.to(
-          [stage7PhotoRef.current, stage7TextRef.current],
+          stage7TextRef.current,
           { opacity: 0, y: -40, duration: dur ?? 0.4, stagger: dur ? 0 : 0.06, ease: "power2.in" },
         );
         tl.set(stage7Ref.current, { opacity: 0 }, dur ? 0 : "+=0.05");
@@ -1111,7 +1138,7 @@ export default function IntroSequence() {
         tl.to(stage8Ref.current, { opacity: 0, duration: dur ?? 0.3 }, 0);
         tl.to(stage7Ref.current, { opacity: 1, duration: dur ?? 0.3 }, 0);
         tl.fromTo(
-          [stage7PhotoRef.current, stage7TextRef.current],
+          stage7TextRef.current,
           { opacity: 0, y: -40 },
           { opacity: 1, y: 0, duration: dur ?? 0.5, stagger: dur ? 0 : 0.08, ease: "power2.out" },
           dur ? 0 : "-=0.1",
@@ -1289,6 +1316,22 @@ export default function IntroSequence() {
       );
     };
 
+    // Steps the Causes carousel to its next/previous card. The move is a
+    // pure CSS transition on the cards themselves (see the stage-6 JSX), so
+    // this only flips the index and holds the lock while it plays.
+    const cycleCause = (nextIndex: number) => {
+      isTransitioningRef.current = true;
+      setStage6Index(nextIndex);
+      transitionTokenRef.current += 1;
+      const myToken = transitionTokenRef.current;
+      window.setTimeout(
+        () => {
+          unlock(myToken);
+        },
+        prefersReducedMotion ? 50 : 560,
+      );
+    };
+
     // Crossfades between stage 8's sub-sections (marquee, donate CTA, and
     // more to come) — these are structurally different layouts, not a
     // text swap, so each gets its own persistent block faded in turn.
@@ -1434,6 +1477,18 @@ export default function IntroSequence() {
         return;
       }
 
+      // Stage 6 is a carousel of the causes — step through each card
+      // before stepping back to stage 5 or forward into stage 7.
+      if (activeStageRef.current === 6) {
+        const nextCause = stage6IndexRef.current + delta;
+        if (nextCause >= 0 && nextCause < CAUSES.length) {
+          cycleCause(nextCause);
+          return;
+        }
+        goToStage((delta > 0 ? 7 : 5) as Stage);
+        return;
+      }
+
       // Stage 7 has its own sub-steps (each team member) that must be
       // exhausted before stepping back to stage 6 or forward into stage 8.
       if (activeStageRef.current === 7) {
@@ -1531,7 +1586,7 @@ export default function IntroSequence() {
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchend", onTouchEnd);
     };
-  }, [prefersReducedMotion, isMobile, setStory, setTeam]);
+  }, [prefersReducedMotion, isMobile, setStory, setTeam, setStage6Index]);
 
   useEffect(() => {
     if (isPaused) panelHeadingRef.current?.focus();
@@ -1552,20 +1607,8 @@ export default function IntroSequence() {
     }
   }, [storyIndex, prefersReducedMotion]);
 
-  // Team member 0/1/2 within stage 7 crossfades on every change — same
-  // pattern as the stage 2 stories.
-  useEffect(() => {
-    if (!stage7MessageRef.current) return;
-    const dur = prefersReducedMotion ? 0.001 : 0.4;
-    gsap.fromTo(
-      stage7MessageRef.current,
-      { opacity: 0, y: 10 },
-      { opacity: 1, y: 0, duration: dur, ease: "power2.out" },
-    );
-    if (stage7PhotoImgRef.current) {
-      gsap.fromTo(stage7PhotoImgRef.current, { opacity: 0 }, { opacity: 1, duration: dur, ease: "power2.out" });
-    }
-  }, [teamIndex, prefersReducedMotion]);
+  // Stage 7's team accordion resizes its panels with a pure CSS transition
+  // (see the stage-7 JSX), so no imperative crossfade is needed on change.
 
   // The CTA tab's form and image tint crossfade on every switch — same
   // pattern as the stage 2 stories and stage 7 team members.
@@ -1656,6 +1699,18 @@ export default function IntroSequence() {
           Skip button to go straight to the site, or Pause to read about each
           condition in plain language.
         </p>
+      )}
+
+      {/* Splash hairline: draws across the black field on load with a glint
+          travelling along it, so the countdown is never completely still. */}
+      {layout === "countdown" && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-x-0 top-[70%] z-40 h-px overflow-hidden"
+        >
+          <div className="animate-splash-line-draw h-full w-full bg-white/25" />
+          <div className="animate-splash-line-sweep absolute top-0 h-full w-1/3 bg-gradient-to-r from-transparent via-white to-transparent" />
+        </div>
       )}
 
       {/* Decorative vision-simulation layers — purely visual, hidden from AT. */}
@@ -1830,6 +1885,41 @@ export default function IntroSequence() {
                 onSelect={(n) => jumpToStage(n as Stage)}
               />
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Discrete progress rail — present only while a numbered stage is
+          showing (never on the hero or the footer), and its marker only
+          moves when the active number changes, in step with the stepper. */}
+      {layout === "final" && (
+        <div
+          aria-hidden="true"
+          className="fixed right-3 top-1/2 z-20 hidden -translate-y-1/2 md:block"
+          style={{
+            opacity: activeStage >= 1 && activeStage <= TOTAL_STAGES ? 1 : 0,
+            transition: "opacity 0.4s ease",
+          }}
+        >
+          <div
+            className={
+              "relative h-[38vh] max-h-[320px] w-1 rounded-full " +
+              (activeStage >= 3 && activeStage <= 5 ? "bg-white/20" : "bg-black/10")
+            }
+          >
+            <div
+              className={
+                "absolute inset-x-0 rounded-full " +
+                (activeStage >= 3 && activeStage <= 5 ? "bg-white" : "bg-navy")
+              }
+              style={{
+                height: `${100 / TOTAL_STAGES}%`,
+                top: `${((Math.min(Math.max(activeStage, 1), TOTAL_STAGES) - 1) / TOTAL_STAGES) * 100}%`,
+                transition: prefersReducedMotion
+                  ? "none"
+                  : "top 0.5s cubic-bezier(.22,1,.36,1), background-color 0.4s ease",
+              }}
+            />
           </div>
         </div>
       )}
@@ -2072,7 +2162,8 @@ export default function IntroSequence() {
         />
       )}
 
-      {/* Stage 3: Vision and Mission, on the navy field the tab reveals. */}
+      {/* Stage 3: the vision told as five threads of work, then the
+          mission — on the navy field the tab reveals. */}
       {layout === "final" && (
         <div
           ref={stage3Ref}
@@ -2087,40 +2178,46 @@ export default function IntroSequence() {
           }}
           className="z-[16] flex flex-col items-center justify-start overflow-hidden px-8 pt-20 pointer-events-none md:justify-center md:pt-0"
         >
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 md:gap-10">
-            <h2
-              ref={stage3HeadlineRef}
-              className="text-center font-heading text-2xl leading-tight font-bold whitespace-pre-line text-white opacity-0 sm:text-4xl"
-            >
-              {STAGE3_HEADLINE}
-            </h2>
+          <div className="mx-auto grid w-full max-w-5xl items-start gap-8 md:grid-cols-[1.5fr_1fr] md:gap-16">
+            <div ref={stage3VisionRef} className="flex flex-col gap-4 opacity-0 md:gap-5">
+              <h3
+                ref={stage3HeadlineRef}
+                className="font-heading text-xs font-bold uppercase tracking-[0.22em] text-white/55 opacity-0 sm:text-sm"
+              >
+                Our Vision
+              </h3>
+              <ul className="flex flex-col gap-3.5 md:gap-4">
+                {STAGE3_POINTS.map((point, i) => (
+                  <li
+                    key={point.icon}
+                    ref={(el) => {
+                      stage3PointRefs.current[i] = el;
+                    }}
+                    className="flex items-start gap-3 opacity-0 md:gap-4"
+                  >
+                    <span
+                      ref={(el) => {
+                        stage3PointIconRefs.current[i] = el;
+                      }}
+                      className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-white"
+                    >
+                      <Icon name={point.icon} size={20} className="text-white" />
+                    </span>
+                    <p className="font-body text-sm leading-6 text-white/85 md:text-base md:leading-7">
+                      {point.text}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-            <div className="grid items-center gap-3 md:gap-10 md:grid-cols-3">
-              <div ref={stage3VisionRef} className="opacity-0">
-                <Icon name="visibility" size={28} className="mb-2 text-white md:mb-3" />
-                <h3 className="font-heading text-lg font-bold text-white md:mb-3 md:text-2xl">Our Vision</h3>
-                <p className="font-body text-sm leading-6 text-white/80 md:text-base md:leading-7">
-                  {STAGE3_VISION_TEXT}
-                </p>
-              </div>
-
-              <div ref={stage3PhotoRef} className="overflow-hidden rounded-2xl opacity-0">
-                <Image
-                  src="/img/nab/children.jpg"
-                  alt=""
-                  width={836}
-                  height={964}
-                  className="h-[20vh] max-h-[160px] min-h-[120px] w-full object-cover md:h-[42vh] md:max-h-[380px] md:min-h-[240px]"
-                />
-              </div>
-
-              <div ref={stage3MissionRef} className="opacity-0 md:text-right">
-                <Icon name="target" size={28} className="mb-2 text-white md:mb-3" />
-                <p className="font-body text-sm leading-6 text-white/80 md:text-base md:leading-7">
-                  {STAGE3_MISSION_TEXT}
-                </p>
-                <h3 className="font-heading text-lg font-bold text-white md:mt-3 md:text-2xl">Our Mission</h3>
-              </div>
+            <div ref={stage3MissionRef} className="flex flex-col gap-3 opacity-0 md:pt-9">
+              <h3 className="font-heading text-xs font-bold uppercase tracking-[0.22em] text-white/55 sm:text-sm">
+                Our Mission
+              </h3>
+              <p className="font-body text-lg leading-8 text-white md:text-2xl md:leading-10">
+                {STAGE3_MISSION_TEXT}
+              </p>
             </div>
           </div>
         </div>
@@ -2150,7 +2247,7 @@ export default function IntroSequence() {
               ref={journeyHeadingRef}
               className="text-center font-heading text-3xl leading-tight font-bold text-white opacity-0 sm:text-4xl"
             >
-              Our Journey
+              Our Journey, Quantified
             </h2>
 
             <div ref={timelineRef} className="absolute top-full mt-10 w-full max-w-xl">
@@ -2171,8 +2268,9 @@ export default function IntroSequence() {
                     className="absolute inset-x-0 opacity-0"
                     style={{ top: i * journeyEntryHeight }}
                   >
-                    <div className="font-body text-3xl font-bold text-white">{stat.value}</div>
-                    <p className="mt-1 font-body text-xs leading-5 text-white/80">{stat.label}</p>
+                    <p className="font-body text-sm leading-6 text-white/80">
+                      <span className="text-2xl font-bold text-white">{stat.value}</span> {stat.text}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -2231,8 +2329,9 @@ export default function IntroSequence() {
                   }}
                   className="opacity-0"
                 >
-                  <div className="font-body text-3xl font-bold text-white">{stat.value}</div>
-                  <p className="mt-1 font-body text-sm leading-5 text-white/80">{stat.label}</p>
+                  <p className="font-body text-base leading-6 text-white/80">
+                    <span className="text-2xl font-bold text-white">{stat.value}</span> {stat.text}
+                  </p>
                 </div>
               ))}
             </div>
@@ -2240,8 +2339,9 @@ export default function IntroSequence() {
         </div>
       )}
 
-      {/* Stage 6: Our Causes — a full context switch to a white field,
-          revealed entirely by the curtain's motion rather than a fade. */}
+      {/* Stage 6: Our Causes — a glass-panelled image card for the active
+          cause, flanked by ghosted portrait previews of the causes before
+          and after it. Scrolling steps between them. */}
       {layout === "final" && (
         <div
           ref={stage6Ref}
@@ -2253,68 +2353,80 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center overflow-hidden bg-white px-8 pt-20 pb-6 opacity-0 pointer-events-none"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-start md:pt-28"
         >
-          <div className="mx-auto flex w-full max-w-5xl flex-col gap-4 md:gap-5">
-            <div className="flex flex-col gap-1">
-              <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">Our Causes</h2>
-              <p className="text-center font-body text-xs text-black/45 md:hidden">Swipe to browse</p>
+          <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-6 md:gap-8">
+            <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">Our Causes</h2>
+
+            <div className="relative flex h-[46vh] max-h-[360px] min-h-[230px] w-full items-center justify-center">
+              {CAUSES.map((cause, i) => {
+                const pos = i - stage6Index;
+                const isActive = pos === 0;
+                const off = Math.abs(pos);
+                const pct = Math.min(100, Math.round((cause.raisedAmount / cause.goalAmount) * 100));
+                const cardStyle: CSSProperties = {
+                  position: "absolute",
+                  left: "50%",
+                  top: "50%",
+                  width: isActive ? (isMobile ? "80vw" : 560) : isMobile ? 120 : 172,
+                  height: isActive ? (isMobile ? 240 : 336) : isMobile ? 170 : 238,
+                  transform: `translate(calc(-50% + ${pos * (isMobile ? 150 : 400)}px), -50%) scale(${isActive ? 1 : 0.95})`,
+                  opacity: off > 1 ? 0 : isActive ? 1 : 0.4,
+                  zIndex: isActive ? 20 : 10 - off,
+                  pointerEvents: isActive ? "auto" : "none",
+                  transition: prefersReducedMotion
+                    ? "none"
+                    : "width .55s cubic-bezier(.22,1,.36,1), height .55s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1), opacity .5s ease",
+                };
+                return (
+                  <div
+                    key={cause.slug}
+                    style={cardStyle}
+                    className="overflow-hidden rounded-3xl shadow-2xl ring-1 ring-black/10"
+                  >
+                    <Image src={cause.image} alt="" fill sizes="640px" className="object-cover" />
+                    {isActive ? (
+                      <div className="absolute inset-x-0 bottom-0 m-3 flex flex-col gap-2 rounded-2xl border border-white/40 bg-white/20 p-4 text-white backdrop-blur-xl md:m-4 md:p-5">
+                        <h3 className="font-heading text-lg font-bold md:text-2xl">{cause.title}</h3>
+                        <p className="font-body text-xs leading-5 text-white/90 md:text-sm md:leading-6">
+                          {cause.description}
+                        </p>
+                        <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-white/25">
+                          <div className="h-full rounded-full bg-orange" style={{ width: `${pct}%` }} />
+                        </div>
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-body text-[11px] text-white/85 md:text-xs">
+                            {formatINR(cause.raisedAmount)} of {formatINR(cause.goalAmount)}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={openDonate}
+                            className="shrink-0 rounded-full bg-white px-4 py-1.5 font-heading text-xs font-semibold text-navy transition-colors hover:bg-orange hover:text-white"
+                          >
+                            Donate
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/55 to-transparent p-3">
+                        <span className="font-heading text-xs font-bold leading-tight text-white">{cause.title}</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
-            {/* On phones the three cards are a horizontal, snap-scrolling row
-                with a visible scrollbar; the page still steps down to stage 7
-                on a vertical swipe. On desktop it is a plain 3-up grid. */}
-            <div
-              data-stage-scroll=""
-              className="-mx-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-8 pb-3 md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 md:pb-0"
-              style={{ scrollbarWidth: "thin" }}
-            >
-              {CAUSES.map((cause) => (
-                <div
-                  key={cause.title}
-                  className="flex w-[78%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl bg-orange shadow-lg md:w-auto"
-                >
-                  <div className="p-2 md:w-full">
-                    <Image
-                      src={cause.image}
-                      alt=""
-                      width={640}
-                      height={520}
-                      className="h-32 w-full rounded-xl object-cover md:h-36"
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col gap-1.5 px-4 pb-4 text-left text-white md:gap-2 md:px-5 md:pb-5 md:text-center">
-                    <h3 className="font-heading text-base font-bold md:text-xl">{cause.title}</h3>
-                    <p className="font-body text-xs leading-5 text-white/90">{cause.description}</p>
-                    <p className="font-body text-xs text-white/90 md:mt-1 md:border-b md:border-white/50 md:pb-1">
-                      Goal: {formatINR(cause.goalAmount)}
-                    </p>
-                    <div className="mt-1 flex items-center gap-2 md:mt-2 md:justify-center">
-                      <button
-                        type="button"
-                        onClick={openVolunteer}
-                        className="rounded-full border border-white px-3 py-1 font-heading text-xs font-semibold text-white transition-colors hover:bg-white hover:text-orange"
-                      >
-                        Volunteer
-                      </button>
-                      <button
-                        type="button"
-                        onClick={openDonate}
-                        className="rounded-full bg-white px-3 py-1 font-heading text-xs font-semibold text-orange transition-colors hover:bg-navy hover:text-white"
-                      >
-                        Donate
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <p className="font-body text-xs text-black/45">
+              {stage6Index + 1} / {CAUSES.length} — scroll to move between causes
+            </p>
           </div>
         </div>
       )}
 
-      {/* Stage 7: Team spotlight — same white field as stage 6, a plain fly
-          since there's no backdrop color to hand off between them. */}
+      {/* Stage 7: the team as an expanding row of photo panels — the active
+          member's panel widens to show their note, name and role; the rest
+          stay as slim strips. Scroll or tap a panel to move along. */}
       {layout === "final" && (
         <div
           ref={stage7Ref}
@@ -2326,42 +2438,73 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-center md:pt-28"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-start md:pt-28"
         >
-          <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-4 md:gap-8">
-            <h2 className="text-center font-heading text-xl font-bold text-navy sm:text-3xl">Meet the Dream Team</h2>
-            <div className="grid w-full items-center gap-6 md:gap-14 md:grid-cols-2">
-              <div ref={stage7PhotoRef} className="opacity-0">
-                <div className="relative mx-auto aspect-[3/4] w-full max-w-[140px] overflow-hidden rounded-3xl shadow-lg md:max-w-xs">
-                  <Image
-                    ref={stage7PhotoImgRef}
-                    src={TEAM_MEMBERS[teamIndex].photo}
-                    alt=""
-                    fill
-                    sizes="320px"
-                    className="object-cover"
-                  />
-                  <span aria-hidden="true" className="absolute bottom-0 left-0 h-1.5 w-full bg-orange" />
-                </div>
-              </div>
+          <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-6 md:gap-10">
+            <h2 className="text-center font-heading text-xl font-bold text-navy sm:text-3xl">Meet the Team</h2>
 
-              <div ref={stage7TextRef} className="flex flex-col gap-2 opacity-0 md:gap-4">
-                <span aria-hidden="true" className="hidden font-heading text-6xl leading-none text-orange md:block">
-                  &ldquo;
-                </span>
-                <div ref={stage7MessageRef} className="md:-mt-6">
-                  <p className="font-body text-base leading-6 text-black/80 italic md:text-xl md:leading-8">
-                    {TEAM_MEMBERS[teamIndex].message}
-                  </p>
-                  <div className="mt-2 md:mt-4">
-                    <p className="font-heading text-lg font-bold text-navy md:text-xl">
-                      {TEAM_MEMBERS[teamIndex].name}
-                    </p>
-                    <p className="font-body text-sm text-black/60">{TEAM_MEMBERS[teamIndex].role}</p>
-                  </div>
-                </div>
-              </div>
+            <div
+              ref={stage7TextRef}
+              className="flex w-full gap-2 opacity-0 md:gap-3"
+              style={{ height: isMobile ? 340 : 420 }}
+            >
+              {TEAM_MEMBERS.map((member, i) => {
+                const isActive = i === teamIndex;
+                return (
+                  <button
+                    type="button"
+                    key={member.name}
+                    onClick={() => setTeam(i)}
+                    aria-pressed={isActive}
+                    className="group relative overflow-hidden rounded-3xl ring-1 ring-black/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+                    style={{
+                      flexGrow: isActive ? 7 : 1,
+                      flexBasis: 0,
+                      minWidth: 0,
+                      transition: prefersReducedMotion
+                        ? "none"
+                        : "flex-grow 0.55s cubic-bezier(.22,1,.36,1)",
+                    }}
+                  >
+                    <Image
+                      src={member.photo}
+                      alt={isActive ? `${member.name}, ${member.role}` : ""}
+                      fill
+                      sizes="(max-width: 768px) 90vw, 620px"
+                      className="object-cover"
+                    />
+                    <span
+                      className={
+                        "absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/70 via-black/15 to-transparent p-3 transition-opacity duration-300 " +
+                        (isActive ? "opacity-0" : "opacity-100")
+                      }
+                    >
+                      <span className="font-heading text-xs font-bold text-white [writing-mode:vertical-rl] md:text-sm">
+                        {member.name}
+                      </span>
+                    </span>
+                    <span
+                      className={
+                        "absolute inset-x-0 bottom-0 m-2.5 flex flex-col gap-2 rounded-2xl border border-white/25 bg-black/35 p-4 text-left text-white backdrop-blur-xl transition-opacity duration-300 md:m-4 md:p-5 " +
+                        (isActive ? "opacity-100" : "pointer-events-none opacity-0")
+                      }
+                    >
+                      <p className="font-body text-xs italic leading-5 text-white/90 md:text-sm md:leading-6">
+                        &ldquo;{member.message}&rdquo;
+                      </p>
+                      <div>
+                        <p className="font-heading text-sm font-bold md:text-lg">{member.name}</p>
+                        <p className="font-body text-[11px] text-white/70 md:text-xs">{member.role}</p>
+                      </div>
+                    </span>
+                  </button>
+                );
+              })}
             </div>
+
+            <p className="font-body text-xs text-black/45">
+              {teamIndex + 1} / {TEAM_MEMBERS.length} — scroll or tap a panel
+            </p>
           </div>
         </div>
       )}
@@ -2385,7 +2528,7 @@ export default function IntroSequence() {
           <div className="relative h-full w-full">
             <div
               ref={stage8MarqueeBlockRef}
-              className="absolute inset-0 flex flex-col items-center justify-start gap-10 px-8 pt-20 md:justify-center md:pt-28"
+              className="absolute inset-0 flex flex-col items-center justify-start gap-10 px-8 pt-20 md:pt-28"
             >
               <h2 className="text-center font-heading text-3xl font-bold text-navy sm:text-4xl">Our Sponsors</h2>
 
@@ -2423,7 +2566,7 @@ export default function IntroSequence() {
                 </div>
 
                 <div className="flex flex-col gap-3 md:gap-4">
-                  <h2 className="font-heading text-xl font-bold text-navy sm:text-4xl">Support Our Mission</h2>
+                  <h2 className="font-heading text-xl font-bold text-navy sm:text-4xl">See the World Differently</h2>
 
                   <div className="flex gap-2">
                     {(["volunteer", "donate", "csr"] as const).map((tab) => (
@@ -2524,7 +2667,7 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-center md:pt-28"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-start md:pt-28"
         >
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 md:gap-10">
             <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">What People Say</h2>
@@ -2561,7 +2704,7 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-center md:pt-28"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-start md:pt-28"
         >
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 md:gap-4">
             <h2 className="text-center font-heading text-xl font-bold text-navy sm:text-4xl">

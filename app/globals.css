@@ -92,3 +92,33 @@ body {
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
+/* Splash screen: a hairline that draws itself across the black field on
+   load, with a brighter glint travelling along it, so the countdown never
+   sits completely still. */
+@keyframes splash-line-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.animate-splash-line-draw {
+  transform-origin: left center;
+  animation: splash-line-draw 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes splash-line-sweep {
+  0% {
+    left: -35%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.animate-splash-line-sweep {
+  animation: splash-line-sweep 2.6s ease-in-out infinite;
+}
