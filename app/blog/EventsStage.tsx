@@ -14,8 +14,14 @@ export function EventsStage() {
   return (
     <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-center gap-3 sm:gap-5">
       <div>
-        <h1 className="font-heading text-xl font-bold text-navy sm:text-3xl">Events</h1>
-        <p className="mt-1 font-body text-sm text-black/60">Recaps from every programme, fundraiser, and drive.</p>
+        <h1 className="font-heading text-xl font-bold text-navy sm:text-3xl">Blog</h1>
+        <p className="mt-1 font-body text-sm text-black/60">
+          Recaps and stories from every programme, fundraiser, and drive. For dates still to come, see{" "}
+          <Link href="/events" className="font-semibold text-navy underline underline-offset-2">
+            upcoming events
+          </Link>
+          .
+        </p>
       </div>
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-5 md:grid-cols-5">

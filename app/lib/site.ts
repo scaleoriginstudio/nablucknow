@@ -1,7 +1,7 @@
-// Placeholder production domain. Swap for the real one before launch.
-// .example is the IANA-reserved placeholder TLD (RFC 2606), so this can't
-// resolve to anyone else's site in the meantime.
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.nabindia.example";
+// Current live origin. Override with NEXT_PUBLIC_SITE_URL once a custom
+// domain (e.g. nablucknow.org) is pointed at the deployment — canonical
+// URLs, OpenGraph tags, the sitemap and robots.txt all derive from this.
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://nablucknow.vercel.app";
 
 export const SITE_NAME = "National Association for the Blind, State Chapter, Lucknow";
 

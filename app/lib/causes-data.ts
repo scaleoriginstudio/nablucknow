@@ -7,6 +7,10 @@ export type Cause = {
   raisedAmount: number;
 };
 
+// TODO(nab): confirm the real goal and raised figures for each cause with
+// the organisation. "Office Infrastructure" and "White Cane Distribution"
+// currently share an identical 1,50,00,000 goal, which looks like a
+// placeholder pasted twice rather than two independently-set targets.
 export const CAUSES: Cause[] = [
   {
     slug: "office-infra",

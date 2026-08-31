@@ -29,6 +29,10 @@ import { useOverlay } from "../shared/OverlayContext";
 gsap.registerPlugin(Flip);
 
 const COUNTDOWN_SECONDS = 6;
+// sessionStorage flag: set once the intro has finished (by any path), read
+// on load to decide whether to replay it. Session-scoped, so a brand-new
+// visit still gets the full experience.
+const INTRO_SEEN_KEY = "nab-intro-seen";
 const HEADER_HEIGHT = 96;
 const TOTAL_STAGES = 10;
 const HERO_HEADLINE = "Seeing the world differently, together.";
@@ -554,7 +558,14 @@ export default function IntroSequence() {
   useGSAP(
     () => {
       if (layout !== "countdown") return;
-      if (prefersReducedMotion) {
+      // Play the vision-loss intro once per browsing session only. A visitor
+      // who reloads or navigates back lands straight on the hero rather than
+      // sitting through (or tabbing past) the animation again.
+      let alreadySeen = false;
+      try {
+        alreadySeen = sessionStorage.getItem(INTRO_SEEN_KEY) === "1";
+      } catch {}
+      if (prefersReducedMotion || alreadySeen) {
         handleSkip();
         return;
       }
@@ -576,6 +587,15 @@ export default function IntroSequence() {
     },
     { scope: sectionRef, dependencies: [prefersReducedMotion, layout] },
   );
+
+  // Remember, for the rest of this session, that the intro has run — every
+  // path to a finished intro ends on the "final" layout.
+  useEffect(() => {
+    if (layout !== "final") return;
+    try {
+      sessionStorage.setItem(INTRO_SEEN_KEY, "1");
+    } catch {}
+  }, [layout]);
 
   // Phase 2: video + headline fly in below the held logo, then hand off to phase 3.
   useLayoutEffect(() => {
@@ -1618,10 +1638,17 @@ export default function IntroSequence() {
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden bg-black"
-    >
+    <>
+      <a
+        href="#home-hero-heading"
+        className="fixed left-2 top-2 z-50 -translate-y-16 rounded-md bg-navy px-4 py-2 font-heading text-sm font-semibold text-white transition-transform focus:translate-y-0"
+      >
+        Skip to content
+      </a>
+      <section
+        ref={sectionRef}
+        className="relative min-h-screen w-full overflow-hidden bg-black"
+      >
       {layout === "countdown" && (
         <p className="sr-only">
           Welcome to National Association for the Blind. This intro briefly
@@ -1775,7 +1802,13 @@ export default function IntroSequence() {
         )}
       </div>
 
-      <h1 ref={headlineRef} style={headlineStyle(layout, isMobile)} className="z-20 font-heading font-semibold leading-tight">
+      <h1
+        ref={headlineRef}
+        id="home-hero-heading"
+        tabIndex={-1}
+        style={headlineStyle(layout, isMobile)}
+        className="z-20 font-heading font-semibold leading-tight outline-none"
+      >
         {HERO_HEADLINE}
       </h1>
 
@@ -2634,6 +2667,7 @@ export default function IntroSequence() {
           </button>
         </div>
       )}
-    </section>
+      </section>
+    </>
   );
 }

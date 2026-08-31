@@ -2,7 +2,13 @@
 
 :root {
   --color-navy: #23398d;
-  --color-orange: #f17c08;
+  /* Darkened from the original #f17c08 so white-on-orange buttons and
+     orange-on-white labels clear WCAG AA (4.5:1). #c2410c gives ~5.2:1
+     against white both ways. --color-orange-bright keeps the original vivid
+     tone for large decorative fills only (progress bars, accent rules),
+     never for text or for a control that carries a text label. */
+  --color-orange: #c2410c;
+  --color-orange-bright: #f17c08;
   --color-black: #000000;
   --color-white: #ffffff;
 }
@@ -10,6 +16,7 @@
 @theme inline {
   --color-navy: var(--color-navy);
   --color-orange: var(--color-orange);
+  --color-orange-bright: var(--color-orange-bright);
   --font-heading: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-body), Georgia, serif;
 }

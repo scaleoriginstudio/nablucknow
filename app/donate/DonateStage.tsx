@@ -74,7 +74,7 @@ export function DonateStage() {
         }
         extraPayload={amount ? { amount } : undefined}
         disabled={!amount}
-        submitLabel={amount ? `Pay ₹${amount} via Razorpay` : "Choose an amount"}
+        submitLabel={amount ? `Pledge ₹${amount}` : "Choose an amount"}
         feeNote={`Online payment is not live yet. We will email you UPI and bank transfer details to complete the donation. ${TAX_EXEMPTION_NOTE}`}
         successTitle="Pledge recorded"
         successBody="Thank you. We have your details and will send payment options shortly."
