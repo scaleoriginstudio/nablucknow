@@ -386,6 +386,7 @@ export default function IntroSequence() {
   const headerRef = useRef<HTMLElement>(null);
   const percentageRef = useRef<HTMLSpanElement>(null);
   const conditionRef = useRef<HTMLSpanElement>(null);
+  const splashLineRef = useRef<HTMLDivElement>(null);
   const tunnelRef = useRef<HTMLDivElement>(null);
   const macularRef = useRef<HTMLDivElement>(null);
   const pauseButtonRef = useRef<HTMLButtonElement>(null);
@@ -487,6 +488,13 @@ export default function IntroSequence() {
   const update = useCallback((v: number) => {
     const pct = Math.max(0, Math.round(v));
     if (percentageRef.current) percentageRef.current.textContent = `${pct}%`;
+
+    // The bottom hairline draws left-to-right as the counter falls: 0 at
+    // 100%, full at 0%.
+    if (splashLineRef.current) {
+      const drawn = Math.min(1, Math.max(0, 1 - v / 100));
+      splashLineRef.current.style.transform = `scaleX(${drawn.toFixed(4)})`;
+    }
 
     const stage = stageForValue(v);
     if (stage.label !== lastLabelRef.current) {
@@ -1775,15 +1783,22 @@ export default function IntroSequence() {
         </p>
       )}
 
-      {/* Splash hairline: draws across the black field on load with a glint
-          travelling along it, so the countdown is never completely still. */}
+      {/* Splash hairline: a full-width line pinned to the bottom of the
+          screen that draws itself left-to-right in step with the countdown
+          — empty at 100%, complete as sight "returns" to 0%. Width is a
+          scaleX transform so it stays crisp at any viewport size, and
+          mix-blend-difference keeps it visible as the field goes from
+          black to white behind it. */}
       {layout === "countdown" && (
         <div
           aria-hidden="true"
-          className="pointer-events-none fixed inset-x-0 top-[70%] z-40 h-px overflow-hidden"
+          className="pointer-events-none fixed inset-x-0 bottom-0 z-40 h-0.5"
         >
-          <div className="animate-splash-line-draw h-full w-full bg-white/25" />
-          <div className="animate-splash-line-sweep absolute top-0 h-full w-1/3 bg-gradient-to-r from-transparent via-white to-transparent" />
+          <div
+            ref={splashLineRef}
+            className="h-full w-full origin-left bg-gradient-to-r from-white/40 to-white mix-blend-difference"
+            style={{ transform: "scaleX(0)" }}
+          />
         </div>
       )}
 
