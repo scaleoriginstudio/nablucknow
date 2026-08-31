@@ -29,10 +29,6 @@ import { useOverlay } from "../shared/OverlayContext";
 gsap.registerPlugin(Flip);
 
 const COUNTDOWN_SECONDS = 6;
-// sessionStorage flag: set once the intro has finished (by any path), read
-// on load to decide whether to replay it. Session-scoped, so a brand-new
-// visit still gets the full experience.
-const INTRO_SEEN_KEY = "nab-intro-seen";
 const HEADER_HEIGHT = 96;
 const TOTAL_STAGES = 10;
 // The heading of the section that comes next, shown as a faint prelude
@@ -607,14 +603,9 @@ export default function IntroSequence() {
   useGSAP(
     () => {
       if (layout !== "countdown") return;
-      // Play the vision-loss intro once per browsing session only. A visitor
-      // who reloads or navigates back lands straight on the hero rather than
-      // sitting through (or tabbing past) the animation again.
-      let alreadySeen = false;
-      try {
-        alreadySeen = sessionStorage.getItem(INTRO_SEEN_KEY) === "1";
-      } catch {}
-      if (prefersReducedMotion || alreadySeen) {
+      // The vision-loss countdown runs on every load — it is the point of
+      // the homepage. Only a stated OS "reduce motion" preference skips it.
+      if (prefersReducedMotion) {
         handleSkip();
         return;
       }
@@ -636,15 +627,6 @@ export default function IntroSequence() {
     },
     { scope: sectionRef, dependencies: [prefersReducedMotion, layout] },
   );
-
-  // Remember, for the rest of this session, that the intro has run — every
-  // path to a finished intro ends on the "final" layout.
-  useEffect(() => {
-    if (layout !== "final") return;
-    try {
-      sessionStorage.setItem(INTRO_SEEN_KEY, "1");
-    } catch {}
-  }, [layout]);
 
   // Phase 2: video + headline fly in below the held logo, then hand off to phase 3.
   useLayoutEffect(() => {
