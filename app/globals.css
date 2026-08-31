@@ -122,3 +122,20 @@ body {
 .animate-splash-line-sweep {
   animation: splash-line-sweep 2.6s ease-in-out infinite;
 }
+
+/* Ghosted prelude of the next section: rises into place from just below
+   its resting spot every time the active stage changes. */
+@keyframes prelude-fly-in {
+  from {
+    transform: translateY(26px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: var(--prelude-opacity, 0.12);
+  }
+}
+
+.animate-prelude {
+  animation: prelude-fly-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}

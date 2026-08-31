@@ -35,6 +35,20 @@ const COUNTDOWN_SECONDS = 6;
 const INTRO_SEEN_KEY = "nab-intro-seen";
 const HEADER_HEIGHT = 96;
 const TOTAL_STAGES = 10;
+// The heading of the section that comes next, shown as a faint prelude
+// peeking from the bottom of the current stage and re-flying into place on
+// every step. Keyed by the stage you are currently on; gaps (1, 4, 10) are
+// stages whose successor is the same section or the footer, which has its
+// own arrival animation.
+const NEXT_SECTION_LABEL: Record<number, string> = {
+  2: "Our Vision",
+  3: "Our Journey, Quantified",
+  5: "Our Causes",
+  6: "Meet the Team",
+  7: "See the World Differently",
+  8: "What People Say",
+  9: "Aligned with the UN Goals",
+};
 const HERO_HEADLINE = "Seeing the world differently, together.";
 const STAGE1_HEADLINE =
   "National Association for the Blind, State Chapter, Lucknow";
@@ -213,27 +227,48 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-const logoStyle = (layout: Layout, isMobile: boolean): CSSProperties =>
-  layout === "final"
-    ? {
-        position: "fixed",
-        top: 8,
-        left: 16,
-        width: 80,
-        height: 80,
-        transform: "none",
-        backgroundColor: "#FFFFFF",
-        borderRadius: 12,
-        padding: 8,
-      }
-    : {
-        position: "fixed",
-        top: "38%",
-        left: "50%",
-        width: isMobile ? 130 : 200,
-        height: isMobile ? 130 : 200,
-        transform: "translate(-50%, -50%)",
-      };
+const logoStyle = (layout: Layout, isMobile: boolean, atFooter = false): CSSProperties => {
+  if (layout !== "final") {
+    return {
+      position: "fixed",
+      top: "38%",
+      left: "50%",
+      width: isMobile ? 130 : 200,
+      height: isMobile ? 130 : 200,
+      transform: "translate(-50%, -50%)",
+    };
+  }
+  const transition = "top 0.55s cubic-bezier(0.22,1,0.36,1), left 0.55s cubic-bezier(0.22,1,0.36,1), width 0.55s ease, height 0.55s ease, background-color 0.5s ease, padding 0.5s ease, border-radius 0.5s ease";
+  // On the footer stage the logo leaves the header and settles, white and
+  // chromeless, roughly where the footer's own (hidden) logo would sit —
+  // top-left of the centered footer content column.
+  if (atFooter) {
+    return {
+      position: "fixed",
+      top: "calc(50% - 132px)",
+      left: "max(2rem, calc((100vw - 68rem) / 2))",
+      width: 60,
+      height: 60,
+      transform: "none",
+      backgroundColor: "rgba(255,255,255,0)",
+      borderRadius: 0,
+      padding: 0,
+      transition,
+    };
+  }
+  return {
+    position: "fixed",
+    top: 8,
+    left: 16,
+    width: 80,
+    height: 80,
+    transform: "none",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    padding: 8,
+    transition,
+  };
+};
 
 // On mobile the hero video stays a horizontal 16:9 band under the header
 // instead of stretching to fill the remaining viewport height — the
@@ -714,7 +749,7 @@ export default function IntroSequence() {
 
     // Stage 3's signature entrance, shared by the forward (2->3) and back
     // (4->3) paths: the "Our Vision" label appears, then each pointer line
-    // flies in from the left while its icon grows from nothing in the same
+    // rises up into place while its icon grows from nothing in the same
     // beat, and finally the mission block rises in.
     const revealStage3 = (tl: gsap.core.Timeline, instant: boolean) => {
       const lines = stage3PointRefs.current.filter(Boolean);
@@ -725,15 +760,15 @@ export default function IntroSequence() {
       // opacity 0 when the whole transition ran instant).
       tl.set(stage3VisionRef.current, { opacity: 1, y: 0 }, 0);
       tl.set(stage3HeadlineRef.current, { opacity: 0, y: instant ? 0 : 12 }, 0);
-      tl.set(lines, { opacity: 0, x: instant ? 0 : -24 }, 0);
+      tl.set(lines, { opacity: 0, y: instant ? 0 : 26 }, 0);
       tl.set(icons, { scale: instant ? 1 : 0 }, 0);
       tl.set(stage3MissionRef.current, { opacity: 0, y: instant ? 0 : 24 }, 0);
-      // Then play them in: label, then each line flying in from the left as
-      // its icon grows in the same beat, then the mission block.
+      // Then play them in: label, then each line rising up from below as its
+      // icon grows in the same beat, then the mission block.
       tl.to(stage3HeadlineRef.current, { opacity: 1, y: 0, duration: d ?? 0.4, ease: "power2.out" });
       tl.to(
         lines,
-        { opacity: 1, x: 0, duration: d ?? 0.45, stagger: instant ? 0 : 0.13, ease: "power2.out" },
+        { opacity: 1, y: 0, duration: d ?? 0.45, stagger: instant ? 0 : 0.13, ease: "power2.out" },
         instant ? ">" : "-=0.15",
       );
       tl.to(
@@ -1128,7 +1163,8 @@ export default function IntroSequence() {
           { opacity: 0, y: -40, duration: dur ?? 0.4, stagger: dur ? 0 : 0.06, ease: "power2.in" },
         );
         tl.set(stage7Ref.current, { opacity: 0 }, dur ? 0 : "+=0.05");
-        tl.set(stage8Ref.current, { opacity: 1, pointerEvents: "auto" });
+        // y:0 clears any lift left on the panel by a prior 8->9 step.
+        tl.set(stage8Ref.current, { opacity: 1, y: 0, pointerEvents: "auto" });
       } else if (current === 8 && next === 7) {
         // A symmetric crossfade (both tweened, not one instant + one
         // slow) so there's never a window where neither's opaque white
@@ -1144,34 +1180,55 @@ export default function IntroSequence() {
           dur ? 0 : "-=0.1",
         );
       } else if (current === 8 && next === 9) {
-        // Same white field again — symmetric crossfade, same pattern as
-        // 7<->8 and 8<->7.
+        // Same white field — the outgoing panel lifts up and out while the
+        // incoming one rises into place, both converging on the number line.
         tl.set(stage8Ref.current, { pointerEvents: "none" });
         tl.set(stage9Ref.current, { pointerEvents: "auto" });
-        tl.to(stage8Ref.current, { opacity: 0, duration: dur ?? 0.3 }, 0);
-        tl.to(stage9Ref.current, { opacity: 1, duration: dur ?? 0.3 }, 0);
+        tl.to(stage8Ref.current, { opacity: 0, y: dur ? 0 : -30, duration: dur ?? 0.3 }, 0);
+        tl.fromTo(
+          stage9Ref.current,
+          { opacity: 0, y: dur ? 0 : 40 },
+          { opacity: 1, y: 0, duration: dur ?? 0.35, ease: "power2.out" },
+          0,
+        );
       } else if (current === 9 && next === 8) {
         tl.set(stage9Ref.current, { pointerEvents: "none" });
         tl.set(stage8Ref.current, { pointerEvents: "auto" });
-        tl.to(stage9Ref.current, { opacity: 0, duration: dur ?? 0.3 }, 0);
-        tl.to(stage8Ref.current, { opacity: 1, duration: dur ?? 0.3 }, 0);
+        tl.to(stage9Ref.current, { opacity: 0, y: dur ? 0 : -30, duration: dur ?? 0.3 }, 0);
+        tl.fromTo(
+          stage8Ref.current,
+          { opacity: 0, y: dur ? 0 : 40 },
+          { opacity: 1, y: 0, duration: dur ?? 0.35, ease: "power2.out" },
+          0,
+        );
       } else if (current === 9 && next === 10) {
         tl.set(stage9Ref.current, { pointerEvents: "none" });
         tl.set(stage10Ref.current, { pointerEvents: "auto" });
-        tl.to(stage9Ref.current, { opacity: 0, duration: dur ?? 0.3 }, 0);
-        tl.to(stage10Ref.current, { opacity: 1, duration: dur ?? 0.3 }, 0);
+        tl.to(stage9Ref.current, { opacity: 0, y: dur ? 0 : -30, duration: dur ?? 0.3 }, 0);
+        tl.fromTo(
+          stage10Ref.current,
+          { opacity: 0, y: dur ? 0 : 40 },
+          { opacity: 1, y: 0, duration: dur ?? 0.35, ease: "power2.out" },
+          0,
+        );
       } else if (current === 10 && next === 9) {
         tl.set(stage10Ref.current, { pointerEvents: "none" });
         tl.set(stage9Ref.current, { pointerEvents: "auto" });
-        tl.to(stage10Ref.current, { opacity: 0, duration: dur ?? 0.3 }, 0);
-        tl.to(stage9Ref.current, { opacity: 1, duration: dur ?? 0.3 }, 0);
+        tl.to(stage10Ref.current, { opacity: 0, y: dur ? 0 : -30, duration: dur ?? 0.3 }, 0);
+        tl.fromTo(
+          stage9Ref.current,
+          { opacity: 0, y: dur ? 0 : 40 },
+          { opacity: 1, y: 0, duration: dur ?? 0.35, ease: "power2.out" },
+          0,
+        );
       } else if (current === 10 && next === 11) {
         // The footer isn't a numbered step and has no navbar of its own —
         // hide the header and stepper entirely rather than inverting them.
-        // The footer's own opacity is driven by the Footer component itself
-        // (from the `active` prop derived off activeStage), not tweened
-        // here — it owns a hardcoded full-viewport inline style, and a
-        // GSAP write here would just get overwritten on the next render.
+        // The footer slides up from below (its own CSS transition off the
+        // `active` prop), and the persistent logo travels into the footer's
+        // logo slot and turns white — both driven by state + CSS (see
+        // logoStyle's `atFooter` branch), not tweened here, so a stalled
+        // GSAP timeline can never strand them half-morphed.
         tl.set(stage10Ref.current, { pointerEvents: "none" });
         tl.set(headerRef.current, { pointerEvents: "none" });
         tl.set(stepperGroupRef.current, { pointerEvents: "none" });
@@ -1179,9 +1236,6 @@ export default function IntroSequence() {
         tl.to(stage10Ref.current, { opacity: 0, duration: dur ?? 0.3 }, 0);
         tl.to(headerRef.current, { opacity: 0, duration: dur ?? 0.3 }, 0);
         tl.to(stepperGroupRef.current, { opacity: 0, duration: dur ?? 0.3 }, 0);
-        // The footer renders its own logo — without this, the persistent
-        // "go home" logo stays fixed on top of it, reading as a duplicate.
-        tl.to(logoWrapRef.current, { opacity: 0, duration: dur ?? 0.3 }, 0);
       } else if (current === 11 && next === 10) {
         tl.set(stage10Ref.current, { pointerEvents: "auto" });
         tl.set(headerRef.current, { pointerEvents: "auto" });
@@ -1190,7 +1244,6 @@ export default function IntroSequence() {
         tl.to(stage10Ref.current, { opacity: 1, duration: dur ?? 0.3 }, 0);
         tl.to(headerRef.current, { opacity: 1, duration: dur ?? 0.3 }, 0);
         tl.to(stepperGroupRef.current, { opacity: 1, duration: dur ?? 0.3 }, 0);
-        tl.to(logoWrapRef.current, { opacity: 1, duration: dur ?? 0.3 }, 0);
       } else if (next === 1 && current === 0) {
         // The hero video shrinks and snaps into the photo slot; the hero
         // heading carries over into the stage 1 heading position — one
@@ -1771,10 +1824,12 @@ export default function IntroSequence() {
         <MobileNav />
       </header>
 
-      {/* The persistent logo — one continuous element from the countdown through to the header. */}
+      {/* The persistent logo — one continuous element from the countdown
+          through the header and, on the footer stage, into the footer's
+          own logo slot (white, chromeless). */}
       <div
         ref={logoWrapRef}
-        style={logoStyle(layout, isMobile)}
+        style={logoStyle(layout, isMobile, activeStage === 11)}
         className={"z-40 flex items-center justify-center" + (layout === "final" ? " cursor-pointer" : "")}
         onClick={layout === "final" ? handleLogoClick : undefined}
         role={layout === "final" ? "button" : undefined}
@@ -1802,7 +1857,9 @@ export default function IntroSequence() {
           style={
             layout === "countdown"
               ? { filter: "blur(26px) contrast(0.5) grayscale(1) brightness(0.35)" }
-              : undefined
+              : activeStage === 11
+                ? { filter: "brightness(0) invert(1)", transition: "filter 0.5s ease" }
+                : { transition: "filter 0.5s ease" }
           }
         />
       </div>
@@ -1921,6 +1978,31 @@ export default function IntroSequence() {
               }}
             />
           </div>
+        </div>
+      )}
+
+      {/* Ghosted prelude: the next section's heading peeking from the bottom
+          of whatever stage is showing, re-flying into place on every step —
+          the same "here's what's next" hint the stage-1 word list gives. */}
+      {layout === "final" && NEXT_SECTION_LABEL[activeStage] && (
+        <div
+          key={activeStage}
+          aria-hidden="true"
+          className="animate-prelude pointer-events-none fixed inset-x-0 bottom-5 z-[17] flex justify-center"
+          style={
+            {
+              "--prelude-opacity": activeStage >= 3 && activeStage <= 5 ? "0.16" : "0.11",
+            } as CSSProperties
+          }
+        >
+          <span
+            className={
+              "font-heading text-lg font-bold sm:text-2xl " +
+              (activeStage >= 3 && activeStage <= 5 ? "text-white" : "text-navy")
+            }
+          >
+            {NEXT_SECTION_LABEL[activeStage]}
+          </span>
         </div>
       )}
 
@@ -2759,7 +2841,7 @@ export default function IntroSequence() {
       {/* Stage 11: Footer — same shared component every other page ends
           on, just wired into this page's own symmetric-crossfade stage
           machine instead of the generic StagePager's. */}
-      {layout === "final" && <Footer ref={stage11Ref} active={activeStage === 11} />}
+      {layout === "final" && <Footer ref={stage11Ref} active={activeStage === 11} morphLogo />}
 
       {layout === "countdown" && (
         <div className="fixed top-6 right-6 z-50 flex gap-3">

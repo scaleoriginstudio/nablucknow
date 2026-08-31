@@ -12,18 +12,22 @@ const GET_INVOLVED_HREF: Record<string, string> = {
     both by the fixed full-viewport stage `Footer` (homepage + StagePager
     pages) and by the normally-scrolling blog pages, so every page closes on
     the same footer. */
-export function SiteFooterContent() {
+export function SiteFooterContent({ hideLogo = false }: { hideLogo?: boolean } = {}) {
   return (
     <div className="mx-auto w-full max-w-6xl">
       <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
         <div className="col-span-2 flex flex-col gap-3 sm:col-span-1">
+          {/* data-footer-logo: the homepage measures this to fly its
+              persistent logo into place; hideLogo keeps the slot laid out
+              but invisible so there is never a duplicate. */}
           <Image
             src="/img/logo.png"
             alt=""
             width={64}
             height={64}
+            data-footer-logo=""
             className="h-16 w-16 object-contain"
-            style={{ filter: "brightness(0) invert(1)" }}
+            style={{ filter: "brightness(0) invert(1)", visibility: hideLogo ? "hidden" : "visible" }}
           />
           <p className="font-heading text-sm font-bold text-white">National Association for the Blind</p>
           <p className="font-body text-xs text-white/60">State Chapter, Lucknow</p>
