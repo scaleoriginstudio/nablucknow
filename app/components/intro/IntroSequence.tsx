@@ -1696,6 +1696,45 @@ export default function IntroSequence() {
     });
   }, [activeStage, storyIndex, prefersReducedMotion]);
 
+  // Settle enforcer. Every step's exit animation is a GSAP tween, and GSAP's
+  // ticker is paused while the tab is in the background — so a step taken
+  // just before switching away (or on a slow device) can leave its outgoing
+  // layer stranded half-faded on top of the new stage. This snaps the
+  // persistent hero layers and the stepper/header colours back to whatever
+  // the current stage requires: once, well after any real transition would
+  // have finished, and again the moment the tab is brought back to the
+  // foreground. It never fires mid-transition and is a no-op when nothing
+  // actually stalled.
+  useEffect(() => {
+    if (layout !== "final") return;
+    const settle = () => {
+      const stage = activeStageRef.current;
+      if (stage >= 2) {
+        // Past stage 1 the hero video and heading are never on screen.
+        gsap.set([videoBoxRef.current, headlineRef.current], { opacity: 0 });
+      } else if (stage === 0) {
+        // The hero: video and heading must be fully visible.
+        gsap.set([videoBoxRef.current, headlineRef.current], { opacity: 1 });
+      }
+      // On the plain white stages the navy wipe never ran, so any inline
+      // colours an earlier navy step wrote to the stepper/header are stale.
+      if (stage <= 1 || stage >= 6) {
+        gsap.set(stepperGroupRef.current?.querySelectorAll("span") ?? [], { clearProps: "color" });
+        gsap.set(headerRef.current?.querySelectorAll("a") ?? [], { clearProps: "color,borderColor" });
+        if (headerRef.current) gsap.set(headerRef.current, { clearProps: "backgroundColor" });
+      }
+    };
+    const t = window.setTimeout(settle, 1400);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") window.setTimeout(settle, 60);
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.clearTimeout(t);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [activeStage, layout]);
+
   const handleTogglePause = useCallback(() => {
     const tween = countdownTweenRef.current;
     if (!tween) return;
