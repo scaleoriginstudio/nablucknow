@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent, type ReactNode } from "react";
 import { submitLead, type LeadPayload } from "../../lib/forms";
+import { FIELD_CLASS } from "./constants";
 import { Icon } from "./Icon";
 
 export type LeadSelect = {
@@ -14,8 +15,7 @@ export type LeadSelect = {
   onChange: (value: string) => void;
 };
 
-const fieldClass =
-  "w-full rounded-lg border border-black/15 bg-white/85 px-3.5 py-2.5 font-body text-sm text-black shadow-sm placeholder:text-black/40 transition-colors focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy/20";
+const fieldClass = FIELD_CLASS;
 
 const labelClass = "font-heading text-[11px] font-semibold uppercase tracking-wide text-black/55";
 
@@ -91,22 +91,29 @@ export function LeadForm({
       {select && (
         <label className="flex flex-col gap-1">
           <span className={labelClass}>{select.label}</span>
-          <select
-            required
-            name={select.name}
-            value={select.value}
-            onChange={(e) => select.onChange(e.target.value)}
-            className={fieldClass}
-          >
-            <option value="" disabled>
-              {select.placeholder ?? "Please choose"}
-            </option>
-            {select.options.map((option) => (
-              <option key={option} value={option}>
-                {option}
+          <div className="relative">
+            <select
+              required
+              name={select.name}
+              value={select.value}
+              onChange={(e) => select.onChange(e.target.value)}
+              className={fieldClass + " appearance-none pr-6"}
+            >
+              <option value="" disabled>
+                {select.placeholder ?? "Please choose"}
               </option>
-            ))}
-          </select>
+              {select.options.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+            <Icon
+              name="expand_more"
+              size={18}
+              className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-black/45"
+            />
+          </div>
         </label>
       )}
 

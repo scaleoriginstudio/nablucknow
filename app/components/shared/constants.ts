@@ -1,5 +1,12 @@
 export const HEADER_HEIGHT = 96;
 
+// Every text input, select and textarea the site collects data through.
+// Underline-only, no box: transparent background, a single hairline on the
+// bottom edge that turns navy on focus. Shared so the look stays identical
+// across the lead form, the contact form and every overlay.
+export const FIELD_CLASS =
+  "w-full rounded-none border-0 border-b border-black/25 bg-transparent px-0 py-2 font-body text-sm text-black placeholder:text-black/40 transition-colors focus:border-navy focus:outline-none";
+
 export const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Events", href: "/events" },

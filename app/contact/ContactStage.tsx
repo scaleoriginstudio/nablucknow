@@ -3,13 +3,12 @@
 import { useState, type FormEvent } from "react";
 import { GlassFormShell } from "../components/shared/GlassFormShell";
 import { Icon } from "../components/shared/Icon";
-import { FOOTER_CONTACT } from "../components/shared/constants";
+import { FIELD_CLASS, FOOTER_CONTACT } from "../components/shared/constants";
 import { submitLead } from "../lib/forms";
 
 const MAPS_HREF = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(FOOTER_CONTACT.address)}`;
 
-const fieldClass =
-  "w-full rounded-lg border border-black/15 bg-white/85 px-3.5 py-2.5 font-body text-sm text-black shadow-sm placeholder:text-black/40 transition-colors focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy/20";
+const fieldClass = FIELD_CLASS;
 const labelClass = "font-heading text-[11px] font-semibold uppercase tracking-wide text-black/55";
 
 export function ContactStage() {
