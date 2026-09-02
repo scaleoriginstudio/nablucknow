@@ -10,8 +10,8 @@ const StageActiveContext = createContext(true);
 export const StageActiveProvider = StageActiveContext.Provider;
 export const useStageActive = () => useContext(StageActiveContext);
 
-/** The heading block every numbered stage opens with: a title and an
-    optional line of supporting text, held a constant distance below the
+/** The heading block every numbered stage opens with: a centred title and
+    an optional line of supporting text, held a constant distance below the
     number line (the stage's own top-aligned layout does that) and flown up
     into place whenever the stage becomes active — the same beat on every
     page, so Events, Blog and the rest read as one system.
@@ -30,8 +30,8 @@ export function StageIntro({
   title: ReactNode;
   subtitle?: ReactNode;
   headingLevel?: "h1" | "h2";
-  /** Optional controls that share the heading's row (e.g. filter chips),
-      right-aligned on wide screens. */
+  /** Optional controls (e.g. filter chips) shown on their own centred row
+      just below the heading. */
   trailing?: ReactNode;
 }) {
   // Visibility keys off `active` alone: the stage on screen shows its
@@ -52,12 +52,16 @@ export function StageIntro({
   });
 
   return (
-    <div className={trailing ? "flex flex-wrap items-center justify-between gap-3" : undefined}>
+    <div className="text-center">
       <div style={rise(120)}>
         <Heading className="font-heading text-xl font-bold text-navy sm:text-3xl">{title}</Heading>
-        {subtitle && <p className="mt-1 font-body text-sm text-black/60">{subtitle}</p>}
+        {subtitle && <p className="mx-auto mt-1 max-w-2xl font-body text-sm text-black/60">{subtitle}</p>}
       </div>
-      {trailing && <div style={rise(200)}>{trailing}</div>}
+      {trailing && (
+        <div style={rise(200)} className="mt-3 flex flex-wrap justify-center gap-2">
+          {trailing}
+        </div>
+      )}
     </div>
   );
 }

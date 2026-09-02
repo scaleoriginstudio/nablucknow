@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { POSTS } from "../lib/posts-data";
 import { StageIntro } from "../components/shared/StageIntro";
+import { Icon } from "../components/shared/Icon";
 
 const PAST_EVENTS = POSTS.filter((post) => post.section === "Events").sort(
   (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
@@ -73,7 +74,7 @@ export function PastEventsStage() {
         headingLevel="h2"
         title="Past Events"
         trailing={
-          <div className="flex flex-wrap gap-2">
+          <>
             {CATEGORY_FILTERS.map((c) => (
               <Chip key={c} active={category === c} onClick={() => setCategory(c)}>
                 {c}
@@ -85,22 +86,22 @@ export function PastEventsStage() {
                 {m}
               </Chip>
             ))}
-          </div>
+          </>
         }
       />
 
       {years.length === 0 ? (
-        <p className="font-body text-sm text-black/50">No past events match these filters.</p>
+        <p className="text-center font-body text-sm text-black/50">No past events match these filters.</p>
       ) : (
         <>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap justify-center gap-2">
             {years.map((y) => (
               <Chip key={y} active={activeYear === y} onClick={() => setYear(y)}>
                 {y}
               </Chip>
             ))}
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap justify-center gap-2">
             {monthsInYear.map((m) => (
               <Chip key={m} active={activeMonth === m} onClick={() => setMonth(m)}>
                 {new Date(`${m}-01`).toLocaleDateString("en-IN", { month: "long" })}
@@ -123,6 +124,12 @@ export function PastEventsStage() {
                     {post.title}
                   </h3>
                   <p className="font-body text-xs leading-5 text-black/60">{post.excerpt}</p>
+                  {post.location && (
+                    <p className="mt-0.5 flex items-center gap-1 font-body text-[11px] text-black/50">
+                      <Icon name="location_on" size={12} className="shrink-0 text-black/40" />
+                      {post.location}
+                    </p>
+                  )}
                 </div>
               </Link>
             ))}

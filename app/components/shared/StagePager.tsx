@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -63,12 +63,17 @@ function StageStepper({
 export function StagePager({
   stages,
   background,
+  stageLabels,
 }: {
   stages: React.ReactNode[];
   /** A full-bleed layer painted behind every stage (below the header and
       stepper). When set, the stages themselves render transparent so it
       shows through, and the glass panels on them have something to blur. */
   background?: React.ReactNode;
+  /** One short label per stage, in order. When given, the next stage's
+      label peeks in faint at the bottom edge and re-flies into place on
+      every step — the same "here's what's next" ghost the homepage uses. */
+  stageLabels?: string[];
 }) {
   const total = stages.length;
   const lastStage = total + 1;
@@ -132,8 +137,13 @@ export function StagePager({
       return el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1;
     };
 
+    // A card's sign-up dialog (portalled to <body>, role="dialog") must
+    // take the scroll for itself — stepping the stage underneath it while
+    // it is open is exactly the bug the events audit flagged.
+    const modalOpen = () => document.querySelector('[role="dialog"][aria-modal="true"]') !== null;
+
     const step = (delta: 1 | -1) => {
-      if (overlayOpenRef.current) return;
+      if (overlayOpenRef.current || modalOpen()) return;
       goTo(Math.min(lastStage, Math.max(1, activeRef.current + delta)));
     };
 
@@ -324,6 +334,27 @@ export function StagePager({
           );
         })}
       </div>
+
+      {/* Ghosted prelude: the next stage's heading peeking from the bottom
+          edge, re-flying into place on every step (keyed on `active`), then
+          the real StageIntro heading rises to meet it. Same hint the
+          homepage gives between its sections. */}
+      {stageLabels && !onFooter && stageLabels[active] && (
+        <div
+          key={active}
+          aria-hidden="true"
+          className="animate-prelude pointer-events-none fixed inset-x-0 bottom-5 z-[17] flex justify-center"
+          style={{ "--prelude-opacity": "0.12" } as CSSProperties}
+        >
+          <span
+            className={
+              "font-heading text-lg font-bold sm:text-2xl " + (background ? "text-white" : "text-navy")
+            }
+          >
+            {stageLabels[active]}
+          </span>
+        </div>
+      )}
 
       <Footer active={onFooter} />
     </>

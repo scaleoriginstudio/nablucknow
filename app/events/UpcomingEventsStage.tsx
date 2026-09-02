@@ -6,6 +6,7 @@ import { UPCOMING_EVENTS, type UpcomingEvent } from "./events-data";
 import { GlassFormShell } from "../components/shared/GlassFormShell";
 import { LeadForm } from "../components/shared/LeadForm";
 import { StageIntro } from "../components/shared/StageIntro";
+import { Icon } from "../components/shared/Icon";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
@@ -44,7 +45,7 @@ function SignUpModal({ event, onClose, onRegistered }: { event: UpcomingEvent; o
       eyebrow={`${event.eventCategory} · ${event.mode}`}
       title={event.title}
       intro={event.description}
-      meta={`${formatDate(event.date)} · ${event.time}`}
+      meta={`${formatDate(event.date)} · ${event.time} · ${event.location}`}
     >
       <LeadForm
         formType="EventSignup"
@@ -84,6 +85,10 @@ function EventCard({ event }: { event: UpcomingEvent }) {
           </div>
           <h3 className="font-heading text-sm font-bold leading-tight text-navy sm:text-base">{event.title}</h3>
           <p className="font-body text-xs text-black/60">{formatDate(event.date)}</p>
+          <p className="flex items-center gap-1 font-body text-xs text-black/55">
+            <Icon name="location_on" size={13} className="shrink-0 text-black/45" />
+            {event.location}
+          </p>
           <p className="hidden font-body text-xs leading-5 text-black/70 sm:block">{event.description}</p>
 
           <div className="mt-auto flex flex-col gap-2 sm:pt-2">

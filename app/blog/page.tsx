@@ -12,7 +12,10 @@ export const metadata: Metadata = {
 export default function BlogPage() {
   return (
     <main>
-      <StagePager stages={[<EventsStage key="events" />, <LinkedInStage key="linkedin" />]} />
+      <StagePager
+        stages={[<EventsStage key="events" />, <LinkedInStage key="linkedin" />]}
+        stageLabels={["Blog", "On LinkedIn"]}
+      />
     </main>
   );
 }

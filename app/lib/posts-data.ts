@@ -7,6 +7,9 @@ export type Post = {
   section: "Awareness" | "Events";
   eventCategory?: "Programs" | "Fundraiser & Awareness";
   mode?: "Online" | "Offline";
+  /** Where it was held. "Online" for remote events; a short venue for the
+      rest. Shown on the Past Events cards. */
+  location?: string;
   body: string[];
 };
 
@@ -57,6 +60,7 @@ export const POSTS: Post[] = [
     section: "Events",
     eventCategory: "Programs",
     mode: "Offline",
+    location: "NAB Lucknow campus, Indira Nagar",
     body: [
       "Our Annual Day closed out 2025 with performances, awards, and a graduating vocational-training batch of ten students moving into corporate and government placements.",
       "Family members, longtime donors, and this year's CSR partners joined us on campus for the full afternoon.",
@@ -71,6 +75,7 @@ export const POSTS: Post[] = [
     section: "Events",
     eventCategory: "Fundraiser & Awareness",
     mode: "Offline",
+    location: "Indira Nagar, Lucknow",
     body: [
       "Every White Cane Day, we open our blindfolded walk to the public: a short, guided route meant to make independent mobility without sight tangible rather than abstract.",
       "This year's walk raised funds toward our white cane distribution drive and drew a record number of first-time participants.",
@@ -85,6 +90,7 @@ export const POSTS: Post[] = [
     section: "Events",
     eventCategory: "Programs",
     mode: "Online",
+    location: "Online",
     body: [
       "This online panel brought together HR leaders from three corporate partners to talk through what accessible onboarding actually requires in the first ninety days of a new hire's employment.",
       "The full recording is available to CSR partners on request.",
@@ -99,6 +105,7 @@ export const POSTS: Post[] = [
     section: "Events",
     eventCategory: "Fundraiser & Awareness",
     mode: "Online",
+    location: "Online",
     body: [
       "Our year-end online fundraiser closed out fully funded, covering a full year of audiobook recording for our library, every session paid for by an individual donor.",
       "Recording continues through 2026 with volunteer readers from three partner colleges.",
@@ -113,6 +120,7 @@ export const POSTS: Post[] = [
     section: "Events",
     eventCategory: "Programs",
     mode: "Offline",
+    location: "Indira Nagar, Lucknow",
     body: [
       "After weeks of training with professional street artists and theatre directors, our students performed their first fully independent nukkad naatak to a crowd gathered right outside our campus gates.",
       "The performance has since become an annual fixture on our events calendar.",

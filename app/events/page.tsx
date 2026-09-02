@@ -12,7 +12,10 @@ export const metadata: Metadata = {
 export default function EventsPage() {
   return (
     <main>
-      <StagePager stages={[<UpcomingEventsStage key="upcoming" />, <PastEventsStage key="past" />]} />
+      <StagePager
+        stages={[<UpcomingEventsStage key="upcoming" />, <PastEventsStage key="past" />]}
+        stageLabels={["Upcoming Events", "Past Events"]}
+      />
     </main>
   );
 }
