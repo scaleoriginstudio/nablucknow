@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { POSTS } from "../lib/posts-data";
+import { StageIntro } from "../components/shared/StageIntro";
 
 const PAST_EVENTS = POSTS.filter((post) => post.section === "Events").sort(
   (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
@@ -67,23 +68,26 @@ export function PastEventsStage() {
   const eventsInMonth = filtered.filter((post) => post.date.slice(0, 7) === activeMonth);
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-center gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="font-heading text-2xl font-bold text-navy sm:text-3xl">Past Events</h2>
-        <div className="flex flex-wrap gap-2">
-          {CATEGORY_FILTERS.map((c) => (
-            <Chip key={c} active={category === c} onClick={() => setCategory(c)}>
-              {c}
-            </Chip>
-          ))}
-          <span className="mx-1 hidden text-black/20 sm:inline">|</span>
-          {MODE_FILTERS.map((m) => (
-            <Chip key={m} active={mode === m} onClick={() => setMode(m)}>
-              {m}
-            </Chip>
-          ))}
-        </div>
-      </div>
+    <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-start gap-4">
+      <StageIntro
+        headingLevel="h2"
+        title="Past Events"
+        trailing={
+          <div className="flex flex-wrap gap-2">
+            {CATEGORY_FILTERS.map((c) => (
+              <Chip key={c} active={category === c} onClick={() => setCategory(c)}>
+                {c}
+              </Chip>
+            ))}
+            <span className="mx-1 hidden text-black/20 sm:inline">|</span>
+            {MODE_FILTERS.map((m) => (
+              <Chip key={m} active={mode === m} onClick={() => setMode(m)}>
+                {m}
+              </Chip>
+            ))}
+          </div>
+        }
+      />
 
       {years.length === 0 ? (
         <p className="font-body text-sm text-black/50">No past events match these filters.</p>

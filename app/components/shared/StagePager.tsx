@@ -9,6 +9,7 @@ import { HEADER_HEIGHT, NAV_LINKS } from "./constants";
 import { Footer } from "./Footer";
 import { MobileNav } from "./MobileNav";
 import { useOverlay } from "./OverlayContext";
+import { StageActiveProvider } from "./StageIntro";
 
 function StageStepper({
   active,
@@ -317,7 +318,7 @@ export function StagePager({
                   (hasStepper ? "pt-20 md:pt-24" : "pt-3 md:pt-0")
                 }
               >
-                {content}
+                <StageActiveProvider value={isActive}>{content}</StageActiveProvider>
               </div>
             </div>
           );

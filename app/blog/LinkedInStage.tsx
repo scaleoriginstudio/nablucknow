@@ -1,13 +1,11 @@
 import Image from "next/image";
 import { LINKEDIN_POSTS } from "../lib/linkedin-data";
+import { StageIntro } from "../components/shared/StageIntro";
 
 export function LinkedInStage() {
   return (
-    <div className="mx-auto flex h-full w-full max-w-5xl flex-col justify-center gap-3 sm:gap-4">
-      <div>
-        <h1 className="font-heading text-xl font-bold text-navy sm:text-3xl">On LinkedIn</h1>
-        <p className="mt-1 font-body text-sm text-black/60">Our latest posts, straight from LinkedIn.</p>
-      </div>
+    <div className="mx-auto flex h-full w-full max-w-5xl flex-col justify-start gap-3 sm:gap-4">
+      <StageIntro title="On LinkedIn" subtitle="Our latest posts, straight from LinkedIn." />
 
       <div className="grid grid-cols-3 gap-2 sm:gap-3">
         {LINKEDIN_POSTS.map((post) => (

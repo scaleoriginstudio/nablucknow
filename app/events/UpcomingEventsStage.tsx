@@ -5,6 +5,7 @@ import Image from "next/image";
 import { UPCOMING_EVENTS, type UpcomingEvent } from "./events-data";
 import { GlassFormShell } from "../components/shared/GlassFormShell";
 import { LeadForm } from "../components/shared/LeadForm";
+import { StageIntro } from "../components/shared/StageIntro";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
@@ -127,11 +128,8 @@ function EventCard({ event }: { event: UpcomingEvent }) {
 
 export function UpcomingEventsStage() {
   return (
-    <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-center gap-3 sm:gap-6">
-      <div>
-        <h1 className="font-heading text-xl font-bold text-navy sm:text-3xl">Upcoming Events</h1>
-        <p className="mt-1 font-body text-sm text-black/60">Sign up and reserve your spot.</p>
-      </div>
+    <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-start gap-3 sm:gap-6">
+      <StageIntro title="Upcoming Events" subtitle="Sign up and reserve your spot." />
       <div className="grid gap-2 sm:grid-cols-3 sm:gap-6">
         {UPCOMING_EVENTS.map((event) => (
           <EventCard key={event.slug} event={event} />
