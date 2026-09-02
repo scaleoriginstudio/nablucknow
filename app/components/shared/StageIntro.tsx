@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 
 /** True when the stage this subtree belongs to is the one on screen. The
@@ -13,8 +13,14 @@ export const useStageActive = () => useContext(StageActiveContext);
 /** The heading block every numbered stage opens with: a title and an
     optional line of supporting text, held a constant distance below the
     number line (the stage's own top-aligned layout does that) and flown up
-    into place each time the stage becomes active — the same beat on every
-    page, so Events, Blog and the rest read as one system. */
+    into place whenever the stage becomes active — the same beat on every
+    page, so Events, Blog and the rest read as one system.
+
+    An off-screen stage's provider reports `active: false`, so its heading
+    already sits in the hidden (dropped, transparent) state; the crossfade
+    into view then plays the rise. The first stage shown on load is active
+    from the first render, so it is simply painted in place — no way for it
+    to be stranded invisible if the tab never gets a frame. */
 export function StageIntro({
   title,
   subtitle,
@@ -28,24 +34,15 @@ export function StageIntro({
       right-aligned on wide screens. */
   trailing?: ReactNode;
 }) {
-  const active = useStageActive();
+  // Visibility keys off `active` alone: the stage on screen shows its
+  // heading in place, an off-screen stage keeps it dropped and transparent,
+  // and the crossfade into view plays the rise between the two. `active`
+  // comes from context (same on the server and the first client render), so
+  // the initial markup never disagrees and there is no hydration flash.
+  const shown = useStageActive();
   const prefersReducedMotion = usePrefersReducedMotion();
   const Heading = headingLevel;
 
-  // Fly in a beat after the stage's crossfade rather than with it, so the
-  // heading reads as arriving rather than simply appearing. Reset the
-  // moment the stage leaves so the next visit replays it.
-  const [flown, setFlown] = useState(false);
-  useEffect(() => {
-    if (!active) {
-      setFlown(false);
-      return;
-    }
-    const t = window.setTimeout(() => setFlown(true), 60);
-    return () => window.clearTimeout(t);
-  }, [active]);
-
-  const shown = flown || prefersReducedMotion;
   const rise = (delay: number) => ({
     opacity: shown ? 1 : 0,
     transform: shown ? "none" : "translateY(24px)",
@@ -56,11 +53,11 @@ export function StageIntro({
 
   return (
     <div className={trailing ? "flex flex-wrap items-center justify-between gap-3" : undefined}>
-      <div style={rise(0)}>
+      <div style={rise(120)}>
         <Heading className="font-heading text-xl font-bold text-navy sm:text-3xl">{title}</Heading>
         {subtitle && <p className="mt-1 font-body text-sm text-black/60">{subtitle}</p>}
       </div>
-      {trailing && <div style={rise(80)}>{trailing}</div>}
+      {trailing && <div style={rise(200)}>{trailing}</div>}
     </div>
   );
 }
