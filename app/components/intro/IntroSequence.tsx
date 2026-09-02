@@ -234,7 +234,11 @@ const logoStyle = (layout: Layout, isMobile: boolean, atFooter = false): CSSProp
       transform: "translate(-50%, -50%)",
     };
   }
-  const transition = "top 0.55s cubic-bezier(0.22,1,0.36,1), left 0.55s cubic-bezier(0.22,1,0.36,1), width 0.55s ease, height 0.55s ease, background-color 0.5s ease, padding 0.5s ease, border-radius 0.5s ease";
+  // Only the chrome (white plate -> transparent) is CSS-driven. Position and
+  // size are handed to a GSAP transform tween on the 10<->11 step (see the
+  // logo-morph effect): a plain length can't CSS-interpolate into the footer
+  // slot's calc()/max(), so a `top`/`left` transition here would only snap.
+  const transition = "background-color 0.5s ease, padding 0.5s ease, border-radius 0.5s ease";
   // On the footer stage the logo leaves the header and settles, white and
   // chromeless, roughly where the footer's own (hidden) logo would sit —
   // top-left of the centered footer content column.
@@ -480,6 +484,10 @@ export default function IntroSequence() {
   // reads as a single jump rather than a rewind through every stage.
   const goToStageRef = useRef<(next: Stage) => void>(() => {});
   const forceInstantRef = useRef(false);
+  // Tracks the stage the logo-morph effect last ran for, so it can tell a
+  // real 10<->11 step (glide the persistent logo between the header and the
+  // footer's own logo slot) from any other render.
+  const logoMorphStageRef = useRef<Stage>(0);
 
   useEffect(() => {
     overlayOpenRef.current = overlayOpen !== null;
@@ -684,6 +692,53 @@ export default function IntroSequence() {
       introSettledRef.current = true;
     }
   }, [layout, prefersReducedMotion]);
+
+  // The persistent logo glides between its header rest spot and the footer's
+  // own (hidden) logo slot on the 10<->11 step. logoStyle already snaps the
+  // wrapper to the destination top/left/size on that render (a plain length
+  // can't CSS-transition into the footer slot's calc()/max() anyway), so
+  // this only adds the visible travel: a transform tween from the far end
+  // back to zero. Transform is GSAP's alone here — React never writes it to
+  // this element — so nothing clobbers the tween. Kept out of goToStage's
+  // timeline so a stalled step can't strand the logo half-morphed.
+  useLayoutEffect(() => {
+    const prev = logoMorphStageRef.current;
+    logoMorphStageRef.current = activeStage;
+    if (layout !== "final") return;
+    const el = logoWrapRef.current;
+    if (!el) return;
+
+    const toFooter = activeStage === 11 && prev === 10;
+    const toHeader = activeStage === 10 && prev === 11;
+    if (!toFooter && !toHeader) return;
+
+    // Both endpoints as viewport pixels, matching logoStyle's two branches:
+    // header = { top: 8, left: 16, 80x80 }; footer slot = { top: calc(50%
+    // - 132px), left: max(2rem, (100vw - 68rem) / 2), 60x60 }.
+    const rootPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    const header = { x: 16, y: 8, w: 80 };
+    const footer = {
+      x: Math.max(2 * rootPx, (window.innerWidth - 68 * rootPx) / 2),
+      y: window.innerHeight / 2 - 132,
+      w: 60,
+    };
+    const from = toFooter ? header : footer;
+    const to = toFooter ? footer : header;
+
+    gsap.fromTo(
+      el,
+      { x: from.x - to.x, y: from.y - to.y, scale: from.w / to.w, transformOrigin: "0 0" },
+      {
+        x: 0,
+        y: 0,
+        scale: 1,
+        duration: prefersReducedMotion || forceInstantRef.current ? 0.001 : 0.6,
+        ease: "power3.out",
+        overwrite: "auto",
+        onComplete: () => gsap.set(el, { clearProps: "transform,transformOrigin" }),
+      },
+    );
+  }, [activeStage, layout, prefersReducedMotion]);
 
   // Once settled on the hero, wheel/keyboard/touch gestures step between the
   // hero and stage 1 — the viewport itself never scrolls; content flies
@@ -1215,10 +1270,9 @@ export default function IntroSequence() {
         // The footer isn't a numbered step and has no navbar of its own —
         // hide the header and stepper entirely rather than inverting them.
         // The footer slides up from below (its own CSS transition off the
-        // `active` prop), and the persistent logo travels into the footer's
-        // logo slot and turns white — both driven by state + CSS (see
-        // logoStyle's `atFooter` branch), not tweened here, so a stalled
-        // GSAP timeline can never strand them half-morphed.
+        // `active` prop). The persistent logo glides into the footer's logo
+        // slot from a dedicated Flip effect keyed on activeStage (see
+        // above), not this timeline, so a stalled step can't strand it.
         tl.set(stage10Ref.current, { pointerEvents: "none" });
         tl.set(headerRef.current, { pointerEvents: "none" });
         tl.set(stepperGroupRef.current, { pointerEvents: "none" });
