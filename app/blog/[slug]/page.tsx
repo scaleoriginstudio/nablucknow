@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { POSTS, getPostBySlug } from "../../lib/posts-data";
 import { NAV_LINKS } from "../../components/shared/constants";
+import { MobileNav } from "../../components/shared/MobileNav";
 import { ScrollUnlock } from "../../components/shared/ScrollUnlock";
 import { SiteFooterContent } from "../../components/shared/SiteFooterContent";
 
@@ -30,8 +31,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   return (
     <main className="min-h-screen bg-white">
       <ScrollUnlock />
-      <header className="flex h-24 items-center justify-between gap-8 px-8">
-        <Link href="/" className="flex h-16 w-16 items-center justify-center rounded-xl bg-white">
+      <header className="flex h-20 items-center justify-between gap-4 px-5 sm:h-24 sm:gap-8 sm:px-8">
+        <Link href="/" className="flex h-14 w-14 items-center justify-center rounded-xl bg-white sm:h-16 sm:w-16">
           <Image
             src="/img/logo.png"
             alt="National Association for the Blind"
@@ -40,7 +41,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             className="h-full w-full object-contain"
           />
         </Link>
-        <nav aria-label="Primary" className="flex items-center gap-7">
+        <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.label}
@@ -55,9 +56,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </Link>
           ))}
         </nav>
+        <MobileNav />
       </header>
 
-      <article className="mx-auto max-w-3xl px-8 pb-24 pt-8">
+      <article className="mx-auto max-w-3xl px-5 pb-24 pt-8 sm:px-8">
         <Link href="/blog" className="font-heading text-xs font-semibold text-navy hover:underline">
           ← Back to Blog
         </Link>
@@ -81,7 +83,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
       </article>
 
-      <footer className="bg-navy px-8 py-10">
+      <footer className="bg-navy px-5 py-10 sm:px-8">
         <SiteFooterContent />
       </footer>
     </main>

@@ -197,7 +197,7 @@ type Stage = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
 
 function StageStepper({ active, onSelect }: { active: number; onSelect?: (n: number) => void }) {
   return (
-    <div className="flex w-full items-baseline justify-center gap-4 font-body sm:gap-6">
+    <div className="flex w-full items-baseline justify-center gap-2.5 font-body sm:gap-6">
       {Array.from({ length: TOTAL_STAGES }, (_, i) => i + 1).map((n) => (
         <button
           key={n}
@@ -210,8 +210,8 @@ function StageStepper({ active, onSelect }: { active: number; onSelect?: (n: num
             style={{ transition: "color 500ms ease-out, font-size 500ms ease-out" }}
             className={
               n === active
-                ? "text-2xl font-bold text-navy sm:text-4xl"
-                : "text-sm font-semibold text-black/25 sm:text-lg"
+                ? "text-xl font-bold text-navy sm:text-4xl"
+                : "text-xs font-semibold text-black/25 sm:text-lg"
             }
           >
             {String(n).padStart(2, "0")}
@@ -3088,7 +3088,7 @@ export default function IntroSequence() {
       {layout === "final" && <Footer ref={stage11Ref} active={activeStage === 11} morphLogo />}
 
       {layout === "countdown" && (
-        <div className="fixed top-6 right-6 z-50 flex gap-3">
+        <div className="fixed right-4 top-4 z-50 flex gap-2 sm:right-6 sm:top-6 sm:gap-3">
           {!prefersReducedMotion && (
             <button
               ref={pauseButtonRef}
@@ -3096,7 +3096,7 @@ export default function IntroSequence() {
               onClick={handleTogglePause}
               aria-expanded={isPaused}
               aria-controls={panelId}
-              className="rounded-full bg-white px-5 py-2.5 font-heading text-sm font-semibold text-black shadow-lg ring-1 ring-black/10 transition-colors hover:bg-orange hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange"
+              className="rounded-full bg-white px-3.5 py-2 font-heading text-xs font-semibold text-black shadow-lg ring-1 ring-black/10 transition-colors hover:bg-orange hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange sm:px-5 sm:py-2.5 sm:text-sm"
             >
               {isPaused ? "Resume intro" : "Pause & learn more"}
             </button>
@@ -3104,7 +3104,7 @@ export default function IntroSequence() {
           <button
             type="button"
             onClick={handleSkip}
-            className="rounded-full bg-white px-5 py-2.5 font-heading text-sm font-semibold text-black shadow-lg ring-1 ring-black/10 transition-colors hover:bg-orange hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange"
+            className="rounded-full bg-white px-3.5 py-2 font-heading text-xs font-semibold text-black shadow-lg ring-1 ring-black/10 transition-colors hover:bg-orange hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange sm:px-5 sm:py-2.5 sm:text-sm"
           >
             Skip intro
           </button>

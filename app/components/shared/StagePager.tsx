@@ -288,7 +288,7 @@ export function StagePager({
 
       <header
         style={fade(!onFooter)}
-        className="fixed inset-x-0 top-0 z-30 flex h-24 items-center justify-end gap-8 bg-white px-8"
+        className="fixed inset-x-0 top-0 z-30 flex h-24 items-center justify-end gap-6 bg-white px-5 sm:gap-8 sm:px-8"
       >
         <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
           {NAV_LINKS.map((link) => {
@@ -365,7 +365,7 @@ export function StagePager({
       {hasStepper && (
         <div
           style={{ position: "fixed", top: HEADER_HEIGHT + 40, left: 0, width: "100vw", ...fade(!onFooter) }}
-          className="z-20 px-8 pointer-events-none"
+          className="z-20 px-5 sm:px-8 pointer-events-none"
         >
           <div className="mx-auto max-w-6xl">
             <StageStepper active={active} total={total} onSelect={goTo} onDark={!!background} />
@@ -393,7 +393,7 @@ export function StagePager({
                 ...stageFly(stageNum),
               }}
               className={
-                "z-10 flex flex-col items-center justify-start overflow-hidden px-8 md:justify-center " +
+                "z-10 flex flex-col items-center justify-start overflow-hidden px-5 sm:px-8 md:justify-center " +
                 (background ? "" : "bg-white")
               }
             >
