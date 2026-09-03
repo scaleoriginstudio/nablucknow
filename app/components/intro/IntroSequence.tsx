@@ -678,6 +678,12 @@ export default function IntroSequence() {
         ease: "power2.inOut",
         props: "color,fontSize",
         onComplete: () => {
+          // Flip leaves a sub-pixel transform on its targets; drop it so the
+          // logo settles dead still in the header rather than on a hair's
+          // twitch that reads as a bounce.
+          gsap.set([logoWrapRef.current, videoBoxRef.current, headlineRef.current], {
+            clearProps: "transform",
+          });
           introSettledRef.current = true;
         },
       });
@@ -1982,13 +1988,20 @@ export default function IntroSequence() {
           muted
           loop
           playsInline
+          // Keep the button's icon honest even when autoplay is blocked or
+          // the OS pauses playback out from under us.
+          onPlay={() => setIsVideoPlaying(true)}
+          onPause={() => setIsVideoPlaying(false)}
         />
         {layout === "final" && (
           <button
             type="button"
             onClick={handleToggleVideo}
             aria-label={isVideoPlaying ? "Pause background video" : "Play background video"}
-            className="absolute bottom-6 right-6 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-black shadow-lg ring-1 ring-black/10 transition-colors hover:bg-orange hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange"
+            // Bottom-left: the bottom-right corner belongs to the floating
+            // actions button, which used to sit on top of this one and eat
+            // its clicks.
+            className="absolute bottom-6 left-6 z-30 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-black shadow-lg ring-1 ring-black/10 transition-colors hover:bg-orange hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange"
           >
             {isVideoPlaying ? (
               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
@@ -2009,7 +2022,7 @@ export default function IntroSequence() {
         id="home-hero-heading"
         tabIndex={-1}
         style={headlineStyle(layout, isMobile)}
-        className="z-20 font-heading font-semibold leading-tight outline-none"
+        className="z-20 font-heading font-bold leading-tight outline-none"
       >
         {HERO_HEADLINE}
       </h1>
