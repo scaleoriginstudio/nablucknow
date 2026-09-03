@@ -90,7 +90,7 @@ const VISIBLE_JOURNEY_ROWS = 3;
 const IMPACT_STATS = [
   { value: "5,000+", text: "people supported since we began in 1997." },
   { value: "200+", text: "students taught to read and learn in our schools." },
-  { value: "1,000+", text: "families steadied through counselling and early help." },
+  { value: "1,000+", text: "families steadied through early counselling." },
 ];
 const TIMELINE_SHIFT_X = 180;
 const TEAM_MEMBERS = [
@@ -2441,7 +2441,7 @@ export default function IntroSequence() {
                   box so they always fly in just to its left. */}
               <div
                 ref={impactStatsRef}
-                className="absolute top-0 right-full mr-12 hidden w-56 text-right md:block"
+                className="absolute top-0 right-full mr-12 hidden w-64 text-right md:block"
                 style={{ height: timelineWindowHeight }}
               >
                 {IMPACT_STATS.map((stat, i) => (
@@ -2725,7 +2725,7 @@ export default function IntroSequence() {
                   {[...SPONSORS, ...SPONSORS].map((sponsor, i) => (
                     <span
                       key={i}
-                      className="shrink-0 whitespace-nowrap font-heading text-2xl font-semibold text-black/40"
+                      className="shrink-0 whitespace-nowrap font-heading text-2xl font-semibold text-navy/80"
                     >
                       {sponsor}
                     </span>
