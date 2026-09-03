@@ -2602,9 +2602,25 @@ export default function IntroSequence() {
               })}
             </div>
 
-            <p className="font-body text-xs text-black/45">
-              {stage6Index + 1} / {CAUSES.length} — scroll to move between causes
-            </p>
+            {/* One slot per cause, the current one filled — the same shape
+                and count no matter where you are, so it reads as a place in
+                a set rather than a fraction to track. */}
+            <div className="flex items-center gap-2" role="tablist" aria-label="Causes">
+              {CAUSES.map((cause, i) => (
+                <button
+                  key={cause.slug}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === stage6Index}
+                  aria-label={cause.title}
+                  onClick={() => setStage6Index(i)}
+                  className={
+                    "h-1.5 rounded-full transition-all duration-300 " +
+                    (i === stage6Index ? "w-8 bg-navy" : "w-3.5 bg-black/20 hover:bg-black/35")
+                  }
+                />
+              ))}
+            </div>
           </div>
         </div>
       )}
