@@ -2172,23 +2172,23 @@ export default function IntroSequence() {
         </div>
       )}
 
-      {/* Ghosted prelude: the next section's heading peeking from the bottom
-          of whatever stage is showing, re-flying into place on every step —
-          the same "here's what's next" hint the stage-1 word list gives. */}
+      {/* Ghosted prelude: the next section's heading, heading-scale, resting
+          half below the fold and re-flying in on every step — the same
+          "here's what's next" hint the stage-1 word list gives. */}
       {layout === "final" && NEXT_SECTION_LABEL[activeStage] && (
         <div
           key={activeStage}
           aria-hidden="true"
-          className="animate-prelude pointer-events-none fixed inset-x-0 bottom-5 z-[17] flex justify-center"
+          className="animate-prelude pointer-events-none fixed inset-x-0 bottom-0 z-[17] flex justify-center"
           style={
             {
-              "--prelude-opacity": activeStage >= 3 && activeStage <= 5 ? "0.16" : "0.11",
+              "--prelude-opacity": activeStage >= 3 && activeStage <= 5 ? "0.2" : "0.14",
             } as CSSProperties
           }
         >
           <span
             className={
-              "font-heading text-lg font-bold sm:text-2xl " +
+              "font-heading text-2xl font-bold sm:text-4xl " +
               (activeStage >= 3 && activeStage <= 5 ? "text-white" : "text-navy")
             }
           >
@@ -2496,11 +2496,10 @@ export default function IntroSequence() {
       )}
 
       {/* Stage 4: Our Journey — same navy field as stage 3. The heading is
-          the only element that participates in centering, so it stays put
-          no matter what the timeline below it does. The timeline itself is
-          a fixed-height window: once entries outnumber what fits, the list
-          scrolls so the newest entry lands at the bottom and the oldest
-          leaves from the top. */}
+          top-anchored the same distance below the number line as the stage
+          1/2 content, so the 3->4 heading handoff lands where "Our Vision"
+          just was; the timeline hangs off it, absolutely positioned, and
+          scrolls within its own fixed-height window. */}
       {layout === "final" && (
         <div
           ref={stage4Ref}
@@ -2512,9 +2511,11 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-start overflow-hidden px-8 pt-20 pb-40 opacity-0 pointer-events-none md:justify-center md:pt-0"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden px-8 pt-20 pb-40 opacity-0 pointer-events-none"
         >
-          <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center justify-center">
+          <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center">
+            {/* Stepper clearance, matching stage 1/2's spacer. */}
+            <div className="mb-20 h-20 sm:mb-10 sm:h-10" aria-hidden="true" />
             <h2
               ref={journeyHeadingRef}
               className="text-center font-heading text-3xl leading-tight font-bold text-white opacity-0 sm:text-4xl"

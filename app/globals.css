@@ -96,15 +96,16 @@ body {
 /* The splash hairline (bottom of the screen) is drawn imperatively in step
    with the countdown — see IntroSequence's update(). No keyframes needed. */
 
-/* Ghosted prelude of the next section: rises into place from just below
-   its resting spot every time the active stage changes. */
+/* Ghosted prelude of the next section: a heading-scale label that rises to
+   rest half below the fold — on screen enough to read, off screen enough
+   to say "keep going" — re-flying on every stage change. */
 @keyframes prelude-fly-in {
   from {
-    transform: translateY(26px);
+    transform: translateY(calc(42% + 26px));
     opacity: 0;
   }
   to {
-    transform: translateY(0);
+    transform: translateY(42%);
     opacity: var(--prelude-opacity, 0.12);
   }
 }
