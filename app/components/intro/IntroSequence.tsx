@@ -53,18 +53,21 @@ const STAGE2_PARAGRAPH =
 const STAGE2_STORIES = [
   {
     word: "Educate.",
-    headline: "Our students dream of growing up to become teachers and doctors.",
+    headline: "A child who learns braille at five reads as fast as anyone in the class.",
     image: "/img/nab/care.jpg",
+    href: "/blog/what-early-education-changes",
   },
   {
     word: "Empathise.",
-    headline: "“Why should we care?” We're often asked at the start of our sessions.",
+    headline: "Ten minutes with a cane and a blindfold changes how a room thinks about access.",
     image: "/img/nab/teacher.jpg",
+    href: "/blog/white-cane-day-walk-2025",
   },
   {
     word: "Empower.",
-    headline: "Our vocational graduates go on to build careers of their own.",
+    headline: "We stay past the training, past the interview, until the first month is behind them.",
     image: "/img/nab/vocational.jpg",
+    href: "/blog/why-accessible-hiring-matters",
   },
 ];
 const STAGE3_MISSION_TEXT = "Education, counselling, and training, from childhood to an independent career.";
@@ -2266,12 +2269,11 @@ export default function IntroSequence() {
                   </h2>
                 </div>
                 <p ref={paragraphRef} className="line-clamp-3 font-body text-sm text-black/70 opacity-0 leading-6 md:line-clamp-none md:block md:text-base md:leading-7">
-                  An impact driven NGO that has devoted over 30+ years to the
-                  wellbeing of visually impaired individuals, right from
-                  primary education to family counselling up until
-                  employment support. And we strive to do it while giving
-                  them an environment as normal to their upbringing as
-                  possible.
+                  For over thirty years we have worked so that losing your
+                  sight in Uttar Pradesh need not mean losing your schooling,
+                  your work, or your place in your own family. Every
+                  programme we run points at one thing: an ordinary,
+                  independent life.
                 </p>
                 <div ref={ctaRef} className="flex items-center gap-3 opacity-0">
                   <a
@@ -2374,13 +2376,13 @@ export default function IntroSequence() {
                   {STAGE2_STORIES[storyIndex].headline}
                 </h2>
                 <p className="hidden font-body text-base leading-7 text-black/70 md:block">{STAGE2_PARAGRAPH}</p>
-                <a
-                  href="#"
+                <Link
+                  href={STAGE2_STORIES[storyIndex].href}
                   className="inline-flex items-center gap-2 font-heading text-sm font-semibold text-orange hover:text-navy md:mt-auto"
                 >
                   Read More
                   <Image src="/img/arrow.svg" alt="" width={14} height={14} />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -2743,7 +2745,9 @@ export default function IntroSequence() {
             <div
               ref={stage7TextRef}
               className="flex w-full justify-center gap-2 opacity-0 md:gap-3"
-              style={{ height: isMobile ? 340 : 420 }}
+              // Shorter than the stage is tall, leaving clear space below the
+              // row for the ghosted stage-8 heading.
+              style={{ height: isMobile ? 300 : 360 }}
             >
               {TEAM_MEMBERS.map((member, i) => {
                 const isActive = i === teamIndex;

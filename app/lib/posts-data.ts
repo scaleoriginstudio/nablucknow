@@ -15,6 +15,20 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: "what-early-education-changes",
+    title: "What Starting School Early Changes for a Blind Child",
+    excerpt:
+      "The gap between a child who begins braille at five and one who begins at ten rarely closes. This is why we push for early enrolment.",
+    image: "/img/nab/care.jpg",
+    date: "2026-07-01",
+    section: "Awareness",
+    body: [
+      "A five-year-old learning braille builds the same reading reflexes a sighted child builds with print: letters become words without conscious effort, and spelling and grammar follow from the page rather than from being taught as rules. Start that process at ten and the child is not only behind, they are learning to read while also learning everything else school expects of a ten-year-old.",
+      "This is why our admissions work begins with families, often before a child is school age. Early braille literacy, orientation and mobility, and a classroom that assumes the child will keep up are what let our students sit the same board exams as everyone else and pass them.",
+      "For most of our students, the years between five and eight decide whether school is a place they belong or a place they are visiting. We would rather not leave that to chance.",
+    ],
+  },
+  {
     slug: "why-accessible-hiring-matters",
     title: "What Changes After a Company's First Visually Impaired Hire",
     excerpt:
