@@ -38,7 +38,7 @@ const TOTAL_STAGES = 10;
 // own arrival animation.
 const NEXT_SECTION_LABEL: Record<number, string> = {
   2: "Our Vision",
-  3: "Our Journey, Quantified",
+  3: "Our journey",
   5: "Our Causes",
   6: "Meet the Team",
   7: "See the World Differently",
@@ -448,6 +448,8 @@ export default function IntroSequence() {
   const stage3PointIconRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const stage4Ref = useRef<HTMLDivElement>(null);
   const journeyHeadingRef = useRef<HTMLHeadingElement>(null);
+  // The ", quantified" that appends itself to "Our journey" on the 4->5 step.
+  const quantifiedWordRef = useRef<HTMLSpanElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const timelineListRef = useRef<HTMLDivElement>(null);
   const journeyEntryRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -1040,6 +1042,8 @@ export default function IntroSequence() {
         gsap.set(timelineListRef.current, { y: 0 });
         gsap.set(journeyEntryRefs.current.filter(Boolean), { opacity: 0, y: 40 });
         gsap.set(journeyConnectorRefs.current.filter(Boolean), { scaleY: 0 });
+        // Arrive as "Our journey" — the ", quantified" only appends on 4->5.
+        gsap.set(quantifiedWordRef.current, { opacity: 0, maxWidth: 0 });
         // The wipe box never moves during this transition (it's already
         // fully expanded from stage 3), so the stepper's white-on-navy
         // contrast just needs recomputing once for the new active number.
@@ -1054,9 +1058,9 @@ export default function IntroSequence() {
         tl.to(stage4Ref.current, { opacity: 1, duration: dur ?? 0.3 }, dur ? 0 : "-=0.2");
         tl.fromTo(
           journeyHeadingRef.current,
-          { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: dur ?? 0.5, ease: "power2.out" },
-          dur ? 0 : "-=0.25",
+          { opacity: 0, y: 48 },
+          { opacity: 1, y: 0, duration: dur ?? 0.55, ease: "power3.out" },
+          dur ? 0 : "-=0.3",
         );
       } else if (current === 4 && next === 3) {
         colorInverter(3)();
@@ -1068,6 +1072,22 @@ export default function IntroSequence() {
       } else if (current === 4 && next === 5) {
         impactIndexRef.current = 1;
         colorInverter(5)();
+
+        // "Our journey" gains its ", quantified" as the stats arrive — the
+        // word grows in from zero width so the heading re-centres around it.
+        const quantifiedW = quantifiedWordRef.current?.scrollWidth ?? 220;
+        tl.fromTo(
+          quantifiedWordRef.current,
+          { opacity: 0, maxWidth: 0 },
+          {
+            opacity: 1,
+            maxWidth: quantifiedW,
+            duration: dur ?? 0.45,
+            ease: "power2.out",
+            onComplete: () => gsap.set(quantifiedWordRef.current, { maxWidth: "none" }),
+          },
+          dur ? 0 : 0.1,
+        );
 
         if (isMobile) {
           // No room to shift the timeline aside on a narrow screen — cross-
@@ -1099,6 +1119,14 @@ export default function IntroSequence() {
       } else if (current === 5 && next === 4) {
         colorInverter(4)();
         impactIndexRef.current = 0;
+
+        // Back to plain "Our journey".
+        tl.set(quantifiedWordRef.current, { maxWidth: quantifiedWordRef.current?.scrollWidth ?? 220 }, 0);
+        tl.to(
+          quantifiedWordRef.current,
+          { opacity: 0, maxWidth: 0, duration: dur ?? 0.3, ease: "power2.in" },
+          0,
+        );
 
         if (isMobile) {
           tl.set(impactStatsMobileRef.current, { pointerEvents: "none" });
@@ -2433,7 +2461,13 @@ export default function IntroSequence() {
               ref={journeyHeadingRef}
               className="text-center font-heading text-3xl leading-tight font-bold text-white opacity-0 sm:text-4xl"
             >
-              Our Journey, Quantified
+              Our journey
+              <span
+                ref={quantifiedWordRef}
+                className="inline-block max-w-0 overflow-hidden whitespace-nowrap align-bottom opacity-0"
+              >
+                , quantified
+              </span>
             </h2>
 
             <div ref={timelineRef} className="absolute top-full mt-10 w-full max-w-xl">
