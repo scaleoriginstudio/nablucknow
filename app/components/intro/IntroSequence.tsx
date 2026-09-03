@@ -810,13 +810,14 @@ export default function IntroSequence() {
       // reset mid-flight by a late .set() (which stranded the list at
       // opacity 0 when the whole transition ran instant).
       tl.set(stage3VisionRef.current, { opacity: 1, y: 0 }, 0);
-      tl.set(stage3HeadlineRef.current, { opacity: 0, y: instant ? 0 : 12 }, 0);
+      tl.set(stage3HeadlineRef.current, { opacity: 0, y: instant ? 0 : 44 }, 0);
       tl.set(lines, { opacity: 0, y: instant ? 0 : 26 }, 0);
       tl.set(icons, { scale: instant ? 1 : 0 }, 0);
       tl.set(stage3MissionRef.current, { opacity: 0, y: instant ? 0 : 24 }, 0);
-      // Then play them in: label, then each line rising up from below as its
-      // icon grows in the same beat, then the mission block.
-      tl.to(stage3HeadlineRef.current, { opacity: 1, y: 0, duration: d ?? 0.4, ease: "power2.out" });
+      // Then play them in: the label flies up into place, then each line
+      // rises from below as its icon grows in the same beat, then the
+      // mission block.
+      tl.to(stage3HeadlineRef.current, { opacity: 1, y: 0, duration: d ?? 0.5, ease: "power3.out" });
       tl.to(
         lines,
         { opacity: 1, y: 0, duration: d ?? 0.45, stagger: instant ? 0 : 0.13, ease: "power2.out" },
@@ -1045,8 +1046,10 @@ export default function IntroSequence() {
         colorInverter(4)();
 
         tl.set(stage3Ref.current, { pointerEvents: "none" });
-        tl.to(stage3Grid, { opacity: 0, y: -20, duration: dur ?? 0.35, stagger: dur ? 0 : 0.05, ease: "power2.in" }, 0);
-        tl.to(stage3HeadlineRef.current, { opacity: 0, y: -30, duration: dur ?? 0.4, ease: "power2.in" }, 0);
+        // Stage 3's content flies straight up toward the number line and
+        // fades out as it goes, rather than nudging up a few pixels.
+        tl.to(stage3Grid, { opacity: 0, y: -160, duration: dur ?? 0.45, stagger: dur ? 0 : 0.05, ease: "power2.in" }, 0);
+        tl.to(stage3HeadlineRef.current, { opacity: 0, y: -180, duration: dur ?? 0.5, ease: "power2.in" }, 0);
         tl.set(stage4Ref.current, { pointerEvents: "auto" });
         tl.to(stage4Ref.current, { opacity: 1, duration: dur ?? 0.3 }, dur ? 0 : "-=0.2");
         tl.fromTo(
@@ -1733,18 +1736,16 @@ export default function IntroSequence() {
   // never a plain opacity fade.
   useEffect(() => {
     if (!wipeBoxRef.current) return;
-    const showing =
-      activeStage === 3 ||
-      activeStage === 4 ||
-      activeStage === 5 ||
-      activeStage === 6 ||
-      (activeStage === 2 && storyIndex === STAGE2_STORIES.length - 1);
+    // Only from stage 3 on. It used to also peek in during stage 2's
+    // "Empower" beat, where the corner it sits in is over the text column,
+    // not spare margin — the box crossed the copy.
+    const showing = activeStage === 3 || activeStage === 4 || activeStage === 5 || activeStage === 6;
     gsap.to(wipeBoxRef.current, {
       scale: showing ? 1 : 0,
       duration: prefersReducedMotion ? 0.001 : 0.45,
       ease: showing ? "back.out(1.6)" : "power2.in",
     });
-  }, [activeStage, storyIndex, prefersReducedMotion]);
+  }, [activeStage, prefersReducedMotion]);
 
   // Settle enforcer. Every step's exit animation is a GSAP tween, and GSAP's
   // ticker is paused while the tab is in the background — so a step taken
