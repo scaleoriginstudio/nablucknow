@@ -42,6 +42,39 @@ body {
   color: var(--color-black);
 }
 
+/* One scrollbar for every scroll region on the site — the pinned-stage
+   forms and lists, the blog and programs panels, the footer. Slim, no
+   arrows, a soft rounded thumb; the thumb goes light inside any navy
+   panel so it reads on the dark ground. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.28) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.28);
+  border-radius: 9999px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.42);
+}
+.bg-navy,
+.bg-navy * {
+  scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
+}
+.bg-navy ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4);
+}
+.bg-navy ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
 /* Google's Material Symbols icon font — base rule from Google's own setup
    guide. Render a glyph with <span className="material-symbols-outlined">
    name</span>; the ligature turns the plain-text ligature name into the

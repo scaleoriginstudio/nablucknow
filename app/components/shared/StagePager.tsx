@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import gsap from "gsap";
 import { usePathname } from "next/navigation";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { HEADER_HEIGHT, NAV_LINKS } from "./constants";
@@ -207,6 +208,68 @@ export function StagePager({
     transition: `opacity ${dur}s ease`,
   });
 
+  // Each stage doesn't just cross-fade: it flies. The one leaving lifts up
+  // and out, the one arriving rises in from below — the same beat as the
+  // homepage's 01 -> 02 step. Direction falls out of where a stage sits
+  // relative to the active one, so no separate "which way" state is needed.
+  const stageFly = (stageNum: number) => {
+    const offset = stageNum === active ? 0 : stageNum < active ? -48 : 48;
+    return {
+      opacity: stageNum === active ? 1 : 0,
+      transform: `translateY(${offset}px)`,
+      pointerEvents: stageNum === active ? ("auto" as const) : ("none" as const),
+      transition: prefersReducedMotion
+        ? "none"
+        : `opacity ${dur}s ease, transform ${dur}s cubic-bezier(0.22, 1, 0.36, 1)`,
+    };
+  };
+
+  // The persistent logo glides into the footer's own (hidden) logo slot as
+  // the footer flies up, and back to the header when it leaves — the
+  // homepage's footer morph, now on every stage page.
+  const logoRef = useRef<HTMLAnchorElement>(null);
+  const logoImgRef = useRef<HTMLImageElement>(null);
+  const wasFooterRef = useRef(false);
+  useEffect(() => {
+    const el = logoRef.current;
+    if (!el || wasFooterRef.current === onFooter) {
+      wasFooterRef.current = onFooter;
+      return;
+    }
+    wasFooterRef.current = onFooter;
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    // Header rest spot vs the footer's logo slot — the same target the
+    // homepage tuned against the shared SiteFooterContent layout.
+    const header = { x: 16, y: 8, w: 80 };
+    const slot = {
+      x: Math.max(2 * rem, (window.innerWidth - 68 * rem) / 2),
+      y: window.innerHeight / 2 - 132,
+      w: 60,
+    };
+    const instant = prefersReducedMotion;
+    if (onFooter) {
+      gsap.to(el, {
+        x: slot.x - header.x,
+        y: slot.y - header.y,
+        scale: slot.w / header.w,
+        transformOrigin: "0 0",
+        duration: instant ? 0.001 : 0.6,
+        ease: "power3.out",
+        overwrite: "auto",
+      });
+    } else {
+      gsap.to(el, {
+        x: 0,
+        y: 0,
+        scale: 1,
+        duration: instant ? 0.001 : 0.55,
+        ease: "power3.out",
+        overwrite: "auto",
+        onComplete: () => gsap.set(el, { clearProps: "transform,transformOrigin" }),
+      });
+    }
+  }, [onFooter, prefersReducedMotion]);
+
   return (
     <>
       <a
@@ -264,19 +327,38 @@ export function StagePager({
 
       {/* The logo is a "go home" control everywhere outside the homepage
           itself, so it's a plain link rather than the homepage's in-place
-          stage-1 jump. */}
+          stage-1 jump. It stays visible on the footer, morphing into the
+          footer's logo slot (white, chromeless) instead of fading out. */}
       <Link
+        ref={logoRef}
         href="/"
         aria-label="Go to homepage"
-        style={{ position: "fixed", top: 8, left: 16, width: 80, height: 80, ...fade(!onFooter) }}
-        className="z-40 flex items-center justify-center rounded-xl bg-white p-2"
+        style={{
+          position: "fixed",
+          top: 8,
+          left: 16,
+          width: 80,
+          height: 80,
+          backgroundColor: onFooter ? "rgba(255,255,255,0)" : "#FFFFFF",
+          borderRadius: onFooter ? 0 : 12,
+          padding: onFooter ? 0 : 8,
+          transition: prefersReducedMotion
+            ? "none"
+            : "background-color 0.4s ease, border-radius 0.4s ease, padding 0.4s ease",
+        }}
+        className="z-40 flex items-center justify-center"
       >
         <Image
+          ref={logoImgRef}
           src="/img/logo.png"
           alt="National Association for the Blind"
           width={80}
           height={80}
           className="h-full w-full object-contain"
+          style={{
+            filter: onFooter ? "brightness(0) invert(1)" : "none",
+            transition: prefersReducedMotion ? "none" : "filter 0.4s ease",
+          }}
         />
       </Link>
 
@@ -308,7 +390,7 @@ export function StagePager({
                 // collapsible browser toolbar, which pushes centered content
                 // below what's actually visible on screen.
                 height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
-                ...fade(isActive),
+                ...stageFly(stageNum),
               }}
               className={
                 "z-10 flex flex-col items-center justify-start overflow-hidden px-8 md:justify-center " +
@@ -343,12 +425,12 @@ export function StagePager({
         <div
           key={active}
           aria-hidden="true"
-          className="animate-prelude pointer-events-none fixed inset-x-0 bottom-5 z-[17] flex justify-center"
-          style={{ "--prelude-opacity": "0.12" } as CSSProperties}
+          className="animate-prelude pointer-events-none fixed inset-x-0 bottom-0 z-[17] flex justify-center"
+          style={{ "--prelude-opacity": "0.14" } as CSSProperties}
         >
           <span
             className={
-              "font-heading text-lg font-bold sm:text-2xl " + (background ? "text-white" : "text-navy")
+              "font-heading text-2xl font-bold sm:text-4xl " + (background ? "text-white" : "text-navy")
             }
           >
             {stageLabels[active]}
@@ -356,7 +438,7 @@ export function StagePager({
         </div>
       )}
 
-      <Footer active={onFooter} />
+      <Footer active={onFooter} morphLogo />
     </>
   );
 }
