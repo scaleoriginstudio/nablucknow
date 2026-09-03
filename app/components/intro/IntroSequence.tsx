@@ -41,7 +41,7 @@ const NEXT_SECTION_LABEL: Record<number, string> = {
   3: "Our journey",
   5: "Our Causes",
   6: "Meet the Team",
-  7: "See the World Differently",
+  7: "Our Sponsors",
   8: "What People Say",
   9: "Aligned with the UN Goals",
 };
@@ -467,6 +467,7 @@ export default function IntroSequence() {
   const causesWipeRef = useRef<HTMLDivElement>(null);
   const stage6Ref = useRef<HTMLDivElement>(null);
   const stage7Ref = useRef<HTMLDivElement>(null);
+  const stage7HeadingRef = useRef<HTMLHeadingElement>(null);
   const stage7TextRef = useRef<HTMLDivElement>(null);
   const stage8Ref = useRef<HTMLDivElement>(null);
   const stage9Ref = useRef<HTMLDivElement>(null);
@@ -1164,6 +1165,19 @@ export default function IntroSequence() {
         // Flip opacity instantly (no tween) while fully covered, so the
         // reveal reads as "the curtain moved," never as a fade.
         tl.set(stage6Ref.current, { opacity: 1, pointerEvents: "auto" });
+        // Collapse the navy field-box back to its corner while the curtain
+        // hides it — stage 6 is white, and a full-screen navy box left
+        // behind it flashes through the 6->7 fade.
+        tl.set(wipeBoxRef.current, {
+          top: "auto",
+          left: "auto",
+          bottom: 40,
+          right: 40,
+          width: isMobile ? 70 : 160,
+          height: isMobile ? 52 : 120,
+          borderRadius: "16px 0 16px 0",
+          scale: 0,
+        });
         tl.call(() => {
           gsap.set(stepperGroupRef.current?.querySelectorAll("span") ?? [], { clearProps: "color" });
           gsap.set(headerRef.current?.querySelectorAll("a") ?? [], { clearProps: "color,borderColor" });
@@ -1194,6 +1208,18 @@ export default function IntroSequence() {
         });
         tl.set(stage6Ref.current, { opacity: 0, pointerEvents: "none" });
         tl.set(stage4Ref.current, { pointerEvents: "auto" });
+        // Restore the navy field-box to full screen behind stage 5 while the
+        // curtain still hides the swap (mirror of the 5->6 collapse).
+        tl.set(wipeBoxRef.current, {
+          top: 0,
+          left: 0,
+          bottom: "auto",
+          right: "auto",
+          width: "100vw",
+          height: "100vh",
+          borderRadius: 0,
+          scale: 1,
+        });
         tl.call(() => colorInverter(5)());
         tl.to(causesWipeRef.current, {
           top: "auto",
@@ -1215,14 +1241,21 @@ export default function IntroSequence() {
         tl.to(stage6Ref.current, { opacity: 0, y: -40, duration: dur ?? 0.4, ease: "power2.in" });
         tl.set(stage7Ref.current, { opacity: 1, pointerEvents: "auto" });
         tl.fromTo(
+          stage7HeadingRef.current,
+          { opacity: 0, y: 48 },
+          { opacity: 1, y: 0, duration: dur ?? 0.55, ease: "power3.out" },
+          dur ? 0 : "-=0.2",
+        );
+        tl.fromTo(
           stage7TextRef.current,
           { opacity: 0, y: 40 },
           { opacity: 1, y: 0, duration: dur ?? 0.6, stagger: dur ? 0 : 0.1, ease: "power2.out" },
-          dur ? 0 : "-=0.15",
+          dur ? 0 : "-=0.4",
         );
       } else if (current === 7 && next === 6) {
         setStage6Index(0);
         tl.set(stage7Ref.current, { pointerEvents: "none" });
+        tl.to(stage7HeadingRef.current, { opacity: 0, y: 40, duration: dur ?? 0.3, ease: "power2.in" }, 0);
         tl.to(
           stage7TextRef.current,
           { opacity: 0, y: 40, duration: dur ?? 0.35, stagger: dur ? 0 : 0.06, ease: "power2.in" },
@@ -1240,6 +1273,7 @@ export default function IntroSequence() {
         gsap.set(stage8MarqueeBlockRef.current, { opacity: 1, y: 0, pointerEvents: "auto" });
         gsap.set(stage8CtaBlockRef.current, { yPercent: 55, opacity: 0.35, pointerEvents: "none" });
         tl.set(stage7Ref.current, { pointerEvents: "none" });
+        tl.to(stage7HeadingRef.current, { opacity: 0, y: -40, duration: dur ?? 0.35, ease: "power2.in" }, 0);
         tl.to(
           stage7TextRef.current,
           { opacity: 0, y: -40, duration: dur ?? 0.4, stagger: dur ? 0 : 0.06, ease: "power2.in" },
@@ -1256,10 +1290,16 @@ export default function IntroSequence() {
         tl.to(stage8Ref.current, { opacity: 0, duration: dur ?? 0.3 }, 0);
         tl.to(stage7Ref.current, { opacity: 1, duration: dur ?? 0.3 }, 0);
         tl.fromTo(
+          stage7HeadingRef.current,
+          { opacity: 0, y: -40 },
+          { opacity: 1, y: 0, duration: dur ?? 0.5, ease: "power3.out" },
+          dur ? 0 : "-=0.2",
+        );
+        tl.fromTo(
           stage7TextRef.current,
           { opacity: 0, y: -40 },
           { opacity: 1, y: 0, duration: dur ?? 0.5, stagger: dur ? 0 : 0.08, ease: "power2.out" },
-          dur ? 0 : "-=0.1",
+          dur ? 0 : "-=0.3",
         );
       } else if (current === 8 && next === 9) {
         // Same white field — the outgoing panel lifts up and out while the
@@ -1764,10 +1804,10 @@ export default function IntroSequence() {
   // never a plain opacity fade.
   useEffect(() => {
     if (!wipeBoxRef.current) return;
-    // Only from stage 3 on. It used to also peek in during stage 2's
-    // "Empower" beat, where the corner it sits in is over the text column,
-    // not spare margin — the box crossed the copy.
-    const showing = activeStage === 3 || activeStage === 4 || activeStage === 5 || activeStage === 6;
+    // The box is the navy field behind stages 3-5. Not stage 2 (it sat over
+    // the text column) and not stage 6 (Causes is white — a leftover navy
+    // rectangle showed through the 6->7 fade).
+    const showing = activeStage === 3 || activeStage === 4 || activeStage === 5;
     gsap.to(wipeBoxRef.current, {
       scale: showing ? 1 : 0,
       duration: prefersReducedMotion ? 0.001 : 0.45,
@@ -2677,11 +2717,16 @@ export default function IntroSequence() {
           className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-start md:pt-28"
         >
           <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-6 md:gap-10">
-            <h2 className="text-center font-heading text-xl font-bold text-navy sm:text-3xl">Meet the Team</h2>
+            <h2
+              ref={stage7HeadingRef}
+              className="text-center font-heading text-xl font-bold text-navy opacity-0 sm:text-3xl"
+            >
+              Meet the Team
+            </h2>
 
             <div
               ref={stage7TextRef}
-              className="flex w-full gap-2 opacity-0 md:gap-3"
+              className="flex w-full justify-center gap-2 opacity-0 md:gap-3"
               style={{ height: isMobile ? 340 : 420 }}
             >
               {TEAM_MEMBERS.map((member, i) => {
@@ -2694,12 +2739,15 @@ export default function IntroSequence() {
                     aria-pressed={isActive}
                     className="group relative overflow-hidden rounded-3xl ring-1 ring-black/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
                     style={{
-                      flexGrow: isActive ? 7 : 1,
-                      flexBasis: 0,
+                      // Fixed widths, not flex-grow: the open panel stays
+                      // portrait (~0.75 of its height) instead of stretching
+                      // into a landscape band, and the strips stay narrow.
+                      flexGrow: 0,
+                      flexBasis: isActive ? (isMobile ? 210 : 300) : isMobile ? 52 : 80,
                       minWidth: 0,
                       transition: prefersReducedMotion
                         ? "none"
-                        : "flex-grow 0.55s cubic-bezier(.22,1,.36,1)",
+                        : "flex-basis 0.55s cubic-bezier(.22,1,.36,1)",
                     }}
                   >
                     <Image
@@ -2738,9 +2786,22 @@ export default function IntroSequence() {
               })}
             </div>
 
-            <p className="font-body text-xs text-black/45">
-              {teamIndex + 1} / {TEAM_MEMBERS.length} — scroll or tap a panel
-            </p>
+            <div className="flex items-center gap-2" role="tablist" aria-label="Team members">
+              {TEAM_MEMBERS.map((member, i) => (
+                <button
+                  key={member.name}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === teamIndex}
+                  aria-label={member.name}
+                  onClick={() => setTeam(i)}
+                  className={
+                    "h-1.5 rounded-full transition-all duration-300 " +
+                    (i === teamIndex ? "w-8 bg-navy" : "w-3.5 bg-black/20 hover:bg-black/35")
+                  }
+                />
+              ))}
+            </div>
           </div>
         </div>
       )}
