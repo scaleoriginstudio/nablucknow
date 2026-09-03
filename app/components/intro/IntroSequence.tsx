@@ -471,7 +471,11 @@ export default function IntroSequence() {
   const stage7TextRef = useRef<HTMLDivElement>(null);
   const stage8Ref = useRef<HTMLDivElement>(null);
   const stage9Ref = useRef<HTMLDivElement>(null);
+  const stage9HeadingRef = useRef<HTMLHeadingElement>(null);
+  const stage9CardsRef = useRef<HTMLDivElement>(null);
   const stage10Ref = useRef<HTMLDivElement>(null);
+  const stage10HeadingRef = useRef<HTMLHeadingElement>(null);
+  const stage10CardsRef = useRef<HTMLDivElement>(null);
   const stage11Ref = useRef<HTMLDivElement>(null);
 
   const countdownTweenRef = useRef<gsap.core.Tween | null>(null);
@@ -835,6 +839,27 @@ export default function IntroSequence() {
         stage3MissionRef.current,
         { opacity: 1, y: 0, duration: d ?? 0.5, ease: "power2.out" },
         instant ? ">" : "-=0.1",
+      );
+    };
+
+    // Stages 9 and 10 arrive the same way: the heading flies up into place,
+    // then the cards below it rise in one after another rather than the
+    // whole block sliding as one piece.
+    const flyInHeadingAndCards = (
+      tl: gsap.core.Timeline,
+      heading: HTMLElement | null,
+      cardsBox: HTMLElement | null,
+      instant: boolean,
+    ) => {
+      const d = instant ? 0.001 : undefined;
+      const cards = cardsBox ? Array.from(cardsBox.children) : [];
+      tl.set(heading, { opacity: 0, y: instant ? 0 : 44 }, 0);
+      tl.set(cards, { opacity: 0, y: instant ? 0 : 36 }, 0);
+      tl.to(heading, { opacity: 1, y: 0, duration: d ?? 0.5, ease: "power3.out" }, instant ? ">" : 0);
+      tl.to(
+        cards,
+        { opacity: 1, y: 0, duration: d ?? 0.45, stagger: instant ? 0 : 0.1, ease: "power2.out" },
+        instant ? ">" : 0.15,
       );
     };
 
@@ -1302,17 +1327,14 @@ export default function IntroSequence() {
           dur ? 0 : "-=0.3",
         );
       } else if (current === 8 && next === 9) {
-        // Same white field — the outgoing panel lifts up and out while the
-        // incoming one rises into place, both converging on the number line.
+        // Same white field — stage 8 lifts out while stage 9's heading, then
+        // its testimonial cards, fly in one by one.
         tl.set(stage8Ref.current, { pointerEvents: "none" });
         tl.set(stage9Ref.current, { pointerEvents: "auto" });
         tl.to(stage8Ref.current, { opacity: 0, y: dur ? 0 : -30, duration: dur ?? 0.3 }, 0);
-        tl.fromTo(
-          stage9Ref.current,
-          { opacity: 0, y: dur ? 0 : 40 },
-          { opacity: 1, y: 0, duration: dur ?? 0.35, ease: "power2.out" },
-          0,
-        );
+        tl.set(stage9Ref.current, { y: 0 }, 0);
+        tl.fromTo(stage9Ref.current, { opacity: 0 }, { opacity: 1, duration: dur ?? 0.25 }, 0);
+        flyInHeadingAndCards(tl, stage9HeadingRef.current, stage9CardsRef.current, !!dur);
       } else if (current === 9 && next === 8) {
         tl.set(stage9Ref.current, { pointerEvents: "none" });
         tl.set(stage8Ref.current, { pointerEvents: "auto" });
@@ -1327,22 +1349,16 @@ export default function IntroSequence() {
         tl.set(stage9Ref.current, { pointerEvents: "none" });
         tl.set(stage10Ref.current, { pointerEvents: "auto" });
         tl.to(stage9Ref.current, { opacity: 0, y: dur ? 0 : -30, duration: dur ?? 0.3 }, 0);
-        tl.fromTo(
-          stage10Ref.current,
-          { opacity: 0, y: dur ? 0 : 40 },
-          { opacity: 1, y: 0, duration: dur ?? 0.35, ease: "power2.out" },
-          0,
-        );
+        tl.set(stage10Ref.current, { y: 0 }, 0);
+        tl.fromTo(stage10Ref.current, { opacity: 0 }, { opacity: 1, duration: dur ?? 0.25 }, 0);
+        flyInHeadingAndCards(tl, stage10HeadingRef.current, stage10CardsRef.current, !!dur);
       } else if (current === 10 && next === 9) {
         tl.set(stage10Ref.current, { pointerEvents: "none" });
         tl.set(stage9Ref.current, { pointerEvents: "auto" });
         tl.to(stage10Ref.current, { opacity: 0, y: dur ? 0 : -30, duration: dur ?? 0.3 }, 0);
-        tl.fromTo(
-          stage9Ref.current,
-          { opacity: 0, y: dur ? 0 : 40 },
-          { opacity: 1, y: 0, duration: dur ?? 0.35, ease: "power2.out" },
-          0,
-        );
+        tl.set(stage9Ref.current, { y: 0 }, 0);
+        tl.fromTo(stage9Ref.current, { opacity: 0 }, { opacity: 1, duration: dur ?? 0.25 }, 0);
+        flyInHeadingAndCards(tl, stage9HeadingRef.current, stage9CardsRef.current, !!dur);
       } else if (current === 10 && next === 11) {
         // The footer isn't a numbered step and has no navbar of its own —
         // hide the header and stepper entirely rather than inverting them.
@@ -2967,9 +2983,14 @@ export default function IntroSequence() {
           className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-start md:pt-28"
         >
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 md:gap-10">
-            <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">What People Say</h2>
+            <h2
+              ref={stage9HeadingRef}
+              className="text-center font-heading text-2xl font-bold text-navy opacity-0 sm:text-4xl"
+            >
+              What People Say
+            </h2>
 
-            <div className="grid gap-3 md:gap-8 md:grid-cols-3">
+            <div ref={stage9CardsRef} className="grid gap-3 md:gap-8 md:grid-cols-3">
               {TESTIMONIALS.map((testimonial, i) => (
                 <div key={i} className="flex flex-col gap-2 rounded-2xl border border-black/10 p-3 md:gap-4 md:p-6">
                   <span aria-hidden="true" className="hidden font-heading text-5xl leading-none text-orange md:block">
@@ -3004,14 +3025,17 @@ export default function IntroSequence() {
           className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-start md:pt-28"
         >
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 md:gap-4">
-            <h2 className="text-center font-heading text-xl font-bold text-navy sm:text-4xl">
+            <h2
+              ref={stage10HeadingRef}
+              className="text-center font-heading text-xl font-bold text-navy opacity-0 sm:text-4xl"
+            >
               Aligned with the UN Sustainable Development Goals
             </h2>
             <p className="mx-auto hidden max-w-2xl text-center font-body text-sm leading-6 text-black/60 sm:block">
               Our work maps directly onto five of the UN&apos;s Sustainable Development Goals.
             </p>
 
-            <div className="mt-2 grid grid-cols-5 gap-1.5 sm:mt-4 sm:gap-4">
+            <div ref={stage10CardsRef} className="mt-2 grid grid-cols-5 gap-1.5 sm:mt-4 sm:gap-4">
               {SDG_GOALS.map((goal) => {
                 const isSelected = goal.number === selectedSdg;
                 return (
