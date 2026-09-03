@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { StagePager } from "../components/shared/StagePager";
-import { GlassBackdrop } from "../components/shared/GlassFormShell";
-import { ProgramStage } from "./ProgramStage";
-import { PROGRAMS } from "./programs-data";
+import { ProgramsView } from "./ProgramsView";
 
 export const metadata: Metadata = {
   title: "Programs",
@@ -13,12 +11,7 @@ export const metadata: Metadata = {
 export default function ProgramsPage() {
   return (
     <main>
-      <StagePager
-        background={<GlassBackdrop image="/img/placeholders/talk-inclusion.jpg" priority />}
-        stages={PROGRAMS.map((program, i) => (
-          <ProgramStage key={program.slug} program={program} reverse={i % 2 === 1} />
-        ))}
-      />
+      <StagePager stages={[<ProgramsView key="programs" />]} />
     </main>
   );
 }
