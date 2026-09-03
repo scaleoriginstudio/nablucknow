@@ -159,12 +159,14 @@ export function LeadForm({
         </label>
       </div>
 
-      {feeNote && <p className="font-body text-xs leading-5 text-black/55">{feeNote}</p>}
+      {feeNote && (
+        <p className="border-t border-black/10 pt-3 font-body text-xs leading-5 text-black/55">{feeNote}</p>
+      )}
 
       <button
         type="submit"
         disabled={disabled || busy}
-        className="mt-1 inline-flex items-center justify-center gap-2 self-start rounded-full bg-orange px-7 py-2.5 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy disabled:cursor-not-allowed disabled:opacity-45"
+        className="mt-2 inline-flex items-center justify-center gap-2 self-start rounded-full bg-orange px-7 py-2.5 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy disabled:cursor-not-allowed disabled:opacity-60"
       >
         {busy ? "Sending..." : submitLabel}
       </button>
