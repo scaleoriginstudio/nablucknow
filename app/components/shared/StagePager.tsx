@@ -229,6 +229,7 @@ export function StagePager({
   // homepage's footer morph, now on every stage page.
   const logoRef = useRef<HTMLAnchorElement>(null);
   const logoImgRef = useRef<HTMLImageElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
   const wasFooterRef = useRef(false);
   useEffect(() => {
     const el = logoRef.current;
@@ -237,15 +238,18 @@ export function StagePager({
       return;
     }
     wasFooterRef.current = onFooter;
-    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-    // Header rest spot vs the footer's logo slot — the same target the
-    // homepage tuned against the shared SiteFooterContent layout.
     const header = { x: 16, y: 8, w: 80 };
-    const slot = {
-      x: Math.max(2 * rem, (window.innerWidth - 68 * rem) / 2),
-      y: window.innerHeight / 2 - 132,
-      w: 60,
-    };
+    // Measure the footer's own (hidden) logo slot so the morph lands on it
+    // at any width — the footer is still sliding up as this runs, so undo
+    // its live translateY to get the resting position.
+    const slotEl = footerRef.current?.querySelector<HTMLElement>("[data-footer-logo]");
+    let slot = { x: 16, y: window.innerHeight / 2 - 132, w: 60 };
+    if (slotEl && footerRef.current) {
+      const r = slotEl.getBoundingClientRect();
+      const t = getComputedStyle(footerRef.current).transform;
+      const ty = t && t !== "none" ? new DOMMatrixReadOnly(t).m42 : 0;
+      slot = { x: Math.round(r.left), y: Math.round(r.top - ty), w: Math.round(r.width) || 60 };
+    }
     const instant = prefersReducedMotion;
     if (onFooter) {
       gsap.to(el, {
@@ -438,7 +442,7 @@ export function StagePager({
         </div>
       )}
 
-      <Footer active={onFooter} morphLogo />
+      <Footer ref={footerRef} active={onFooter} morphLogo />
     </>
   );
 }

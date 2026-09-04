@@ -237,22 +237,19 @@ const logoStyle = (layout: Layout, isMobile: boolean, atFooter = false): CSSProp
       transform: "translate(-50%, -50%)",
     };
   }
-  // Only the chrome (white plate -> transparent) is CSS-driven. Position and
-  // size are handed to a GSAP transform tween on the 10<->11 step (see the
-  // logo-morph effect): a plain length can't CSS-interpolate into the footer
-  // slot's calc()/max(), so a `top`/`left` transition here would only snap.
+  // Only the chrome (white plate <-> transparent) is CSS-driven here. The
+  // logo stays pinned at the header spot in both branches; the trip to the
+  // footer's own logo slot (which lives at a different place per viewport)
+  // is a GSAP transform tween that measures the real slot — see the
+  // logo-morph effect.
   const transition = "background-color 0.5s ease, padding 0.5s ease, border-radius 0.5s ease";
-  // On the footer stage the logo leaves the header and settles, white and
-  // chromeless, roughly where the footer's own (hidden) logo would sit —
-  // top-left of the centered footer content column.
   if (atFooter) {
     return {
       position: "fixed",
-      top: "calc(50% - 132px)",
-      left: "max(2rem, calc((100vw - 68rem) / 2))",
-      width: 60,
-      height: 60,
-      transform: "none",
+      top: 8,
+      left: 16,
+      width: 80,
+      height: 80,
       backgroundColor: "rgba(255,255,255,0)",
       borderRadius: 0,
       padding: 0,
@@ -728,32 +725,40 @@ export default function IntroSequence() {
     const toHeader = activeStage === 10 && prev === 11;
     if (!toFooter && !toHeader) return;
 
-    // Both endpoints as viewport pixels, matching logoStyle's two branches:
-    // header = { top: 8, left: 16, 80x80 }; footer slot = { top: calc(50%
-    // - 132px), left: max(2rem, (100vw - 68rem) / 2), 60x60 }.
-    const rootPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-    const header = { x: 16, y: 8, w: 80 };
-    const footer = {
-      x: Math.max(2 * rootPx, (window.innerWidth - 68 * rootPx) / 2),
-      y: window.innerHeight / 2 - 132,
-      w: 60,
-    };
-    const from = toFooter ? header : footer;
-    const to = toFooter ? footer : header;
-
-    gsap.fromTo(
-      el,
-      { x: from.x - to.x, y: from.y - to.y, scale: from.w / to.w, transformOrigin: "0 0" },
-      {
+    const instant = prefersReducedMotion || forceInstantRef.current;
+    if (toFooter) {
+      // Measure the footer's own (hidden) logo slot — it sits in a
+      // different place at every width. The footer is mid-slide-up as this
+      // runs, so undo its live translateY to get the resting spot.
+      const slotEl = stage11Ref.current?.querySelector<HTMLElement>("[data-footer-logo]");
+      const header = { x: 16, y: 8, w: 80 };
+      let slot = { x: 16, y: window.innerHeight / 2 - 132, w: 60 };
+      if (slotEl && stage11Ref.current) {
+        const r = slotEl.getBoundingClientRect();
+        const t = getComputedStyle(stage11Ref.current).transform;
+        const ty = t && t !== "none" ? new DOMMatrixReadOnly(t).m42 : 0;
+        slot = { x: Math.round(r.left), y: Math.round(r.top - ty), w: Math.round(r.width) || 60 };
+      }
+      gsap.to(el, {
+        x: slot.x - header.x,
+        y: slot.y - header.y,
+        scale: slot.w / header.w,
+        transformOrigin: "0 0",
+        duration: instant ? 0.001 : 0.6,
+        ease: "power3.out",
+        overwrite: "auto",
+      });
+    } else {
+      gsap.to(el, {
         x: 0,
         y: 0,
         scale: 1,
-        duration: prefersReducedMotion || forceInstantRef.current ? 0.001 : 0.6,
+        duration: instant ? 0.001 : 0.55,
         ease: "power3.out",
         overwrite: "auto",
         onComplete: () => gsap.set(el, { clearProps: "transform,transformOrigin" }),
-      },
-    );
+      });
+    }
   }, [activeStage, layout, prefersReducedMotion]);
 
   // Once settled on the hero, wheel/keyboard/touch gestures step between the
@@ -1294,12 +1299,19 @@ export default function IntroSequence() {
       } else if (current === 7 && next === 8) {
         // Same white field again — plain fly, no wipe needed. Always
         // arrive at stage 8 fresh, showing the marquee sub-section.
-        // The CTA starts as a ghosted peek from the bottom edge, hinting
-        // there's more below, so it can snap fully into place later
-        // instead of fading in from nothing.
+        // On desktop the CTA starts as a ghosted peek from the bottom
+        // edge, hinting there's more below, so it can snap fully into
+        // place later instead of fading in from nothing. There's no spare
+        // room below the fold for that hint on a phone, so it starts
+        // fully hidden there instead — the peek read as text smeared over
+        // the marquee, not a hint of more content.
         stage8SubIndexRef.current = 0;
         gsap.set(stage8MarqueeBlockRef.current, { opacity: 1, y: 0, pointerEvents: "auto" });
-        gsap.set(stage8CtaBlockRef.current, { yPercent: 55, opacity: 0.35, pointerEvents: "none" });
+        gsap.set(stage8CtaBlockRef.current, {
+          yPercent: isMobile ? 0 : 55,
+          opacity: isMobile ? 0 : 0.35,
+          pointerEvents: "none",
+        });
         tl.set(stage7Ref.current, { pointerEvents: "none" });
         tl.to(stage7HeadingRef.current, { opacity: 0, y: -40, duration: dur ?? 0.35, ease: "power2.in" }, 0);
         tl.to(
@@ -1544,7 +1556,13 @@ export default function IntroSequence() {
         tl.to(stage8CtaBlockRef.current, { yPercent: 0, opacity: 1, duration: dur, ease: "power2.out" });
       } else {
         tl.set(stage8CtaBlockRef.current, { pointerEvents: "none" });
-        tl.to(stage8CtaBlockRef.current, { yPercent: 55, opacity: 0.35, duration: dur, ease: "power2.in" });
+        // Ghosted peek on desktop only — see the 7->8 arrival for why.
+        tl.to(stage8CtaBlockRef.current, {
+          yPercent: isMobile ? 0 : 55,
+          opacity: isMobile ? 0 : 0.35,
+          duration: dur,
+          ease: "power2.in",
+        });
         tl.set(stage8MarqueeBlockRef.current, { pointerEvents: "auto" });
         tl.to(stage8MarqueeBlockRef.current, { opacity: 1, y: 0, duration: dur, ease: "power2.out" });
       }
@@ -2448,9 +2466,17 @@ export default function IntroSequence() {
             // dvh, not vh — see the equivalent note on stage 1's container.
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-start overflow-hidden px-8 pt-20 pointer-events-none md:justify-center md:pt-0"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden px-5 pb-4 pt-16 pointer-events-none sm:px-8 md:justify-center md:pb-0 md:pt-0"
         >
-          <div className="mx-auto grid w-full max-w-5xl items-start gap-8 md:grid-cols-[1.5fr_1fr] md:gap-16">
+          {/* Five vision points plus the mission paragraph can run taller
+              than a phone screen; this scrolls in place on <md instead of
+              clipping (md+ fits without it, so it stays non-scrolling and
+              centred there). */}
+          <div
+            data-stage-scroll=""
+            className="max-h-full w-full overflow-y-auto overscroll-contain md:max-h-none md:overflow-visible"
+          >
+            <div className="mx-auto grid w-full max-w-5xl items-start gap-6 md:gap-16 md:grid-cols-[1.5fr_1fr]">
             <div ref={stage3VisionRef} className="flex flex-col gap-4 opacity-0 md:gap-5">
               <h3
                 ref={stage3HeadlineRef}
@@ -2491,6 +2517,7 @@ export default function IntroSequence() {
                 {STAGE3_MISSION_TEXT}
               </p>
             </div>
+            </div>
           </div>
         </div>
       )}
@@ -2511,11 +2538,14 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-start overflow-hidden px-8 pt-20 pb-40 opacity-0 pointer-events-none"
+          className="z-[16] flex flex-col items-center justify-start overflow-hidden px-5 pb-6 pt-16 opacity-0 pointer-events-none sm:px-8 sm:pb-40 sm:pt-20"
         >
           <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center">
-            {/* Stepper clearance, matching stage 1/2's spacer. */}
-            <div className="mb-20 h-20 sm:mb-10 sm:h-10" aria-hidden="true" />
+            {/* Stepper clearance. Stage 4 already carries its own pt-16/20,
+                so this only needs to add a little more, not stage 1/2's
+                full spacer — that doubled up and pushed the heading (and
+                the timeline hanging off it) far down the screen on phones. */}
+            <div className="mb-2 h-2 sm:mb-10 sm:h-10" aria-hidden="true" />
             <h2
               ref={journeyHeadingRef}
               className="text-center font-heading text-3xl leading-tight font-bold text-white opacity-0 sm:text-4xl"

@@ -44,11 +44,11 @@ body {
 
 /* One scrollbar for every scroll region on the site — the pinned-stage
    forms and lists, the blog and programs panels, the footer. Slim, no
-   arrows, a soft rounded thumb; the thumb goes light inside any navy
+   arrows, a navy (brand) rounded thumb; it goes white inside any navy
    panel so it reads on the dark ground. */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.28) transparent;
+  scrollbar-color: var(--color-navy) transparent;
 }
 *::-webkit-scrollbar {
   width: 8px;
@@ -58,21 +58,21 @@ body {
   background: transparent;
 }
 *::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.28);
+  background: var(--color-navy);
   border-radius: 9999px;
 }
 *::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.42);
+  background: #1a2c6e;
 }
 .bg-navy,
 .bg-navy * {
-  scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
+  scrollbar-color: rgba(255, 255, 255, 0.55) transparent;
 }
 .bg-navy ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.55);
 }
 .bg-navy ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.75);
 }
 
 /* Google's Material Symbols icon font — base rule from Google's own setup

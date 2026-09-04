@@ -32,7 +32,9 @@ export function EventsStage() {
         data-stage-scroll=""
         className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 [-webkit-overflow-scrolling:touch]"
       >
-        <div className="grid grid-cols-1 gap-3 pb-2 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+        {/* pb-16: clears the floating action button so the last row can
+            always scroll past it instead of ending up permanently under it. */}
+        <div className="grid grid-cols-1 gap-3 pb-16 sm:grid-cols-2 sm:gap-4 sm:pb-4 lg:grid-cols-3">
           {BLOG_POSTS.map((post) => (
             <Link
               key={post.slug}
