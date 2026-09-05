@@ -2308,11 +2308,8 @@ export default function IntroSequence() {
         >
           <div className="mx-auto w-full max-w-6xl">
             {/* Spacing reserved for the persistent stepper, which is a
-                separate fixed element overlaid above this content. Taller on
-                mobile: the stepper's own line-box extends a bit below its
-                fixed top offset, and mobile's single-column stack puts the
-                photo right underneath with no side column to absorb it. */}
-            <div className="mb-20 h-20 sm:mb-10 sm:h-10" aria-hidden="true" />
+                separate fixed element overlaid above this content. */}
+            <div className="mb-6 h-6 sm:mb-10 sm:h-10" aria-hidden="true" />
 
             <div className="grid items-center gap-3 md:gap-14 md:grid-cols-2">
               {/* Invisible spacers: reserve the exact rects the video and
@@ -2329,7 +2326,7 @@ export default function IntroSequence() {
                     {STAGE1_HEADLINE}
                   </h2>
                 </div>
-                <p ref={paragraphRef} className="line-clamp-3 font-body text-sm text-black/70 opacity-0 leading-6 md:line-clamp-none md:block md:text-base md:leading-7">
+                <p ref={paragraphRef} className="font-body text-sm text-black/70 opacity-0 leading-6 md:text-base md:leading-7">
                   For over thirty years we have worked so that losing your
                   sight in Uttar Pradesh need not mean losing your schooling,
                   your work, or your place alongside everyone else. Every
@@ -2735,7 +2732,7 @@ export default function IntroSequence() {
                   left: "50%",
                   top: "50%",
                   width: isActive ? (isMobile ? "80vw" : 560) : isMobile ? 120 : 172,
-                  height: isActive ? (isMobile ? 240 : 336) : isMobile ? 170 : 238,
+                  height: isActive ? (isMobile ? 290 : 336) : isMobile ? 170 : 238,
                   transform: `translate(calc(-50% + ${pos * (isMobile ? 150 : 400)}px), -50%) scale(${isActive ? 1 : 0.95})`,
                   opacity: off > 1 ? 0 : isActive ? 1 : 0.4,
                   zIndex: isActive ? 20 : 10 - off,
@@ -2753,8 +2750,10 @@ export default function IntroSequence() {
                     <Image src={cause.image} alt="" fill sizes="640px" className="object-cover" />
                     {isActive ? (
                       <div className="absolute inset-x-0 bottom-0 m-3 flex flex-col gap-2 rounded-2xl border border-white/40 bg-white/20 p-4 text-white backdrop-blur-xl md:m-4 md:p-5">
-                        <h3 className="font-heading text-lg font-bold md:text-2xl">{cause.title}</h3>
-                        <p className="font-body text-xs leading-5 text-white/90 md:text-sm md:leading-6">
+                        <h3 className="line-clamp-2 font-heading text-base font-bold leading-tight md:text-2xl">
+                          {cause.title}
+                        </h3>
+                        <p className="hidden font-body text-sm leading-6 text-white/90 md:line-clamp-2 md:block">
                           {cause.description}
                         </p>
                         <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-white/25">
@@ -2775,7 +2774,9 @@ export default function IntroSequence() {
                       </div>
                     ) : (
                       <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/55 to-transparent p-3">
-                        <span className="font-heading text-xs font-bold leading-tight text-white">{cause.title}</span>
+                        <span className="line-clamp-3 font-heading text-xs font-bold leading-tight text-white">
+                          {cause.title}
+                        </span>
                       </div>
                     )}
                   </div>

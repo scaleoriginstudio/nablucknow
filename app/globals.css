@@ -26,15 +26,38 @@ body {
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
+  /* This page-level box never scrolls by design — every real scroll
+     region on the site is a nested [data-stage-scroll] element. Mobile
+     Chrome can still force a real (if tiny) document scroll of its own
+     accord — e.g. nudging the page while bringing a focused field clear
+     of the on-screen keyboard — and when it does, the styled scrollbar
+     below painted a stray navy bar down the right edge of the hero.
+     overflow: hidden already blocks user-driven scrolling; this also
+     blocks the visible affordance for that one still-possible case. */
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 /* Opt-out for pages that are normal long-form scrolling documents rather
    than the pinned, wheel-stepped stage experience the rule above is for
    (e.g. a blog article) — the global overflow:hidden left nothing to
-   scroll no matter how long the article was. */
+   scroll no matter how long the article was. This is the one place a
+   document-level scrollbar is actually wanted, so it opts back in to the
+   thin styled bar every other scroll region on the site uses. */
 body.scroll-unlocked {
   overflow: auto;
   overscroll-behavior: auto;
+  scrollbar-width: thin;
+}
+body.scroll-unlocked::-webkit-scrollbar {
+  display: block;
+  width: 8px;
+  height: 8px;
 }
 
 body {

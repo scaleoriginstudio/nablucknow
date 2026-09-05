@@ -4,6 +4,7 @@ import { useState, type FormEvent, type ReactNode } from "react";
 import { submitLead, type LeadPayload } from "../../lib/forms";
 import { FIELD_CLASS } from "./constants";
 import { Icon } from "./Icon";
+import { Select } from "./Select";
 
 export type LeadSelect = {
   /** Key the value is stored under in the sheet. */
@@ -49,10 +50,18 @@ export function LeadForm({
 }) {
   const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [selectError, setSelectError] = useState<string | undefined>(undefined);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (disabled || busy) return;
+    // The dropdown is a custom listbox, not a real <select>, so it can't
+    // lean on the browser's own required-field validation — check it here
+    // instead, the same way a failed field reads anywhere else on the site.
+    if (select && !select.value) {
+      setSelectError("Please make a selection.");
+      return;
+    }
     const form = event.currentTarget;
     const data = new FormData(form);
 
@@ -89,32 +98,18 @@ export function LeadForm({
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       {select && (
-        <label className="flex flex-col gap-1">
-          <span className={labelClass}>{select.label}</span>
-          <div className="relative">
-            <select
-              required
-              name={select.name}
-              value={select.value}
-              onChange={(e) => select.onChange(e.target.value)}
-              className={fieldClass + " appearance-none pr-6"}
-            >
-              <option value="" disabled>
-                {select.placeholder ?? "Please choose"}
-              </option>
-              {select.options.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-            <Icon
-              name="expand_more"
-              size={18}
-              className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-black/45"
-            />
-          </div>
-        </label>
+        <Select
+          label={select.label}
+          placeholder={select.placeholder}
+          options={select.options}
+          value={select.value}
+          name={select.name}
+          error={selectError}
+          onChange={(v) => {
+            setSelectError(undefined);
+            select.onChange(v);
+          }}
+        />
       )}
 
       {extra}
