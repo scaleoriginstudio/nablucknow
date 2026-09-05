@@ -53,7 +53,13 @@ export function FloatingActions() {
   return (
     <div
       ref={rootRef}
-      className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-5 z-40 flex flex-col items-end gap-3"
+      // pointer-events-none here, with auto restored on each actionable
+      // child below: collapsed, the hidden WhatsApp/Donate row still
+      // occupies its normal flex height (just invisible), and without this
+      // the whole wrapper's box — including that empty space above the "+"
+      // button — silently ate clicks meant for whatever sits underneath it
+      // on the page (the hero's own Donate button, on phones).
+      className="pointer-events-none fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-5 z-40 flex flex-col items-end gap-3"
     >
       <div
         className={
@@ -91,7 +97,7 @@ export function FloatingActions() {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-label={open ? "Close quick actions" : "Open quick actions"}
-        className="flex h-12 w-12 items-center justify-center rounded-full bg-navy text-white shadow-xl transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+        className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-navy text-white shadow-xl transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
       >
         <Icon name={open ? "close" : "add"} size={24} weight={400} />
       </button>

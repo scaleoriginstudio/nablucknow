@@ -6,4 +6,4 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://nablucknow.
 export const SITE_NAME = "National Association for the Blind, State Chapter, Lucknow";
 
 export const SITE_DESCRIPTION =
-  "National Association for the Blind, State Chapter, Lucknow is an NGO working in education, family counselling, and employment support for visually impaired people. For over 30 years we have run residential schooling, vocational training, and job placement, and we partner with companies on CSR programmes for disability inclusion across Uttar Pradesh.";
+  "National Association for the Blind, State Chapter, Lucknow is an NGO working in inclusive education, family counselling, and employment support for visually impaired people. For over 30 years we have run residential schooling, vocational training, and job placement built around inclusion rather than separation, and we partner with companies on CSR programmes for disability inclusion across Uttar Pradesh.";

@@ -45,11 +45,11 @@ const NEXT_SECTION_LABEL: Record<number, string> = {
   8: "What People Say",
   9: "Aligned with the UN Goals",
 };
-const HERO_HEADLINE = "Seeing the world differently, together.";
+const HERO_HEADLINE = "Seeing the world together.";
 const STAGE1_HEADLINE =
   "National Association for the Blind, State Chapter, Lucknow";
 const STAGE2_PARAGRAPH =
-  "For more than 30 years we have worked with visually impaired people in Lucknow and across Uttar Pradesh, from primary schooling through family counselling to employment. The aim is a full, ordinary life for every person we support, not a lesser version of one.";
+  "For more than 30 years we have worked with visually impaired people in Lucknow and across Uttar Pradesh, from primary schooling through family counselling to employment. Every programme is built for inclusion, not separation — the aim is a full, ordinary life for every person we support, alongside everyone else, not a lesser version of one apart from them.";
 const STAGE2_STORIES = [
   {
     word: "Educate.",
@@ -70,11 +70,11 @@ const STAGE2_STORIES = [
     href: "/blog/why-accessible-hiring-matters",
   },
 ];
-const STAGE3_MISSION_TEXT = "Education, counselling, and training, from childhood to an independent career.";
+const STAGE3_MISSION_TEXT = "Inclusive education, counselling, and training, from childhood to an independent career.";
 // The vision, told as the five threads of work that carry it. Each icon
 // grows into place as its line flies in (see the stage-3 choreographer).
 const STAGE3_POINTS = [
-  { icon: "school", text: "Free primary schooling and braille literacy from the earliest years." },
+  { icon: "school", text: "Free, inclusive primary schooling and braille literacy from the earliest years." },
   { icon: "diversity_3", text: "Early-intervention and family counselling that steadies the whole household." },
   { icon: "construction", text: "Hands-on vocational training in a trade that leads somewhere real." },
   { icon: "work", text: "Job placement and on-the-job support into independent careers." },
@@ -448,8 +448,17 @@ export default function IntroSequence() {
   const stage3PointIconRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const stage4Ref = useRef<HTMLDivElement>(null);
   const journeyHeadingRef = useRef<HTMLHeadingElement>(null);
-  // The ", quantified" that appends itself to "Our journey" on the 4->5 step.
+  // The ", quantified" that appends itself to "Our journey" on the 4->5
+  // step. Split into two refs on purpose: quantifiedWordRef is a plain
+  // (non-atomic) inline span carrying only opacity, glued straight onto
+  // "journey" with no gap — Chrome inserts a line-break opportunity before
+  // an inline-block even with no preceding whitespace, so the comma has to
+  // live outside that box to guarantee it never gets orphaned onto its own
+  // line. quantifiedInnerRef is the actual inline-block that grows via
+  // max-width, wrapping "quantified" alone — if the phrase doesn't fit, it
+  // wraps there, leaving "Our journey," complete on the first line.
   const quantifiedWordRef = useRef<HTMLSpanElement>(null);
+  const quantifiedInnerRef = useRef<HTMLSpanElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const timelineListRef = useRef<HTMLDivElement>(null);
   const journeyEntryRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -1077,7 +1086,8 @@ export default function IntroSequence() {
         gsap.set(journeyEntryRefs.current.filter(Boolean), { opacity: 0, y: 40 });
         gsap.set(journeyConnectorRefs.current.filter(Boolean), { scaleY: 0 });
         // Arrive as "Our journey" — the ", quantified" only appends on 4->5.
-        gsap.set(quantifiedWordRef.current, { opacity: 0, maxWidth: 0 });
+        gsap.set(quantifiedWordRef.current, { opacity: 0 });
+        gsap.set(quantifiedInnerRef.current, { maxWidth: 0 });
         // The wipe box never moves during this transition (it's already
         // fully expanded from stage 3), so the stepper's white-on-navy
         // contrast just needs recomputing once for the new active number.
@@ -1109,16 +1119,24 @@ export default function IntroSequence() {
 
         // "Our journey" gains its ", quantified" as the stats arrive — the
         // word grows in from zero width so the heading re-centres around it.
-        const quantifiedW = quantifiedWordRef.current?.scrollWidth ?? 220;
+        // The comma's own opacity fade is a separate, non-atomic span (see
+        // the refs' declaration) so it can never be orphaned from "journey"
+        // onto its own line; only the "quantified" word grows/wraps.
+        const quantifiedW = quantifiedInnerRef.current?.scrollWidth ?? 190;
         tl.fromTo(
           quantifiedWordRef.current,
-          { opacity: 0, maxWidth: 0 },
+          { opacity: 0 },
+          { opacity: 1, duration: dur ?? 0.45, ease: "power2.out" },
+          dur ? 0 : 0.1,
+        );
+        tl.fromTo(
+          quantifiedInnerRef.current,
+          { maxWidth: 0 },
           {
-            opacity: 1,
             maxWidth: quantifiedW,
             duration: dur ?? 0.45,
             ease: "power2.out",
-            onComplete: () => gsap.set(quantifiedWordRef.current, { maxWidth: "none" }),
+            onComplete: () => gsap.set(quantifiedInnerRef.current, { maxWidth: "none" }),
           },
           dur ? 0 : 0.1,
         );
@@ -1155,12 +1173,9 @@ export default function IntroSequence() {
         impactIndexRef.current = 0;
 
         // Back to plain "Our journey".
-        tl.set(quantifiedWordRef.current, { maxWidth: quantifiedWordRef.current?.scrollWidth ?? 220 }, 0);
-        tl.to(
-          quantifiedWordRef.current,
-          { opacity: 0, maxWidth: 0, duration: dur ?? 0.3, ease: "power2.in" },
-          0,
-        );
+        tl.set(quantifiedInnerRef.current, { maxWidth: quantifiedInnerRef.current?.scrollWidth ?? 190 }, 0);
+        tl.to(quantifiedWordRef.current, { opacity: 0, duration: dur ?? 0.3, ease: "power2.in" }, 0);
+        tl.to(quantifiedInnerRef.current, { maxWidth: 0, duration: dur ?? 0.3, ease: "power2.in" }, 0);
 
         if (isMobile) {
           tl.set(impactStatsMobileRef.current, { pointerEvents: "none" });
@@ -2289,9 +2304,9 @@ export default function IntroSequence() {
                 <p ref={paragraphRef} className="line-clamp-3 font-body text-sm text-black/70 opacity-0 leading-6 md:line-clamp-none md:block md:text-base md:leading-7">
                   For over thirty years we have worked so that losing your
                   sight in Uttar Pradesh need not mean losing your schooling,
-                  your work, or your place in your own family. Every
-                  programme we run points at one thing: an ordinary,
-                  independent life.
+                  your work, or your place alongside everyone else. Every
+                  programme we run points at one thing: an inclusive,
+                  ordinary, independent life.
                 </p>
                 <div ref={ctaRef} className="flex items-center gap-3 opacity-0">
                   <a
@@ -2476,32 +2491,36 @@ export default function IntroSequence() {
             data-stage-scroll=""
             className="max-h-full w-full overflow-y-auto overscroll-contain md:max-h-none md:overflow-visible"
           >
+            {/* Clears the fixed number-line stepper, which otherwise sits
+                almost flush against "Our Vision" on narrow phones — mirrors
+                the equivalent spacer on stage 4/journey. */}
+            <div className="h-5 sm:h-0" aria-hidden="true" />
             <div className="mx-auto grid w-full max-w-5xl items-start gap-6 md:gap-16 md:grid-cols-[1.5fr_1fr]">
-            <div ref={stage3VisionRef} className="flex flex-col gap-4 opacity-0 md:gap-5">
+            <div ref={stage3VisionRef} className="flex flex-col gap-5 opacity-0 md:gap-5">
               <h3
                 ref={stage3HeadlineRef}
                 className="font-heading text-xs font-bold uppercase tracking-[0.22em] text-white/55 opacity-0 sm:text-sm"
               >
                 Our Vision
               </h3>
-              <ul className="flex flex-col gap-3.5 md:gap-4">
+              <ul className="flex flex-col gap-4 md:gap-4">
                 {STAGE3_POINTS.map((point, i) => (
                   <li
                     key={point.icon}
                     ref={(el) => {
                       stage3PointRefs.current[i] = el;
                     }}
-                    className="flex items-start gap-3 opacity-0 md:gap-4"
+                    className="flex items-start gap-3.5 opacity-0 md:gap-4"
                   >
                     <span
                       ref={(el) => {
                         stage3PointIconRefs.current[i] = el;
                       }}
-                      className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-white"
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange/15 text-orange ring-1 ring-orange/30 md:mt-0.5 md:h-9 md:w-9"
                     >
-                      <Icon name={point.icon} size={20} className="text-white" />
+                      <Icon name={point.icon} size={20} />
                     </span>
-                    <p className="font-body text-sm leading-6 text-white/85 md:text-base md:leading-7">
+                    <p className="mt-1 font-body text-sm leading-6 text-white/85 md:mt-0 md:text-base md:leading-7">
                       {point.text}
                     </p>
                   </li>
@@ -2509,7 +2528,10 @@ export default function IntroSequence() {
               </ul>
             </div>
 
-            <div ref={stage3MissionRef} className="flex flex-col gap-3 opacity-0 md:pt-9">
+            <div
+              ref={stage3MissionRef}
+              className="mt-2 flex flex-col gap-3 border-t border-white/15 pt-6 opacity-0 md:mt-0 md:border-0 md:pt-9"
+            >
               <h3 className="font-heading text-xs font-bold uppercase tracking-[0.22em] text-white/55 sm:text-sm">
                 Our Mission
               </h3>
@@ -2548,14 +2570,21 @@ export default function IntroSequence() {
             <div className="mb-2 h-2 sm:mb-10 sm:h-10" aria-hidden="true" />
             <h2
               ref={journeyHeadingRef}
-              className="text-center font-heading text-3xl leading-tight font-bold text-white opacity-0 sm:text-4xl"
+              className="text-center font-heading text-2xl leading-tight font-bold text-white opacity-0 sm:text-4xl"
             >
-              Our journey
-              <span
-                ref={quantifiedWordRef}
-                className="inline-block max-w-0 overflow-hidden whitespace-nowrap align-bottom opacity-0"
-              >
-                , quantified
+              {/* No whitespace between "journey" and the outer span, and
+                  that span is a plain (non-atomic) inline element — Chrome
+                  allows a line break immediately before an inline-block
+                  even with no preceding whitespace, so the comma has to
+                  live outside the growing box to guarantee it can never be
+                  orphaned from "journey" onto its own line. Only the
+                  "quantified" word itself is the inline-block that grows
+                  and (if the phrase doesn't fit) wraps. */}
+              Our journey<span ref={quantifiedWordRef} className="opacity-0">
+                , <span
+                  ref={quantifiedInnerRef}
+                  className="inline-block max-w-0 overflow-hidden align-bottom"
+                >quantified</span>
               </span>
             </h2>
 
@@ -2768,7 +2797,7 @@ export default function IntroSequence() {
           <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-6 md:gap-10">
             <h2
               ref={stage7HeadingRef}
-              className="text-center font-heading text-xl font-bold text-navy opacity-0 sm:text-3xl"
+              className="text-center font-heading text-2xl font-bold text-navy opacity-0 sm:text-4xl"
             >
               Meet the Team
             </h2>
@@ -2878,7 +2907,7 @@ export default function IntroSequence() {
               ref={stage8MarqueeBlockRef}
               className="absolute inset-0 flex flex-col items-center justify-start gap-10 px-8 pt-20 md:pt-28"
             >
-              <h2 className="text-center font-heading text-3xl font-bold text-navy sm:text-4xl">Our Sponsors</h2>
+              <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">Our Sponsors</h2>
 
               <div
                 className="w-full max-w-6xl overflow-hidden"
@@ -2914,7 +2943,7 @@ export default function IntroSequence() {
                 </div>
 
                 <div className="flex flex-col gap-3 md:gap-4">
-                  <h2 className="font-heading text-xl font-bold text-navy sm:text-4xl">See the World Differently</h2>
+                  <h2 className="font-heading text-2xl font-bold text-navy sm:text-4xl">See the World Together</h2>
 
                   <div className="flex gap-2">
                     {(["volunteer", "donate", "csr"] as const).map((tab) => (
@@ -3062,7 +3091,7 @@ export default function IntroSequence() {
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 md:gap-4">
             <h2
               ref={stage10HeadingRef}
-              className="text-center font-heading text-xl font-bold text-navy opacity-0 sm:text-4xl"
+              className="text-center font-heading text-2xl font-bold text-navy opacity-0 sm:text-4xl"
             >
               Aligned with the UN Sustainable Development Goals
             </h2>

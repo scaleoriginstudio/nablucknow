@@ -28,6 +28,7 @@ const KEYWORDS = [
   "CSR partner NGO",
   "corporate social responsibility disability inclusion",
   "blind welfare NGO Uttar Pradesh",
+  "inclusive education for visually impaired children",
   "visually impaired education India",
   "donate to blind welfare NGO",
 ];
