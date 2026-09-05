@@ -105,7 +105,7 @@ function Split({
         <div className="flex flex-col gap-4 p-6 md:p-9">
           <div className="flex flex-col gap-1.5">
             {eyebrow && (
-              <span className="font-heading text-[11px] font-bold uppercase tracking-wide text-orange">{eyebrow}</span>
+              <span className="font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-orange">{eyebrow}</span>
             )}
             <h2 id={headingId} className="font-heading text-2xl font-bold leading-tight text-navy sm:text-3xl">
               {title}

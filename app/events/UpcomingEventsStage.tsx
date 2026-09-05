@@ -78,7 +78,7 @@ function EventCard({ event }: { event: UpcomingEvent }) {
           <Image src={event.image} alt="" width={400} height={200} className="h-full w-full object-cover" />
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-2 sm:p-4">
-          <div className="hidden items-center gap-2 font-body text-[11px] font-semibold uppercase tracking-wide text-orange sm:flex">
+          <div className="hidden items-center gap-2 font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-orange sm:flex">
             <span>{event.eventCategory}</span>
             <span className="text-black/30">·</span>
             <span>{event.mode}</span>

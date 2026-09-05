@@ -129,13 +129,23 @@ export function StagePager({
     };
 
     // A scroll gesture that starts inside a form/list that is actually
-    // overflowing right now (marked data-stage-scroll) must scroll that,
-    // not step the stage.
-    const inScrollableRegion = (target: EventTarget | null) => {
-      if (!(target instanceof Element)) return false;
+    // overflowing right now (marked data-stage-scroll) must scroll that
+    // instead of stepping the stage — but only while it still has room to
+    // move in the gesture's own direction. Without the boundary check,
+    // once inside a scrollable panel a wheel/swipe could never step to
+    // another stage again, even after reaching the top or bottom of it.
+    const inScrollableRegion = (target: EventTarget | null): HTMLElement | null => {
+      if (!(target instanceof Element)) return null;
       const el = target.closest<HTMLElement>("[data-stage-scroll]");
-      if (!el) return false;
-      return el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1;
+      if (!el) return null;
+      const scrolls = el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1;
+      return scrolls ? el : null;
+    };
+
+    const scrollableHasRoom = (el: HTMLElement, dir: 1 | -1) => {
+      const max = el.scrollHeight - el.clientHeight;
+      if (max <= 1) return false;
+      return dir > 0 ? el.scrollTop < max - 1 : el.scrollTop > 1;
     };
 
     // A card's sign-up dialog (portalled to <body>, role="dialog") must
@@ -160,10 +170,12 @@ export function StagePager({
 
     const onWheel = (event: WheelEvent) => {
       if (overlayOpenRef.current) return;
-      if (inScrollableRegion(event.target)) return;
       if (Math.abs(event.deltaY) < 10) return;
+      const dir = event.deltaY > 0 ? 1 : -1;
+      const scrollEl = inScrollableRegion(event.target);
+      if (scrollEl && scrollableHasRoom(scrollEl, dir)) return;
       event.preventDefault();
-      gatedStep(event.deltaY > 0 ? 1 : -1);
+      gatedStep(dir);
     };
     const onKeyDown = (event: KeyboardEvent) => {
       if (overlayOpenRef.current) return;
@@ -177,16 +189,27 @@ export function StagePager({
       }
     };
     let touchStartY = 0;
-    let touchInScroll = false;
+    let touchScrollEl: HTMLElement | null = null;
+    // Captured once, at the moment the finger lands — not re-checked at
+    // touchend, where the native scroll this same gesture just caused would
+    // otherwise make it look like the boundary was always there.
+    let touchAtTop = false;
+    let touchAtBottom = false;
     const onTouchStart = (event: TouchEvent) => {
       touchStartY = event.touches[0]?.clientY ?? 0;
-      touchInScroll = inScrollableRegion(event.target);
+      touchScrollEl = inScrollableRegion(event.target);
+      if (touchScrollEl) {
+        const max = touchScrollEl.scrollHeight - touchScrollEl.clientHeight;
+        touchAtTop = touchScrollEl.scrollTop <= 1;
+        touchAtBottom = touchScrollEl.scrollTop >= max - 1;
+      }
     };
     const onTouchEnd = (event: TouchEvent) => {
-      if (touchInScroll) return;
       const dy = touchStartY - (event.changedTouches[0]?.clientY ?? 0);
       if (Math.abs(dy) < 40) return;
-      gatedStep(dy > 0 ? 1 : -1);
+      const dir = dy > 0 ? 1 : -1;
+      if (touchScrollEl && (dir > 0 ? !touchAtBottom : !touchAtTop)) return;
+      gatedStep(dir);
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });

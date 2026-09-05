@@ -9,7 +9,7 @@ import { submitLead } from "../lib/forms";
 const MAPS_HREF = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(FOOTER_CONTACT.address)}`;
 
 const fieldClass = FIELD_CLASS;
-const labelClass = "font-heading text-[11px] font-semibold uppercase tracking-wide text-black/55";
+const labelClass = "font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-black/55";
 
 export function ContactStage() {
   const [sent, setSent] = useState(false);

@@ -63,7 +63,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <Link href="/blog" className="font-heading text-xs font-semibold text-navy hover:underline">
           ← Back to Blog
         </Link>
-        <p className="mt-6 font-body text-xs font-semibold uppercase tracking-wide text-orange">
+        <p className="mt-6 font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-orange">
           {post.section}
           {post.eventCategory ? ` · ${post.eventCategory}` : ""}
         </p>

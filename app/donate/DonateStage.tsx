@@ -51,7 +51,7 @@ export function DonateStage() {
         }}
         extra={
           <div className="flex flex-col gap-1.5">
-            <span className="font-heading text-[11px] font-semibold uppercase tracking-wide text-black/55">Amount</span>
+            <span className="font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-black/55">Amount</span>
             <div className="grid grid-cols-4 gap-2">
               {DONATION_AMOUNTS.map((value) => (
                 <button

@@ -143,18 +143,21 @@ const TESTIMONIALS = [
       "My daughter came to NAB unable to read a single word. Two years later, she reads Braille faster than I read print. I don't have words for what this place has given us.",
     name: "Parent of a student",
     role: "Lucknow",
+    image: "/img/placeholders/testimonial-parent.jpg",
   },
   {
     quote:
       "The training gave me a skill and then a job. More than that, it gave me back my independence.",
     name: "Programme graduate",
     role: "Vocational training, 2022 batch",
+    image: "/img/placeholders/testimonial-graduate.jpg",
   },
   {
     quote:
       "I have supported many causes. Few show you as plainly where the money goes and what it changes.",
     name: "Long-time donor",
     role: "Supporter since 2019",
+    image: "/img/placeholders/testimonial-donor.jpg",
   },
 ];
 // Official UN SDG brand colours, limited to the goals NAB's work maps to
@@ -197,7 +200,7 @@ type Stage = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
 
 function StageStepper({ active, onSelect }: { active: number; onSelect?: (n: number) => void }) {
   return (
-    <div className="flex w-full items-baseline justify-center gap-2.5 font-body sm:gap-6">
+    <div className="flex w-full items-baseline justify-center gap-4 font-body sm:gap-6">
       {Array.from({ length: TOTAL_STAGES }, (_, i) => i + 1).map((n) => (
         <button
           key={n}
@@ -210,8 +213,8 @@ function StageStepper({ active, onSelect }: { active: number; onSelect?: (n: num
             style={{ transition: "color 500ms ease-out, font-size 500ms ease-out" }}
             className={
               n === active
-                ? "text-xl font-bold text-navy sm:text-4xl"
-                : "text-xs font-semibold text-black/25 sm:text-lg"
+                ? "text-2xl font-bold text-navy sm:text-4xl"
+                : "text-sm font-semibold text-black/25 sm:text-lg"
             }
           >
             {String(n).padStart(2, "0")}
@@ -1760,21 +1763,33 @@ export default function IntroSequence() {
 
     // A gesture that begins inside something that is actually scrolling on
     // its own right now (marked data-stage-scroll and currently overflowing
-    // — the CTA form on a phone, the sponsor row) scrolls that, and must
-    // not also step the stage.
-    const inScrollableRegion = (target: EventTarget | null) => {
-      if (!(target instanceof Element)) return false;
+    // — the CTA form on a phone, the sponsor row) scrolls that instead of
+    // stepping the stage — but only while it still has room to move in the
+    // gesture's own direction. Without the boundary check, once inside a
+    // scrollable panel a wheel/swipe could never step to another segment
+    // again, even after reaching the very top or bottom of it.
+    const inScrollableRegion = (target: EventTarget | null): HTMLElement | null => {
+      if (!(target instanceof Element)) return null;
       const el = target.closest<HTMLElement>("[data-stage-scroll]");
-      if (!el) return false;
-      return el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1;
+      if (!el) return null;
+      const scrolls = el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1;
+      return scrolls ? el : null;
+    };
+
+    const scrollableHasRoom = (el: HTMLElement, dir: 1 | -1) => {
+      const max = el.scrollHeight - el.clientHeight;
+      if (max <= 1) return false;
+      return dir > 0 ? el.scrollTop < max - 1 : el.scrollTop > 1;
     };
 
     const onWheel = (event: WheelEvent) => {
       if (!introSettledRef.current) return;
-      if (inScrollableRegion(event.target)) return;
       if (Math.abs(event.deltaY) < 10) return;
+      const dir = event.deltaY > 0 ? 1 : -1;
+      const scrollEl = inScrollableRegion(event.target);
+      if (scrollEl && scrollableHasRoom(scrollEl, dir)) return;
       event.preventDefault();
-      gatedStep(event.deltaY > 0 ? 1 : -1);
+      gatedStep(dir);
     };
 
     const onKeyDown = (event: globalThis.KeyboardEvent) => {
@@ -1789,17 +1804,30 @@ export default function IntroSequence() {
     };
 
     let touchStartY = 0;
-    let touchInScroll = false;
+    let touchScrollEl: HTMLElement | null = null;
+    // Captured once, at the moment the finger lands — not re-checked at
+    // touchend, where the native scroll this same gesture just caused would
+    // otherwise make it look like the boundary was always there.
+    let touchAtTop = false;
+    let touchAtBottom = false;
     const onTouchStart = (event: TouchEvent) => {
       touchStartY = event.touches[0]?.clientY ?? 0;
-      touchInScroll = inScrollableRegion(event.target);
+      touchScrollEl = inScrollableRegion(event.target);
+      if (touchScrollEl) {
+        const max = touchScrollEl.scrollHeight - touchScrollEl.clientHeight;
+        touchAtTop = touchScrollEl.scrollTop <= 1;
+        touchAtBottom = touchScrollEl.scrollTop >= max - 1;
+      }
     };
     const onTouchEnd = (event: TouchEvent) => {
       if (!introSettledRef.current) return;
-      if (touchInScroll) return;
       const dy = touchStartY - (event.changedTouches[0]?.clientY ?? 0);
       if (Math.abs(dy) < 40) return;
-      gatedStep(dy > 0 ? 1 : -1);
+      const dir = dy > 0 ? 1 : -1;
+      // The scrollable panel already had room to move this way before this
+      // gesture started, so the gesture was for that, not for stepping.
+      if (touchScrollEl && (dir > 0 ? !touchAtBottom : !touchAtTop)) return;
+      gatedStep(dir);
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
@@ -2499,7 +2527,7 @@ export default function IntroSequence() {
             <div ref={stage3VisionRef} className="flex flex-col gap-5 opacity-0 md:gap-5">
               <h3
                 ref={stage3HeadlineRef}
-                className="font-heading text-xs font-bold uppercase tracking-[0.22em] text-white/55 opacity-0 sm:text-sm"
+                className="font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-white/55 opacity-0"
               >
                 Our Vision
               </h3>
@@ -2516,9 +2544,9 @@ export default function IntroSequence() {
                       ref={(el) => {
                         stage3PointIconRefs.current[i] = el;
                       }}
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange/15 text-orange ring-1 ring-orange/30 md:mt-0.5 md:h-9 md:w-9"
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange ring-1 ring-orange/30 md:mt-0.5 md:h-9 md:w-9"
                     >
-                      <Icon name={point.icon} size={20} />
+                      <Icon name={point.icon} size={20} className="text-white" />
                     </span>
                     <p className="mt-1 font-body text-sm leading-6 text-white/85 md:mt-0 md:text-base md:leading-7">
                       {point.text}
@@ -2532,7 +2560,7 @@ export default function IntroSequence() {
               ref={stage3MissionRef}
               className="mt-2 flex flex-col gap-3 border-t border-white/15 pt-6 opacity-0 md:mt-0 md:border-0 md:pt-9"
             >
-              <h3 className="font-heading text-xs font-bold uppercase tracking-[0.22em] text-white/55 sm:text-sm">
+              <h3 className="font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
                 Our Mission
               </h3>
               <p className="font-body text-lg leading-8 text-white md:text-2xl md:leading-10">
@@ -2929,7 +2957,20 @@ export default function IntroSequence() {
             <div
               ref={stage8CtaBlockRef}
               data-stage-scroll=""
-              className="absolute inset-0 flex flex-col items-center justify-start gap-6 overflow-y-auto overscroll-contain px-8 pb-10 pt-20 opacity-0 pointer-events-none md:justify-center md:overflow-hidden md:pb-0 md:pt-28"
+              // top-20/md:top-28 (not pt-20 inside an inset-0 box): the
+              // clearance below the number-line stepper has to be outside
+              // this box's own scroll-clipped area, or scrolling the CTA
+              // form drags that padding away and lets the form's own
+              // content pass behind the stepper as it scrolls past.
+              // overflow-hidden while inactive, not just invisible: this
+              // form is taller than the viewport by design, and staying
+              // overflow-y-auto at rest let its scrollbar render (styled,
+              // per the site-wide scrollbar rule) underneath stages 1/2
+              // even though the box itself was faded out.
+              className={
+                "absolute inset-x-0 bottom-0 top-20 flex flex-col items-center justify-start gap-6 overscroll-contain px-8 pb-10 opacity-0 pointer-events-none md:top-28 md:justify-center md:pb-0 " +
+                (activeStage === 8 ? "overflow-y-auto md:overflow-hidden" : "overflow-hidden")
+              }
             >
               <div className="grid w-full max-w-5xl items-center gap-4 md:gap-10 md:grid-cols-[1fr_1.3fr]">
                 <div
@@ -2969,7 +3010,7 @@ export default function IntroSequence() {
                         formType="Donate"
                         extra={
                           <div className="flex flex-col gap-1.5">
-                            <span className="font-heading text-[11px] font-semibold uppercase tracking-wide text-black/55">
+                            <span className="font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-black/55">
                               Amount
                             </span>
                             <div className="grid grid-cols-4 gap-2">
@@ -3063,9 +3104,14 @@ export default function IntroSequence() {
                   <p className="font-body text-xs leading-5 text-black/80 italic md:-mt-4 md:text-sm md:leading-6">
                     {testimonial.quote}
                   </p>
-                  <div className="mt-auto">
-                    <p className="font-heading text-sm font-bold text-navy">{testimonial.name}</p>
-                    <p className="font-body text-xs text-black/50">{testimonial.role}</p>
+                  <div className="mt-auto flex items-center gap-3">
+                    <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full">
+                      <Image src={testimonial.image} alt="" fill sizes="40px" className="object-cover" />
+                    </div>
+                    <div>
+                      <p className="font-heading text-sm font-bold text-navy">{testimonial.name}</p>
+                      <p className="font-body text-xs text-black/50">{testimonial.role}</p>
+                    </div>
                   </div>
                 </div>
               ))}

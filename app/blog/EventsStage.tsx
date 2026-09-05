@@ -51,7 +51,7 @@ export function EventsStage() {
                 />
               </div>
               <div className="flex flex-1 flex-col gap-1.5 p-4">
-                <span className="font-heading text-[10px] font-bold uppercase tracking-wide text-orange">
+                <span className="font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-orange">
                   {post.section}
                   {post.eventCategory ? ` · ${post.eventCategory}` : ""}
                 </span>

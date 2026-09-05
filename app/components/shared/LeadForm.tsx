@@ -17,7 +17,7 @@ export type LeadSelect = {
 
 const fieldClass = FIELD_CLASS;
 
-const labelClass = "font-heading text-[11px] font-semibold uppercase tracking-wide text-black/55";
+const labelClass = "font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-black/55";
 
 /** The one form used everywhere the site collects a lead: name, number,
     email and organisation, plus an optional context selector (which

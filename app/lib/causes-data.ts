@@ -8,36 +8,25 @@ export type Cause = {
 };
 
 // TODO(nab): confirm the real goal and raised figures for each cause with
-// the organisation. "Office Infrastructure" and "White Cane Distribution"
-// currently share an identical 1,50,00,000 goal, which looks like a
-// placeholder pasted twice rather than two independently-set targets.
+// the organisation — both targets below are placeholders pending sign-off.
 export const CAUSES: Cause[] = [
   {
-    slug: "office-infra",
-    image: "/img/nab/cover-page.jpg",
-    title: "Office Infrastructure",
+    slug: "inclusive-school",
+    image: "/img/nab/bani.jpg",
+    title: "Build an Inclusive School for Visually Impaired Students",
     description:
-      "We need to relocate to a larger space to accommodate our growing team and programmes, with proper accessible classrooms, training rooms, and counselling spaces.",
-    goalAmount: 15000000,
-    raisedAmount: 4200000,
+      "A dedicated campus with accessible classrooms, hostel space, and braille-equipped learning areas — a school built around our students from the ground up, not retrofitted for them after the fact.",
+    goalAmount: 20000000,
+    raisedAmount: 3500000,
   },
   {
-    slug: "audiobooks",
-    image: "/img/nab/computer.jpg",
-    title: "Audiobook Library",
+    slug: "life-skills-workshops",
+    image: "/img/nab/vocational.jpg",
+    title: "Workshops on Life Skills and Home Sciences for Visually Impaired Students",
     description:
-      "Help us record an audiobook library for visually impaired individuals. Every session is paid work for our readers, and every recording stays free for our students.",
-    goalAmount: 100000,
-    raisedAmount: 62000,
-  },
-  {
-    slug: "white-cane",
-    image: "/img/nab/eye-checkup.jpg",
-    title: "White Cane Distribution",
-    description:
-      "We source and distribute white canes to our visually impaired beneficiaries at no cost to them, so mobility never depends on ability to pay.",
-    goalAmount: 15000000,
-    raisedAmount: 950000,
+      "Hands-on sessions in cooking, personal care, and household management, so independence at home comes as naturally as independence at school or work.",
+    goalAmount: 500000,
+    raisedAmount: 180000,
   },
 ];
 
