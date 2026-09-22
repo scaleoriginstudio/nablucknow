@@ -5,6 +5,26 @@ import { submitLead, type LeadPayload } from "../../lib/forms";
 import { FIELD_CLASS } from "./constants";
 import { Icon } from "./Icon";
 import { Select } from "./Select";
+import { useLanguage } from "./LanguageContext";
+
+const DEFAULT_SUBMIT_LABEL = { en: "Submit", hi: "सबमिट करें" };
+const SENDING_LABEL = { en: "Sending...", hi: "भेजा जा रहा है..." };
+const DEFAULT_SUCCESS_TITLE = { en: "Thank you", hi: "धन्यवाद" };
+const DEFAULT_SUCCESS_BODY = {
+  en: "We have your details and will be in touch shortly.",
+  hi: "हमें आपकी जानकारी मिल गई है, हम जल्द ही आपसे संपर्क करेंगे।",
+};
+const SELECT_REQUIRED_ERROR = { en: "Please make a selection.", hi: "कृपया एक विकल्प चुनें।" };
+const NAME_LABEL = { en: "Name", hi: "नाम" };
+const NAME_PLACEHOLDER = { en: "Full name", hi: "पूरा नाम" };
+const NUMBER_LABEL = { en: "Number", hi: "नंबर" };
+const EMAIL_LABEL = { en: "Email", hi: "ईमेल" };
+const EMAIL_PLACEHOLDER = { en: "you@email.com", hi: "you@email.com" };
+const ORGANISATION_LABEL = { en: "Organisation", hi: "संस्था" };
+const ORGANISATION_PLACEHOLDER = {
+  en: 'Company, school, or "Individual"',
+  hi: 'कंपनी, स्कूल, या "व्यक्तिगत"',
+};
 
 export type LeadSelect = {
   /** Key the value is stored under in the sheet. */
@@ -31,10 +51,10 @@ export function LeadForm({
   extra,
   extraPayload,
   feeNote,
-  submitLabel = "Submit",
+  submitLabel,
   disabled = false,
-  successTitle = "Thank you",
-  successBody = "We have your details and will be in touch shortly.",
+  successTitle,
+  successBody,
   onSubmitted,
 }: {
   formType: string;
@@ -51,6 +71,10 @@ export function LeadForm({
   const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [selectError, setSelectError] = useState<string | undefined>(undefined);
+  const { t } = useLanguage();
+  const resolvedSubmitLabel = submitLabel ?? t(DEFAULT_SUBMIT_LABEL);
+  const resolvedSuccessTitle = successTitle ?? t(DEFAULT_SUCCESS_TITLE);
+  const resolvedSuccessBody = successBody ?? t(DEFAULT_SUCCESS_BODY);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -59,7 +83,7 @@ export function LeadForm({
     // lean on the browser's own required-field validation — check it here
     // instead, the same way a failed field reads anywhere else on the site.
     if (select && !select.value) {
-      setSelectError("Please make a selection.");
+      setSelectError(t(SELECT_REQUIRED_ERROR));
       return;
     }
     const form = event.currentTarget;
@@ -88,8 +112,8 @@ export function LeadForm({
           <Icon name="check" size={16} weight={500} />
         </span>
         <div>
-          <p className="font-heading text-sm font-bold text-navy">{successTitle}</p>
-          <p className="mt-1 font-body text-sm leading-6 text-black/70">{successBody}</p>
+          <p className="font-heading text-sm font-bold text-navy">{resolvedSuccessTitle}</p>
+          <p className="mt-1 font-body text-sm leading-6 text-black/70">{resolvedSuccessBody}</p>
         </div>
       </div>
     );
@@ -116,11 +140,11 @@ export function LeadForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="flex flex-col gap-1">
-          <span className={labelClass}>Name</span>
-          <input required name="name" type="text" autoComplete="name" placeholder="Full name" className={fieldClass} />
+          <span className={labelClass}>{t(NAME_LABEL)}</span>
+          <input required name="name" type="text" autoComplete="name" placeholder={t(NAME_PLACEHOLDER)} className={fieldClass} />
         </label>
         <label className="flex flex-col gap-1">
-          <span className={labelClass}>Number</span>
+          <span className={labelClass}>{t(NUMBER_LABEL)}</span>
           <input
             required
             name="number"
@@ -131,24 +155,24 @@ export function LeadForm({
           />
         </label>
         <label className="flex flex-col gap-1">
-          <span className={labelClass}>Email</span>
+          <span className={labelClass}>{t(EMAIL_LABEL)}</span>
           <input
             required
             name="email"
             type="email"
             autoComplete="email"
-            placeholder="you@email.com"
+            placeholder={t(EMAIL_PLACEHOLDER)}
             className={fieldClass}
           />
         </label>
         <label className="flex flex-col gap-1">
-          <span className={labelClass}>Organisation</span>
+          <span className={labelClass}>{t(ORGANISATION_LABEL)}</span>
           <input
             required
             name="organisation"
             type="text"
             autoComplete="organization"
-            placeholder='Company, school, or "Individual"'
+            placeholder={t(ORGANISATION_PLACEHOLDER)}
             className={fieldClass}
           />
         </label>
@@ -163,7 +187,7 @@ export function LeadForm({
         disabled={disabled || busy}
         className="mt-2 inline-flex items-center justify-center gap-2 self-start rounded-full bg-orange px-7 py-2.5 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {busy ? "Sending..." : submitLabel}
+        {busy ? t(SENDING_LABEL) : resolvedSubmitLabel}
       </button>
     </form>
   );

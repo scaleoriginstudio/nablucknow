@@ -3,7 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { NAV_LINKS } from "./constants";
+import { NAV_LINKS, VOLUNTEER_LABEL, DONATE_LABEL } from "./constants";
+import { LanguageToggle } from "./LanguageToggle";
+import { useLanguage } from "./LanguageContext";
+
+const OPEN_MENU_LABEL = { en: "Open menu", hi: "मेनू खोलें" };
+const CLOSE_MENU_LABEL = { en: "Close menu", hi: "मेनू बंद करें" };
+const PRIMARY_NAV_LABEL = { en: "Primary", hi: "मुख्य नेविगेशन" };
 
 /** Hamburger toggle + dropdown panel shown below `lg`, where the full inline
     nav + Volunteer/Donate buttons no longer fit next to the logo. Rendered
@@ -12,6 +18,7 @@ export function MobileNav() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const close = () => setOpen(false);
+  const { t } = useLanguage();
 
   return (
     <>
@@ -20,7 +27,7 @@ export function MobileNav() {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-controls="mobile-nav-panel"
-        aria-label={open ? "Close menu" : "Open menu"}
+        aria-label={t(open ? CLOSE_MENU_LABEL : OPEN_MENU_LABEL)}
         className="z-40 flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-md ring-1 ring-black/10 lg:hidden"
       >
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#23398D" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
@@ -45,12 +52,12 @@ export function MobileNav() {
           style={{ position: "fixed", top: 96, left: 0, width: "100vw" }}
           className="z-30 flex flex-col gap-6 border-t border-black/10 bg-white px-8 py-6 shadow-lg lg:hidden"
         >
-          <nav aria-label="Primary" className="flex flex-col gap-5">
+          <nav aria-label={t(PRIMARY_NAV_LABEL)} className="flex flex-col gap-5">
             {NAV_LINKS.map((link) => {
               const isCurrent = link.href === "/" ? pathname === "/" : pathname?.startsWith(link.href);
               return (
                 <Link
-                  key={link.label}
+                  key={link.href}
                   href={link.href}
                   onClick={close}
                   aria-current={isCurrent ? "page" : undefined}
@@ -59,25 +66,26 @@ export function MobileNav() {
                     (isCurrent ? " text-navy underline decoration-orange decoration-2 underline-offset-4" : "")
                   }
                 >
-                  {link.label}
+                  {t(link.label)}
                 </Link>
               );
             })}
           </nav>
           <div className="flex flex-col gap-3">
+            <LanguageToggle className="text-center" />
             <Link
               href="/volunteer"
               onClick={close}
               className="rounded-full border border-navy px-5 py-2 text-center font-heading text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-white"
             >
-              Volunteer
+              {t(VOLUNTEER_LABEL)}
             </Link>
             <Link
               href="/donate"
               onClick={close}
               className="rounded-full bg-orange px-5 py-2 text-center font-heading text-sm font-semibold text-white transition-colors hover:bg-navy"
             >
-              Donate
+              {t(DONATE_LABEL)}
             </Link>
           </div>
         </div>

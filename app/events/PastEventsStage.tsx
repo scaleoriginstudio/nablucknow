@@ -6,6 +6,7 @@ import Link from "next/link";
 import { POSTS } from "../lib/posts-data";
 import { StageIntro } from "../components/shared/StageIntro";
 import { Icon } from "../components/shared/Icon";
+import { useLanguage, type Bilingual, type Lang } from "../components/shared/LanguageContext";
 
 const PAST_EVENTS = POSTS.filter((post) => post.section === "Events").sort(
   (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
@@ -13,6 +14,27 @@ const PAST_EVENTS = POSTS.filter((post) => post.section === "Events").sort(
 
 const CATEGORY_FILTERS = ["All", "Programs", "Fundraiser & Awareness"] as const;
 const MODE_FILTERS = ["All", "Online", "Offline"] as const;
+
+const CATEGORY_LABELS: Record<(typeof CATEGORY_FILTERS)[number], Bilingual> = {
+  All: { en: "All", hi: "सभी" },
+  Programs: { en: "Programs", hi: "प्रोग्राम" },
+  "Fundraiser & Awareness": { en: "Fundraiser & Awareness", hi: "फंडरेज़र और जागरूकता" },
+};
+
+const MODE_LABELS: Record<(typeof MODE_FILTERS)[number], Bilingual> = {
+  All: { en: "All", hi: "सभी" },
+  Online: { en: "Online", hi: "ऑनलाइन" },
+  Offline: { en: "Offline", hi: "ऑफलाइन" },
+};
+
+const COPY = {
+  title: { en: "Past Events", hi: "बीते कार्यक्रम" },
+  noMatch: { en: "No past events match these filters.", hi: "इन फ़िल्टर से कोई बीता कार्यक्रम नहीं मिला।" },
+};
+
+function formatDate(iso: string, lang: Lang) {
+  return new Date(iso).toLocaleDateString(lang === "hi" ? "hi-IN" : "en-IN", { month: "long" });
+}
 
 function Chip({
   active,
@@ -38,6 +60,7 @@ function Chip({
 }
 
 export function PastEventsStage() {
+  const { t, lang } = useLanguage();
   const [category, setCategory] = useState<(typeof CATEGORY_FILTERS)[number]>("All");
   const [mode, setMode] = useState<(typeof MODE_FILTERS)[number]>("All");
 
@@ -72,18 +95,18 @@ export function PastEventsStage() {
     <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-start gap-4">
       <StageIntro
         headingLevel="h2"
-        title="Past Events"
+        title={t(COPY.title)}
         trailing={
           <>
             {CATEGORY_FILTERS.map((c) => (
               <Chip key={c} active={category === c} onClick={() => setCategory(c)}>
-                {c}
+                {t(CATEGORY_LABELS[c])}
               </Chip>
             ))}
             <span className="mx-1 hidden text-black/20 sm:inline">|</span>
             {MODE_FILTERS.map((m) => (
               <Chip key={m} active={mode === m} onClick={() => setMode(m)}>
-                {m}
+                {t(MODE_LABELS[m])}
               </Chip>
             ))}
           </>
@@ -91,7 +114,7 @@ export function PastEventsStage() {
       />
 
       {years.length === 0 ? (
-        <p className="text-center font-body text-sm text-black/50">No past events match these filters.</p>
+        <p className="text-center font-body text-sm text-black/50">{t(COPY.noMatch)}</p>
       ) : (
         <>
           <div className="flex flex-wrap justify-center gap-2">
@@ -104,7 +127,7 @@ export function PastEventsStage() {
           <div className="flex flex-wrap justify-center gap-2">
             {monthsInYear.map((m) => (
               <Chip key={m} active={activeMonth === m} onClick={() => setMonth(m)}>
-                {new Date(`${m}-01`).toLocaleDateString("en-IN", { month: "long" })}
+                {formatDate(`${m}-01`, lang)}
               </Chip>
             ))}
           </div>
@@ -121,9 +144,9 @@ export function PastEventsStage() {
                 </div>
                 <div className="flex flex-col gap-1 p-3">
                   <h3 className="font-heading text-sm font-bold leading-tight text-navy group-hover:text-orange">
-                    {post.title}
+                    {t(post.title)}
                   </h3>
-                  <p className="font-body text-xs leading-5 text-black/60">{post.excerpt}</p>
+                  <p className="font-body text-xs leading-5 text-black/60">{t(post.excerpt)}</p>
                   {post.location && (
                     <p className="mt-0.5 flex items-center gap-1 font-body text-[11px] text-black/50">
                       <Icon name="location_on" size={12} className="shrink-0 text-black/40" />

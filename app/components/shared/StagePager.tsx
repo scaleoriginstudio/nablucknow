@@ -6,11 +6,23 @@ import Link from "next/link";
 import gsap from "gsap";
 import { usePathname } from "next/navigation";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
-import { HEADER_HEIGHT, NAV_LINKS } from "./constants";
+import { HEADER_HEIGHT, NAV_LINKS, VOLUNTEER_LABEL, DONATE_LABEL } from "./constants";
 import { Footer } from "./Footer";
 import { MobileNav } from "./MobileNav";
+import { LanguageToggle } from "./LanguageToggle";
+import { useLanguage } from "./LanguageContext";
 import { useOverlay } from "./OverlayContext";
 import { StageActiveProvider } from "./StageIntro";
+
+const SKIP_TO_CONTENT_LABEL = { en: "Skip to content", hi: "सामग्री पर जाएं" };
+const PRIMARY_NAV_LABEL = { en: "Primary", hi: "मुख्य नेविगेशन" };
+const GO_TO_HOMEPAGE_LABEL = { en: "Go to homepage", hi: "होमपेज पर जाएं" };
+const GO_TO_STEP_LABEL = (n: number) => ({ en: `Go to step ${n}`, hi: `चरण ${n} पर जाएं` });
+const STEP_ANNOUNCE_LABEL = (n: number, total: number) => ({
+  en: `Step ${n} of ${total}`,
+  hi: `चरण ${n} का ${total}`,
+});
+const FOOTER_ANNOUNCE_LABEL = { en: "Footer", hi: "फ़ूटर" };
 
 function StageStepper({
   active,
@@ -23,6 +35,7 @@ function StageStepper({
   onSelect: (n: number) => void;
   onDark?: boolean;
 }) {
+  const { t } = useLanguage();
   const activeClass = onDark ? "text-2xl font-bold text-white sm:text-4xl" : "text-2xl font-bold text-navy sm:text-4xl";
   const idleClass = onDark
     ? "text-sm font-semibold text-white/40 sm:text-lg"
@@ -34,7 +47,7 @@ function StageStepper({
           key={n}
           type="button"
           onClick={() => onSelect(n)}
-          aria-label={`Go to step ${n}`}
+          aria-label={t(GO_TO_STEP_LABEL(n))}
           aria-current={n === active ? "step" : undefined}
         >
           <span
@@ -89,6 +102,7 @@ export function StagePager({
   const overlayOpenRef = useRef(false);
   const stageHeadingRefs = useRef<(HTMLElement | null)[]>([]);
   const announceRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     overlayOpenRef.current = open !== null;
@@ -114,11 +128,11 @@ export function StagePager({
         heading?.focus();
         if (announceRef.current) {
           announceRef.current.textContent =
-            next === lastStage ? "Footer" : `Step ${next} of ${total}`;
+            next === lastStage ? t(FOOTER_ANNOUNCE_LABEL) : t(STEP_ANNOUNCE_LABEL(next, total));
         }
       }, dur * 1000);
     },
-    [lastStage, total, dur],
+    [lastStage, total, dur, t],
   );
 
   useEffect(() => {
@@ -303,7 +317,7 @@ export function StagePager({
         href="#main-stage"
         className="fixed left-2 top-2 z-50 -translate-y-16 rounded-md bg-navy px-4 py-2 font-heading text-sm font-semibold text-white transition-transform focus:translate-y-0"
       >
-        Skip to content
+        {t(SKIP_TO_CONTENT_LABEL)}
       </a>
       <div aria-live="polite" className="sr-only" ref={announceRef} />
 
@@ -317,12 +331,12 @@ export function StagePager({
         style={fade(!onFooter)}
         className="fixed inset-x-0 top-0 z-30 flex h-24 items-center justify-end gap-6 bg-white px-5 sm:gap-8 sm:px-8"
       >
-        <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
+        <nav aria-label={t(PRIMARY_NAV_LABEL)} className="hidden items-center gap-7 lg:flex">
           {NAV_LINKS.map((link) => {
             const isCurrent = link.href === "/" ? pathname === "/" : pathname?.startsWith(link.href);
             return (
               <Link
-                key={link.label}
+                key={link.href}
                 href={link.href}
                 aria-current={isCurrent ? "page" : undefined}
                 className={
@@ -330,23 +344,24 @@ export function StagePager({
                   (isCurrent ? " underline decoration-orange decoration-2 underline-offset-4" : "")
                 }
               >
-                {link.label}
+                {t(link.label)}
               </Link>
             );
           })}
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
+          <LanguageToggle />
           <Link
             href="/volunteer"
             className="rounded-full border border-navy px-5 py-2 font-heading text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-white"
           >
-            Volunteer
+            {t(VOLUNTEER_LABEL)}
           </Link>
           <Link
             href="/donate"
             className="rounded-full bg-orange px-5 py-2 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy"
           >
-            Donate
+            {t(DONATE_LABEL)}
           </Link>
         </div>
         <MobileNav />
@@ -359,7 +374,7 @@ export function StagePager({
       <Link
         ref={logoRef}
         href="/"
-        aria-label="Go to homepage"
+        aria-label={t(GO_TO_HOMEPAGE_LABEL)}
         style={{
           position: "fixed",
           top: 8,

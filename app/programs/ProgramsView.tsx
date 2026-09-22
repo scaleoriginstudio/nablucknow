@@ -5,6 +5,7 @@ import Image from "next/image";
 import { LeadForm } from "../components/shared/LeadForm";
 import { Icon } from "../components/shared/Icon";
 import { PROGRAMS } from "./programs-data";
+import { useLanguage } from "../components/shared/LanguageContext";
 
 // A Material Symbol per programme, used on the circular selectors.
 const PROGRAM_ICON: Record<string, string> = {
@@ -13,11 +14,32 @@ const PROGRAM_ICON: Record<string, string> = {
   "walk-for-a-cause": "directions_walk",
 };
 
+function whyTitle(title: string) {
+  return { en: `Why ${title}?`, hi: `${title} क्यों?` };
+}
+
+const COPY = {
+  csrEligible: { en: "CSR eligible", hi: "CSR के लिए पात्र" },
+  bringToTeam: { en: "Bring it to your team", hi: "इसे अपनी टीम तक लाएँ" },
+  bringToTeamSub: {
+    en: "Leave your details and our partnerships team will confirm dates.",
+    hi: "अपनी जानकारी दें, हमारी पार्टनरशिप टीम तारीखें तय करेगी।",
+  },
+  whichProgramme: { en: "Which programme?", hi: "कौन सा प्रोग्राम?" },
+  chooseProgramme: { en: "Choose a programme", hi: "एक प्रोग्राम चुनें" },
+  enquire: { en: "Enquire", hi: "पूछताछ करें" },
+  enquirySuccess: {
+    en: "Thank you. Our partnerships team will reach out to confirm dates and details.",
+    hi: "धन्यवाद। हमारी पार्टनरशिप टीम तारीखें और विवरण तय करने के लिए आपसे संपर्क करेगी।",
+  },
+};
+
 /** The Programs screen, laid out to the notebook wireframe: the active
     programme's name rides the number line, its picture fills a white left
     column (a band on top on phones), the details scroll on the right, and
     a row of circular selectors along the bottom switches between them. */
 export function ProgramsView() {
+  const { t } = useLanguage();
   const [index, setIndex] = useState(0);
   const program = PROGRAMS[index];
 
@@ -28,7 +50,7 @@ export function ProgramsView() {
       <div className="relative shrink-0">
         <div className="h-px w-full bg-black/15" />
         <span className="absolute left-1/2 top-0 max-w-[88vw] -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-center font-heading text-xs font-bold leading-tight text-navy sm:max-w-none sm:px-4 sm:text-base">
-          {program.title}
+          {t(program.title)}
         </span>
       </div>
 
@@ -53,49 +75,51 @@ export function ProgramsView() {
             {program.format} · {program.audience}
           </p>
           <h1 className="mt-1.5 font-heading text-xl font-bold leading-tight text-navy sm:mt-2 sm:text-3xl">
-            Why {program.title}?
+            {t(whyTitle(t(program.title)))}
           </h1>
           <p className="mt-2 font-body text-sm leading-6 text-black/70 sm:mt-3 sm:text-base sm:leading-7">
-            {program.hook}
+            {t(program.hook)}
           </p>
 
           <ul className="mt-3 flex flex-col gap-2 sm:mt-4">
-            {program.highlights.map((point) => (
-              <li key={point} className="flex items-start gap-2 font-body text-sm text-black/75">
+            {program.highlights.map((point, i) => (
+              <li key={i} className="flex items-start gap-2 font-body text-sm text-black/75">
                 <span className="mt-0.5 shrink-0 text-orange">
                   <Icon name="check" size={16} weight={600} />
                 </span>
-                {point}
+                {t(point)}
               </li>
             ))}
           </ul>
 
           <p className="mt-3 font-body text-sm font-semibold text-navy sm:mt-4">
-            {program.contributionAmount} · CSR eligible
+            {program.contributionAmount} · {t(COPY.csrEligible)}
           </p>
 
           <div className="mt-5 border-t border-black/10 pt-5 sm:mt-6 sm:pt-6">
-            <h2 className="font-heading text-lg font-bold text-navy">Bring it to your team</h2>
-            <p className="mt-1 font-body text-sm text-black/60">
-              Leave your details and our partnerships team will confirm dates.
-            </p>
+            <h2 className="font-heading text-lg font-bold text-navy">{t(COPY.bringToTeam)}</h2>
+            <p className="mt-1 font-body text-sm text-black/60">{t(COPY.bringToTeamSub)}</p>
             <div className="mt-4">
               <LeadForm
                 formType="ProgramEnquiry"
                 select={{
                   name: "programme",
-                  label: "Which programme?",
-                  placeholder: "Choose a programme",
-                  options: PROGRAMS.map((p) => p.title),
-                  value: program.title,
+                  label: t(COPY.whichProgramme),
+                  placeholder: t(COPY.chooseProgramme),
+                  options: PROGRAMS.map((p) => t(p.title)),
+                  value: t(program.title),
                   onChange: (v) => {
-                    const i = PROGRAMS.findIndex((p) => p.title === v);
+                    const i = PROGRAMS.findIndex((p) => t(p.title) === v);
                     if (i >= 0) setIndex(i);
                   },
                 }}
-                feeNote={program.impact}
-                submitLabel="Enquire"
-                successBody="Thank you. Our partnerships team will reach out to confirm dates and details."
+                feeNote={t(program.impact)}
+                // Overrides the submitted "programme" field with the stable
+                // slug instead of the select's own (possibly Hindi)
+                // displayed value.
+                extraPayload={{ programme: program.slug }}
+                submitLabel={t(COPY.enquire)}
+                successBody={t(COPY.enquirySuccess)}
               />
             </div>
           </div>
@@ -131,7 +155,7 @@ export function ProgramsView() {
                   (active ? "text-navy" : "text-black/45")
                 }
               >
-                {p.title}
+                {t(p.title)}
               </span>
             </button>
           );

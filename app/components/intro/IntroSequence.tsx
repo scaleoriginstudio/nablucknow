@@ -18,13 +18,15 @@ import { useGSAP } from "@gsap/react";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { SIGHT_STAGES, stageForValue, type SightStage } from "./stages";
-import { NAV_LINKS, VOLUNTEER_AREAS, TAX_EXEMPTION_NOTE } from "../shared/constants";
+import { NAV_LINKS, VOLUNTEER_AREAS, TAX_EXEMPTION_NOTE, VOLUNTEER_LABEL, DONATE_LABEL } from "../shared/constants";
 import { Footer } from "../shared/Footer";
 import { MobileNav } from "../shared/MobileNav";
+import { LanguageToggle } from "../shared/LanguageToggle";
 import { Icon } from "../shared/Icon";
 import { LeadForm } from "../shared/LeadForm";
 import { CAUSES, formatINR } from "../../lib/causes-data";
 import { useOverlay } from "../shared/OverlayContext";
+import { useLanguage, type Bilingual } from "../shared/LanguageContext";
 
 gsap.registerPlugin(Flip);
 
@@ -36,87 +38,183 @@ const TOTAL_STAGES = 10;
 // every step. Keyed by the stage you are currently on; gaps (1, 4, 10) are
 // stages whose successor is the same section or the footer, which has its
 // own arrival animation.
-const NEXT_SECTION_LABEL: Record<number, string> = {
-  2: "Our Vision",
-  3: "Our journey",
-  5: "Our Causes",
-  6: "Meet the Team",
-  7: "Our Sponsors",
-  8: "What People Say",
-  9: "Aligned with the UN Goals",
+const NEXT_SECTION_LABEL: Record<number, Bilingual> = {
+  2: { en: "Our Vision", hi: "हमारा दृष्टिकोण" },
+  3: { en: "Our journey", hi: "हमारी यात्रा" },
+  5: { en: "Our Causes", hi: "हमारे अभियान" },
+  6: { en: "Meet the Team", hi: "हमारी टीम से मिलें" },
+  7: { en: "Our Sponsors", hi: "हमारे प्रायोजक" },
+  8: { en: "What People Say", hi: "लोग क्या कहते हैं" },
+  9: { en: "Aligned with the UN Goals", hi: "संयुक्त राष्ट्र के लक्ष्यों के अनुरूप" },
 };
-const HERO_HEADLINE = "Seeing the world together.";
-const STAGE1_HEADLINE =
-  "National Association for the Blind, State Chapter, Lucknow";
-const STAGE2_PARAGRAPH =
-  "For more than 30 years we have worked with visually impaired people in Lucknow and across Uttar Pradesh, from primary schooling through family counselling to employment. Every programme is built for inclusion, not separation — the aim is a full, ordinary life for every person we support, alongside everyone else, not a lesser version of one apart from them.";
-const STAGE2_STORIES = [
+const HERO_HEADLINE: Bilingual = {
+  en: "Seeing the world together.",
+  hi: "साथ मिलकर दुनिया को देखना।",
+};
+const STAGE1_HEADLINE: Bilingual = {
+  en: "National Association for the Blind, State Chapter, Lucknow",
+  hi: "National Association for the Blind, State Chapter, Lucknow",
+};
+const STAGE1_PARAGRAPH: Bilingual = {
+  en: "For over thirty years we have worked so that losing your sight in Uttar Pradesh need not mean losing your schooling, your work, or your place alongside everyone else — your saath in the world. Every programme we run points at one thing: an inclusive, ordinary, independent life.",
+  hi: "तीस से अधिक वर्षों से हम इसलिए काम कर रहे हैं ताकि उत्तर प्रदेश में किसी की दृष्टि जाने का मतलब उसकी पढ़ाई, काम या बाकी सबके साथ उसकी जगह खोना न हो। हमारा हर प्रोग्राम एक ही बात की ओर इशारा करता है: एक समावेशी, सामान्य और स्वतंत्र ज़िंदगी।",
+};
+const STAGE2_PARAGRAPH: Bilingual = {
+  en: "For more than 30 years we have worked with visually impaired people in Lucknow and across Uttar Pradesh, from primary schooling through family counselling to employment. Every programme is built for inclusion, not separation — the aim is a full, ordinary life for every person we support, alongside everyone else — ek saath — not a lesser version of one apart from them.",
+  hi: "30 से अधिक वर्षों से हम लखनऊ और उत्तर प्रदेश भर में दृष्टिबाधित लोगों के साथ काम कर रहे हैं — प्राथमिक शिक्षा से लेकर पारिवारिक काउंसलिंग और रोज़गार तक। हर प्रोग्राम समावेशन के लिए बनाया गया है, अलगाव के लिए नहीं — मकसद यही है कि हम जिस भी व्यक्ति की मदद करते हैं, उसे बाकी सबके साथ एक पूरी, सामान्य ज़िंदगी मिले, किसी अलग या कमतर ज़िंदगी की बजाय।",
+};
+const STAGE2_STORIES: { word: Bilingual; headline: Bilingual; image: string; href: string }[] = [
   {
-    word: "Educate.",
-    headline: "A child who learns braille at five reads as fast as anyone in the class.",
+    word: { en: "Educate.", hi: "शिक्षा।" },
+    headline: {
+      en: "A child who learns braille at five reads as fast as anyone in the class.",
+      hi: "जो बच्चा पाँच साल की उम्र में ब्रेल सीखना शुरू करता है, वह क्लास में किसी से कम तेज़ नहीं पढ़ पाता।",
+    },
     image: "/img/nab/care.jpg",
     href: "/blog/what-early-education-changes",
   },
   {
-    word: "Empathise.",
-    headline: "Ten minutes with a cane and a blindfold changes how a room thinks about access.",
+    word: { en: "Empathise.", hi: "सहानुभूति।" },
+    headline: {
+      en: "Ten minutes with a cane and a blindfold changes how a room thinks about access.",
+      hi: "छड़ी और आँखों पर पट्टी बांधकर बिताए दस मिनट ही यह बदल देते हैं कि एक कमरा पहुंच के बारे में कैसे सोचता है।",
+    },
     image: "/img/nab/teacher.jpg",
     href: "/blog/white-cane-day-walk-2025",
   },
   {
-    word: "Empower.",
-    headline: "We stay past the training, past the interview, until the first month is behind them.",
+    word: { en: "Empower.", hi: "सशक्तिकरण।" },
+    headline: {
+      en: "We stay past the training, past the interview, until the first month is behind them.",
+      hi: "हम ट्रेनिंग और इंटरव्यू के बाद भी साथ रहते हैं, जब तक नौकरी का पहला महीना पूरा नहीं हो जाता।",
+    },
     image: "/img/nab/vocational.jpg",
     href: "/blog/why-accessible-hiring-matters",
   },
 ];
-const STAGE3_MISSION_TEXT = "Inclusive education, counselling, and training, from childhood to an independent career.";
+const STAGE3_VISION_LABEL: Bilingual = { en: "Our Vision", hi: "हमारा दृष्टिकोण" };
+const STAGE3_MISSION_LABEL: Bilingual = { en: "Our Mission", hi: "हमारा उद्देश्य" };
+const STAGE3_MISSION_TEXT: Bilingual = {
+  en: "Inclusive education, counselling, and training, from childhood to an independent career.",
+  hi: "समावेशी शिक्षा, काउंसलिंग और प्रशिक्षण — बचपन से लेकर एक स्वतंत्र करियर तक।",
+};
 // The vision, told as the five threads of work that carry it. Each icon
 // grows into place as its line flies in (see the stage-3 choreographer).
-const STAGE3_POINTS = [
-  { icon: "school", text: "Free, inclusive primary schooling and braille literacy from the earliest years." },
-  { icon: "diversity_3", text: "Early-intervention and family counselling that steadies the whole household." },
-  { icon: "construction", text: "Hands-on vocational training in a trade that leads somewhere real." },
-  { icon: "work", text: "Job placement and on-the-job support into independent careers." },
-  { icon: "handshake", text: "CSR and community partnerships that fund and scale every programme." },
+const STAGE3_POINTS: { icon: string; text: Bilingual }[] = [
+  {
+    icon: "school",
+    text: {
+      en: "Free, inclusive primary schooling and braille literacy from the earliest years.",
+      hi: "शुरुआती वर्षों से ही मुफ़्त, समावेशी प्राथमिक शिक्षा और ब्रेल साक्षरता।",
+    },
+  },
+  {
+    icon: "diversity_3",
+    text: {
+      en: "Early-intervention and family counselling that steadies the whole household.",
+      hi: "समय पर हस्तक्षेप और पारिवारिक काउंसलिंग, जो पूरे परिवार को संभालती है।",
+    },
+  },
+  {
+    icon: "construction",
+    text: {
+      en: "Hands-on vocational training in a trade that leads somewhere real.",
+      hi: "एक ऐसे हुनर में व्यावहारिक वोकेशनल ट्रेनिंग, जो वाकई किसी मुकाम तक ले जाए।",
+    },
+  },
+  {
+    icon: "work",
+    text: {
+      en: "Job placement and on-the-job support into independent careers.",
+      hi: "नौकरी दिलाना और काम के दौरान सहयोग, ताकि करियर स्वतंत्र रूप से आगे बढ़े।",
+    },
+  },
+  {
+    icon: "handshake",
+    text: {
+      en: "CSR and community partnerships that fund and scale every programme.",
+      hi: "CSR और सामुदायिक भागीदारियां, जो हर प्रोग्राम को फंड और बड़ा करती हैं।",
+    },
+  },
 ];
-const JOURNEY_ENTRIES = [
-  { year: "1997", text: "National Association for the Blind, State Chapter, Lucknow, is founded to serve visually impaired individuals across Uttar Pradesh." },
-  { year: "2005", text: "Our first residential school opens, offering free primary education to visually impaired children." },
-  { year: "2014", text: "A vocational training and employment support programme launches, placing graduates in corporate and government roles." },
-  { year: "2023", text: "Family counselling and early-intervention services expand to reach families across the state." },
+const JOURNEY_HEADING_LABEL: Bilingual = { en: "Our journey", hi: "हमारी यात्रा" };
+const JOURNEY_QUANTIFIED_WORD: Bilingual = { en: "quantified", hi: "आंकड़ों में" };
+const JOURNEY_ENTRIES: { year: string; text: Bilingual }[] = [
+  {
+    year: "1997",
+    text: {
+      en: "National Association for the Blind, State Chapter, Lucknow, is founded to serve visually impaired individuals across Uttar Pradesh.",
+      hi: "नेशनल एसोसिएशन फॉर द ब्लाइंड, स्टेट चैप्टर, लखनऊ की स्थापना उत्तर प्रदेश भर के दृष्टिबाधित लोगों की सेवा के लिए की गई।",
+    },
+  },
+  {
+    year: "2005",
+    text: {
+      en: "Our first residential school opens, offering free primary education to visually impaired children.",
+      hi: "हमारा पहला आवासीय स्कूल शुरू हुआ, जो दृष्टिबाधित बच्चों को मुफ़्त प्राथमिक शिक्षा देता है।",
+    },
+  },
+  {
+    year: "2014",
+    text: {
+      en: "A vocational training and employment support programme launches, placing graduates in corporate and government roles.",
+      hi: "एक वोकेशनल ट्रेनिंग और रोज़गार सहायता प्रोग्राम शुरू हुआ, जिसने स्नातकों को कॉर्पोरेट और सरकारी नौकरियों में जगह दिलाई।",
+    },
+  },
+  {
+    year: "2023",
+    text: {
+      en: "Family counselling and early-intervention services expand to reach families across the state.",
+      hi: "पारिवारिक काउंसलिंग और अर्ली-इंटरवेंशन सेवाएं पूरे राज्य के परिवारों तक पहुंचने के लिए विस्तारित हुईं।",
+    },
+  },
 ];
 const JOURNEY_ENTRY_HEIGHT = 96;
 const VISIBLE_JOURNEY_ROWS = 3;
 // Each pointer reads as a single sentence: the figure sits inline at the
 // head of the line rather than stacked above a separate label.
-const IMPACT_STATS = [
-  { value: "5,000+", text: "people supported since we began in 1997." },
-  { value: "200+", text: "students taught to read and learn in our schools." },
-  { value: "1,000+", text: "families steadied through early counselling." },
+const IMPACT_STATS: { value: string; text: Bilingual }[] = [
+  {
+    value: "5,000+",
+    text: { en: "people supported since we began in 1997.", hi: "लोगों की मदद की गई है, 1997 में हमारी शुरुआत के बाद से।" },
+  },
+  {
+    value: "200+",
+    text: { en: "students taught to read and learn in our schools.", hi: "छात्रों को हमारे स्कूलों में पढ़ना और सीखना सिखाया गया है।" },
+  },
+  {
+    value: "1,000+",
+    text: { en: "families steadied through early counselling.", hi: "परिवारों को शुरुआती काउंसलिंग के ज़रिए संभाला गया है।" },
+  },
 ];
 const TIMELINE_SHIFT_X = 180;
-const TEAM_MEMBERS = [
+const TEAM_MEMBERS: { photo: string; name: string; role: Bilingual; message: Bilingual }[] = [
   {
     photo: "/img/placeholderimg.png",
     name: "Anjali Verma",
-    role: "Programme Director",
-    message:
-      "Most children arrive at our school unable to read. A few months later they are reading braille on their own. That is the part of this work I have never got used to.",
+    role: { en: "Programme Director", hi: "प्रोग्राम डायरेक्टर" },
+    message: {
+      en: "Most children arrive at our school unable to read. A few months later they are reading braille on their own — that hausla is the part of this work I have never got used to.",
+      hi: "ज़्यादातर बच्चे हमारे स्कूल में बिना पढ़ना जाने आते हैं। कुछ ही महीनों बाद वे खुद से ब्रेल पढ़ने लगते हैं। इस काम का यही हिस्सा है जिसकी आदत मुझे आज तक नहीं पड़ी।",
+    },
   },
   {
     photo: "/img/placeholderimg.png",
     name: "Rohit Malhotra",
-    role: "Head of Vocational Training",
-    message:
-      "We teach a trade, then we help our students get hired. Every placement letter is a job someone was told they would never hold.",
+    role: { en: "Head of Vocational Training", hi: "वोकेशनल ट्रेनिंग प्रमुख" },
+    message: {
+      en: "We teach a trade, then we help our students get hired. Every placement letter is apna proof: a job someone was once told they would never hold.",
+      hi: "हम एक हुनर सिखाते हैं, फिर अपने छात्रों को नौकरी दिलाने में मदद करते हैं। हर प्लेसमेंट लेटर एक ऐसी नौकरी है, जिसके बारे में किसी से कभी कहा गया था कि वह कभी नहीं मिलेगी।",
+    },
   },
   {
     photo: "/img/placeholderimg.png",
     name: "Kavita Nair",
-    role: "Family Counsellor",
-    message:
-      "Parents often arrive more anxious than their children. Most of my work is with them. Once a family expects their child to have a future, the child usually does.",
+    role: { en: "Family Counsellor", hi: "फैमिली काउंसलर" },
+    message: {
+      en: "Parents often arrive more anxious than their children. Most of my work is with them — building their hausla. Once a family expects their child to have a future, the child usually does.",
+      hi: "अक्सर माता-पिता अपने बच्चों से ज़्यादा चिंतित होकर आते हैं। मेरा ज़्यादातर काम उन्हीं के साथ होता है। जब एक परिवार अपने बच्चे के भविष्य पर भरोसा करने लगता है, तो अक्सर बच्चा वाकई वहां पहुंच जाता है।",
+    },
   },
 ];
 const SPONSORS = [
@@ -132,66 +230,134 @@ const SPONSORS = [
 ];
 const DONATION_AMOUNTS = [500, 1000, 2500, 5000];
 const STAGE8_SUB_COUNT = 2;
+const READ_MORE_LABEL: Bilingual = { en: "Read More", hi: "और पढ़ें" };
+const CAUSES_HEADING: Bilingual = { en: "Our Causes", hi: "हमारे अभियान" };
+const SPONSORS_HEADING: Bilingual = { en: "Our Sponsors", hi: "हमारे प्रायोजक" };
+const TEAM_HEADING: Bilingual = { en: "Meet the Team", hi: "हमारी टीम से मिलें" };
+const TESTIMONIALS_HEADING: Bilingual = { en: "What People Say", hi: "लोग क्या कहते हैं" };
+const SDG_SECTION_HEADING: Bilingual = {
+  en: "Aligned with the UN Sustainable Development Goals",
+  hi: "संयुक्त राष्ट्र के सतत विकास लक्ष्यों के अनुरूप",
+};
+const SDG_SECTION_SUBHEADING: Bilingual = {
+  en: "Our work maps directly onto five of the UN's Sustainable Development Goals.",
+  hi: "हमारा काम सीधे संयुक्त राष्ट्र के पांच सतत विकास लक्ष्यों से जुड़ा है।",
+};
+const STAGE8_CTA_HEADING: Bilingual = { en: "See the World Together", hi: "दुनिया को साथ देखें" };
+const SKIP_INTRO_LABEL: Bilingual = { en: "Skip intro", hi: "इंट्रो छोड़ें" };
+const PAUSE_LEARN_MORE_LABEL: Bilingual = { en: "Pause & learn more", hi: "रोकें और जानें" };
+const RESUME_INTRO_LABEL: Bilingual = { en: "Resume intro", hi: "इंट्रो जारी रखें" };
 const CTA_TAB_META = {
-  volunteer: { label: "Volunteer", image: "/img/nab/dance.jpg" },
-  donate: { label: "Donate", image: "/img/nab/computer-training.jpg" },
-  csr: { label: "CSR", image: "/img/nab/compitions.jpg" },
+  volunteer: { label: { en: "Volunteer", hi: "वॉलंटियर" } as Bilingual, image: "/img/nab/dance.jpg" },
+  donate: { label: { en: "Donate", hi: "दान करें" } as Bilingual, image: "/img/nab/computer-training.jpg" },
+  csr: { label: { en: "CSR", hi: "CSR" } as Bilingual, image: "/img/nab/compitions.jpg" },
 } as const;
-const TESTIMONIALS = [
+// Copy for the three CTA forms (donate/volunteer/CSR) inside the stage-8
+// tab panel — kept separate from the near-identical DonateOverlay /
+// VolunteerOverlay copy since these are shorter, inline variants.
+const AMOUNT_LABEL: Bilingual = { en: "Amount", hi: "राशि" };
+const CHOOSE_AN_AMOUNT: Bilingual = { en: "Choose an amount", hi: "एक राशि चुनें" };
+const PAY_VIA_RAZORPAY = (amount: number): Bilingual => ({
+  en: `Pay ₹${amount} via Razorpay`,
+  hi: `Razorpay से ₹${amount} भुगतान करें`,
+});
+const DONATE_FEE_NOTE_PREFIX: Bilingual = {
+  en: "Online payment is not live yet. We will email you UPI and bank transfer details to complete the donation.",
+  hi: "ऑनलाइन भुगतान अभी शुरू नहीं हुआ है। दान पूरा करने के लिए हम आपको UPI और बैंक ट्रांसफर की जानकारी ईमेल करेंगे।",
+};
+const PLEDGE_RECORDED: Bilingual = { en: "Pledge recorded", hi: "संकल्प दर्ज हुआ" };
+const DONATE_SUCCESS_BODY: Bilingual = {
+  en: "Thank you. We have your details and will send payment options shortly.",
+  hi: "धन्यवाद। हमें आपकी जानकारी मिल गई है, हम जल्द ही भुगतान के विकल्प भेजेंगे।",
+};
+const WHICH_AREA_LABEL: Bilingual = { en: "Which area?", hi: "कौन सा क्षेत्र?" };
+const CHOOSE_AN_AREA: Bilingual = { en: "Choose an area", hi: "एक क्षेत्र चुनें" };
+const SIGN_UP_TO_VOLUNTEER: Bilingual = { en: "Sign up to volunteer", hi: "वॉलंटियर के लिए साइन अप करें" };
+const VOLUNTEER_SUCCESS_BODY: Bilingual = {
+  en: "Thank you for offering your time. Our volunteer coordinator will be in touch shortly.",
+  hi: "अपना समय देने के लिए धन्यवाद। हमारे वॉलंटियर समन्वयक जल्द ही आपसे संपर्क करेंगे।",
+};
+const SUBMIT_ENQUIRY: Bilingual = { en: "Submit enquiry", hi: "पूछताछ भेजें" };
+const CSR_SUCCESS_BODY: Bilingual = {
+  en: "Thank you. Our partnerships team will be in touch to discuss how we can work together.",
+  hi: "धन्यवाद। हमारी पार्टनरशिप टीम आगे साथ काम करने की चर्चा के लिए जल्द संपर्क करेगी।",
+};
+const TESTIMONIALS: { quote: Bilingual; name: Bilingual; role: Bilingual; image: string }[] = [
   {
-    quote:
-      "My daughter came to NAB unable to read a single word. Two years later, she reads Braille faster than I read print. I don't have words for what this place has given us.",
-    name: "Parent of a student",
-    role: "Lucknow",
+    quote: {
+      en: "My daughter came to NAB unable to read a single word. Two years later, she reads Braille faster than I read print. I don't have words for what this place has given our parivaar.",
+      hi: "मेरी बेटी NAB में तब आई थी जब उसे एक भी शब्द पढ़ना नहीं आता था। दो साल बाद, वह ब्रेल इतनी तेज़ पढ़ती है जितना मैं छपा हुआ भी नहीं पढ़ पाती। इस जगह ने हमें जो दिया है, उसके लिए मेरे पास शब्द नहीं हैं।",
+    },
+    name: { en: "Parent of a student", hi: "एक विद्यार्थी के अभिभावक" },
+    role: { en: "Lucknow", hi: "लखनऊ" },
     image: "/img/placeholders/testimonial-parent.jpg",
   },
   {
-    quote:
-      "The training gave me a skill and then a job. More than that, it gave me back my independence.",
-    name: "Programme graduate",
-    role: "Vocational training, 2022 batch",
+    quote: {
+      en: "The training gave me a skill and then a job. More than that — it gave me back my hausla, my independence.",
+      hi: "ट्रेनिंग ने मुझे एक हुनर दिया और फिर एक नौकरी। उससे भी बढ़कर, इसने मुझे मेरी आज़ादी वापस दी।",
+    },
+    name: { en: "Programme graduate", hi: "प्रोग्राम स्नातक" },
+    role: { en: "Vocational training, 2022 batch", hi: "वोकेशनल ट्रेनिंग, 2022 बैच" },
     image: "/img/placeholders/testimonial-graduate.jpg",
   },
   {
-    quote:
-      "I have supported many causes. Few show you as plainly where the money goes and what it changes.",
-    name: "Long-time donor",
-    role: "Supporter since 2019",
+    quote: {
+      en: "I have supported many seva causes over the years. Few show you as plainly where the money goes and what it changes.",
+      hi: "मैंने कई सेवा कार्यों का साथ दिया है। बहुत कम ऐसे होते हैं जो इतनी स्पष्टता से दिखाते हैं कि पैसा कहां जाता है और उससे क्या बदलता है।",
+    },
+    name: { en: "Long-time donor", hi: "पुराने दानदाता" },
+    role: { en: "Supporter since 2019", hi: "2019 से सहयोगी" },
     image: "/img/placeholders/testimonial-donor.jpg",
   },
 ];
 // Official UN SDG brand colours, limited to the goals NAB's work maps to
 // directly rather than a generic "all 17" claim.
-const SDG_GOALS = [
+const SDG_GOALS: { number: number; title: Bilingual; color: string; description: Bilingual }[] = [
   {
     number: 3,
-    title: "Good Health & Well-being",
+    title: { en: "Good Health & Well-being", hi: "अच्छा स्वास्थ्य और कल्याण" },
     color: "#4C9F38",
-    description: "Free eye-care screenings and health support for visually impaired individuals and their families.",
+    description: {
+      en: "Free eye-care screenings and health support for visually impaired individuals and their families.",
+      hi: "दृष्टिबाधित व्यक्तियों और उनके परिवारों के लिए मुफ़्त नेत्र-जांच और स्वास्थ्य सहायता।",
+    },
   },
   {
     number: 4,
-    title: "Quality Education",
+    title: { en: "Quality Education", hi: "गुणवत्तापूर्ण शिक्षा" },
     color: "#C5192D",
-    description: "Free primary education and braille literacy for blind and low-vision children.",
+    description: {
+      en: "Free primary education and braille literacy for blind and low-vision children.",
+      hi: "दृष्टिहीन और कम दृष्टि वाले बच्चों के लिए मुफ़्त प्राथमिक शिक्षा और ब्रेल साक्षरता।",
+    },
   },
   {
     number: 8,
-    title: "Decent Work & Economic Growth",
+    title: { en: "Decent Work & Economic Growth", hi: "उचित कार्य और आर्थिक विकास" },
     color: "#A21942",
-    description: "Vocational training and job placement that lead to real, independent careers.",
+    description: {
+      en: "Vocational training and job placement that lead to real, independent careers.",
+      hi: "वोकेशनल ट्रेनिंग और जॉब प्लेसमेंट, जो वाकई स्वतंत्र करियर की ओर ले जाते हैं।",
+    },
   },
   {
     number: 10,
-    title: "Reduced Inequalities",
+    title: { en: "Reduced Inequalities", hi: "असमानताओं में कमी" },
     color: "#DD1367",
-    description: "Family counselling and support so disability never decides a family's future.",
+    description: {
+      en: "Family counselling and support so disability never decides a family's future.",
+      hi: "पारिवारिक काउंसलिंग और सहायता, ताकि दिव्यांगता कभी किसी परिवार का भविष्य तय न करे।",
+    },
   },
   {
     number: 17,
-    title: "Partnerships for the Goals",
+    title: { en: "Partnerships for the Goals", hi: "लक्ष्यों के लिए भागीदारी" },
     color: "#19486A",
-    description: "Corporate and community partnerships that fund and scale our programmes.",
+    description: {
+      en: "Corporate and community partnerships that fund and scale our programmes.",
+      hi: "कॉर्पोरेट और सामुदायिक भागीदारियां, जो हमारे प्रोग्रामों को फंड और बड़ा करती हैं।",
+    },
   },
 ];
 
@@ -364,6 +530,19 @@ export default function IntroSequence() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const isMobile = useIsMobile();
   const panelId = useId();
+  const { t } = useLanguage();
+  // Imperative (non-JSX) writes below — textContent assigned straight onto a
+  // DOM node inside GSAP timelines/callbacks rather than rendered by React —
+  // read the translator through this ref instead of closing over `t`
+  // directly. Those callbacks live inside a large useEffect/useGSAP whose own
+  // dependency arrays are deliberately left untouched (re-running them would
+  // re-arm the whole scroll/wheel state machine and its event listeners), so
+  // this is what keeps a language toggle from being read with a stale
+  // translator without touching that timing-sensitive wiring.
+  const tRef = useRef(t);
+  useEffect(() => {
+    tRef.current = t;
+  }, [t]);
 
   // The desktop-tuned 96px-per-entry budget wraps mobile's narrower text
   // column into more lines than that allows, so consecutive journey entries
@@ -493,7 +672,7 @@ export default function IntroSequence() {
   const countdownTweenRef = useRef<gsap.core.Tween | null>(null);
   const compactTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const flipStateRef = useRef<Flip.FlipState | null>(null);
-  const lastLabelRef = useRef<string | null>(null);
+  const lastLabelRef = useRef<Bilingual | null>(null);
   const introSettledRef = useRef(false);
   const activeStageRef = useRef<Stage>(0);
   const isTransitioningRef = useRef(false);
@@ -527,7 +706,7 @@ export default function IntroSequence() {
     if (stage.label !== lastLabelRef.current) {
       lastLabelRef.current = stage.label;
       setCurrentStage(stage);
-      if (conditionRef.current) conditionRef.current.textContent = stage.label;
+      if (conditionRef.current) conditionRef.current.textContent = tRef.current(stage.label);
     }
 
     const t = 1 - v / 100; // 0 -> 1 as sight "returns"
@@ -1432,7 +1611,7 @@ export default function IntroSequence() {
             borderRadius: 16,
           });
         }
-        if (headlineRef.current) headlineRef.current.textContent = STAGE1_HEADLINE;
+        if (headlineRef.current) headlineRef.current.textContent = tRef.current(STAGE1_HEADLINE);
         if (headlineRect) {
           gsap.set(headlineRef.current, {
             position: "fixed",
@@ -1485,7 +1664,7 @@ export default function IntroSequence() {
       } else if (next === 0 && current === 1) {
         const flipState = Flip.getState(flipTargets, { props: "color,fontSize,borderRadius" });
 
-        if (headlineRef.current) headlineRef.current.textContent = HERO_HEADLINE;
+        if (headlineRef.current) headlineRef.current.textContent = tRef.current(HERO_HEADLINE);
         gsap.set(videoBoxRef.current, videoStyle("final", isMobile));
         gsap.set(headlineRef.current, headlineStyle("final", isMobile));
 
@@ -2040,7 +2219,7 @@ export default function IntroSequence() {
         <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
           {NAV_LINKS.map((link) => (
             <Link
-              key={link.label}
+              key={link.href}
               href={link.href}
               aria-current={link.href === "/" ? "page" : undefined}
               className={
@@ -2048,22 +2227,23 @@ export default function IntroSequence() {
                 (link.href === "/" ? " underline decoration-orange decoration-2 underline-offset-4" : "")
               }
             >
-              {link.label}
+              {t(link.label)}
             </Link>
           ))}
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
+          <LanguageToggle />
           <Link
             href="/volunteer"
             className="rounded-full border border-navy px-5 py-2 font-heading text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-white"
           >
-            Volunteer
+            {t(VOLUNTEER_LABEL)}
           </Link>
           <Link
             href="/donate"
             className="rounded-full bg-orange px-5 py-2 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy"
           >
-            Donate
+            {t(DONATE_LABEL)}
           </Link>
         </div>
         <MobileNav />
@@ -2118,7 +2298,7 @@ export default function IntroSequence() {
             100%
           </span>
           <span ref={conditionRef} className="text-lg tracking-wide">
-            Total Blindness
+            {t(SIGHT_STAGES[0].label)}
           </span>
         </div>
       )}
@@ -2173,7 +2353,7 @@ export default function IntroSequence() {
         style={headlineStyle(layout, isMobile)}
         className="z-20 font-heading font-bold leading-tight outline-none"
       >
-        {HERO_HEADLINE}
+        {t(HERO_HEADLINE)}
       </h1>
 
       {/* The persistent stepper — one continuous element for the whole
@@ -2253,7 +2433,7 @@ export default function IntroSequence() {
               (activeStage >= 3 && activeStage <= 5 ? "text-white" : "text-navy")
             }
           >
-            {NEXT_SECTION_LABEL[activeStage]}
+            {t(NEXT_SECTION_LABEL[activeStage])}
           </span>
         </div>
       )}
@@ -2276,13 +2456,13 @@ export default function IntroSequence() {
         >
           {STAGE2_STORIES.map((story, i) => (
             <span
-              key={story.word}
+              key={story.word.en}
               className={
                 "transition-colors duration-300 " +
                 (i === storyIndex ? "font-bold text-navy" : "font-normal text-black/25")
               }
             >
-              {story.word}
+              {t(story.word)}
             </span>
           ))}
         </div>
@@ -2323,15 +2503,11 @@ export default function IntroSequence() {
               <div className="flex flex-col items-center gap-3 text-center md:gap-6">
                 <div ref={stage1HeadlineSlotRef} style={{ visibility: "hidden" }} className="w-full">
                   <h2 className="font-heading text-2xl font-bold leading-tight sm:text-4xl">
-                    {STAGE1_HEADLINE}
+                    {t(STAGE1_HEADLINE)}
                   </h2>
                 </div>
                 <p ref={paragraphRef} className="font-body text-sm text-black/70 opacity-0 leading-6 md:text-base md:leading-7">
-                  For over thirty years we have worked so that losing your
-                  sight in Uttar Pradesh need not mean losing your schooling,
-                  your work, or your place alongside everyone else. Every
-                  programme we run points at one thing: an inclusive,
-                  ordinary, independent life.
+                  {t(STAGE1_PARAGRAPH)}
                 </p>
                 <div ref={ctaRef} className="flex items-center gap-3 opacity-0">
                   <a
@@ -2391,7 +2567,7 @@ export default function IntroSequence() {
                 style={{ visibility: "hidden" }}
               >
                 {STAGE2_STORIES.map((story) => (
-                  <span key={story.word}>{story.word}</span>
+                  <span key={story.word.en}>{t(story.word)}</span>
                 ))}
               </div>
 
@@ -2405,7 +2581,7 @@ export default function IntroSequence() {
                 style={{ visibility: "hidden" }}
               >
                 {STAGE2_STORIES.map((story) => (
-                  <span key={story.word}>{story.word}</span>
+                  <span key={story.word.en}>{t(story.word)}</span>
                 ))}
               </div>
 
@@ -2431,14 +2607,14 @@ export default function IntroSequence() {
                   ref={stage2HeadlineRef}
                   className="font-heading text-xl font-bold leading-tight text-navy sm:text-3xl"
                 >
-                  {STAGE2_STORIES[storyIndex].headline}
+                  {t(STAGE2_STORIES[storyIndex].headline)}
                 </h2>
-                <p className="hidden font-body text-base leading-7 text-black/70 md:block">{STAGE2_PARAGRAPH}</p>
+                <p className="hidden font-body text-base leading-7 text-black/70 md:block">{t(STAGE2_PARAGRAPH)}</p>
                 <Link
                   href={STAGE2_STORIES[storyIndex].href}
                   className="inline-flex items-center gap-2 font-heading text-sm font-semibold text-orange hover:text-navy md:mt-auto"
                 >
-                  Read More
+                  {t(READ_MORE_LABEL)}
                   <Image src="/img/arrow.svg" alt="" width={14} height={14} />
                 </Link>
               </div>
@@ -2526,7 +2702,7 @@ export default function IntroSequence() {
                 ref={stage3HeadlineRef}
                 className="font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-white/55 opacity-0"
               >
-                Our Vision
+                {t(STAGE3_VISION_LABEL)}
               </h3>
               <ul className="flex flex-col gap-4 md:gap-4">
                 {STAGE3_POINTS.map((point, i) => (
@@ -2546,7 +2722,7 @@ export default function IntroSequence() {
                       <Icon name={point.icon} size={20} className="text-white" />
                     </span>
                     <p className="mt-1 font-body text-sm leading-6 text-white/85 md:mt-0 md:text-base md:leading-7">
-                      {point.text}
+                      {t(point.text)}
                     </p>
                   </li>
                 ))}
@@ -2558,10 +2734,10 @@ export default function IntroSequence() {
               className="mt-2 flex flex-col gap-3 border-t border-white/15 pt-6 opacity-0 md:mt-0 md:border-0 md:pt-9"
             >
               <h3 className="font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
-                Our Mission
+                {t(STAGE3_MISSION_LABEL)}
               </h3>
               <p className="font-body text-lg leading-8 text-white md:text-2xl md:leading-10">
-                {STAGE3_MISSION_TEXT}
+                {t(STAGE3_MISSION_TEXT)}
               </p>
             </div>
             </div>
@@ -2605,11 +2781,11 @@ export default function IntroSequence() {
                   orphaned from "journey" onto its own line. Only the
                   "quantified" word itself is the inline-block that grows
                   and (if the phrase doesn't fit) wraps. */}
-              Our journey<span ref={quantifiedWordRef} className="opacity-0">
+              {t(JOURNEY_HEADING_LABEL)}<span ref={quantifiedWordRef} className="opacity-0">
                 , <span
                   ref={quantifiedInnerRef}
                   className="inline-block max-w-0 overflow-hidden align-bottom"
-                >quantified</span>
+                >{t(JOURNEY_QUANTIFIED_WORD)}</span>
               </span>
             </h2>
 
@@ -2632,7 +2808,7 @@ export default function IntroSequence() {
                     style={{ top: i * journeyEntryHeight }}
                   >
                     <p className="font-body text-sm leading-6 text-white/80">
-                      <span className="text-2xl font-bold text-white">{stat.value}</span> {stat.text}
+                      <span className="text-2xl font-bold text-white">{stat.value}</span> {t(stat.text)}
                     </p>
                   </div>
                 ))}
@@ -2668,7 +2844,7 @@ export default function IntroSequence() {
                         {entry.year}
                       </span>
                       <p className="max-w-md font-body text-sm leading-5 text-white md:text-base md:leading-6">
-                        {entry.text}
+                        {t(entry.text)}
                       </p>
                     </div>
                   ))}
@@ -2693,7 +2869,7 @@ export default function IntroSequence() {
                   className="opacity-0"
                 >
                   <p className="font-body text-base leading-6 text-white/80">
-                    <span className="text-2xl font-bold text-white">{stat.value}</span> {stat.text}
+                    <span className="text-2xl font-bold text-white">{stat.value}</span> {t(stat.text)}
                   </p>
                 </div>
               ))}
@@ -2719,7 +2895,7 @@ export default function IntroSequence() {
           className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-start md:pt-28"
         >
           <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-6 md:gap-8">
-            <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">Our Causes</h2>
+            <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">{t(CAUSES_HEADING)}</h2>
 
             <div className="relative flex h-[46vh] max-h-[360px] min-h-[230px] w-full items-center justify-center">
               {CAUSES.map((cause, i) => {
@@ -2751,10 +2927,10 @@ export default function IntroSequence() {
                     {isActive ? (
                       <div className="absolute inset-x-0 bottom-0 m-3 flex flex-col gap-2 rounded-2xl border border-white/40 bg-white/20 p-4 text-white backdrop-blur-xl md:m-4 md:p-5">
                         <h3 className="line-clamp-2 font-heading text-base font-bold leading-tight md:text-2xl">
-                          {cause.title}
+                          {t(cause.title)}
                         </h3>
                         <p className="hidden font-body text-sm leading-6 text-white/90 md:line-clamp-2 md:block">
-                          {cause.description}
+                          {t(cause.description)}
                         </p>
                         <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-white/25">
                           <div className="h-full rounded-full bg-orange" style={{ width: `${pct}%` }} />
@@ -2775,7 +2951,7 @@ export default function IntroSequence() {
                     ) : (
                       <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/55 to-transparent p-3">
                         <span className="line-clamp-3 font-heading text-xs font-bold leading-tight text-white">
-                          {cause.title}
+                          {t(cause.title)}
                         </span>
                       </div>
                     )}
@@ -2794,7 +2970,7 @@ export default function IntroSequence() {
                   type="button"
                   role="tab"
                   aria-selected={i === stage6Index}
-                  aria-label={cause.title}
+                  aria-label={t(cause.title)}
                   onClick={() => setStage6Index(i)}
                   className={
                     "h-1.5 rounded-full transition-all duration-300 " +
@@ -2828,7 +3004,7 @@ export default function IntroSequence() {
               ref={stage7HeadingRef}
               className="text-center font-heading text-2xl font-bold text-navy opacity-0 sm:text-4xl"
             >
-              Meet the Team
+              {t(TEAM_HEADING)}
             </h2>
 
             <div
@@ -2861,7 +3037,7 @@ export default function IntroSequence() {
                   >
                     <Image
                       src={member.photo}
-                      alt={isActive ? `${member.name}, ${member.role}` : ""}
+                      alt={isActive ? `${member.name}, ${t(member.role)}` : ""}
                       fill
                       sizes="(max-width: 768px) 90vw, 620px"
                       className="object-cover"
@@ -2883,11 +3059,11 @@ export default function IntroSequence() {
                       }
                     >
                       <p className="font-body text-xs italic leading-5 text-white/90 md:text-sm md:leading-6">
-                        &ldquo;{member.message}&rdquo;
+                        &ldquo;{t(member.message)}&rdquo;
                       </p>
                       <div>
                         <p className="font-heading text-sm font-bold md:text-lg">{member.name}</p>
-                        <p className="font-body text-[11px] text-white/70 md:text-xs">{member.role}</p>
+                        <p className="font-body text-[11px] text-white/70 md:text-xs">{t(member.role)}</p>
                       </div>
                     </span>
                   </button>
@@ -2936,7 +3112,7 @@ export default function IntroSequence() {
               ref={stage8MarqueeBlockRef}
               className="absolute inset-0 flex flex-col items-center justify-start gap-10 px-8 pt-20 md:pt-28"
             >
-              <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">Our Sponsors</h2>
+              <h2 className="text-center font-heading text-2xl font-bold text-navy sm:text-4xl">{t(SPONSORS_HEADING)}</h2>
 
               <div
                 className="w-full max-w-6xl overflow-hidden"
@@ -2980,12 +3156,12 @@ export default function IntroSequence() {
                 >
                   <Image src={CTA_TAB_META[ctaTab].image} alt="" fill sizes="320px" className="object-cover" />
                   <span className="absolute bottom-4 left-4 rounded-full bg-white/90 px-3 py-1 font-heading text-xs font-semibold text-black/70">
-                    {CTA_TAB_META[ctaTab].label}
+                    {t(CTA_TAB_META[ctaTab].label)}
                   </span>
                 </div>
 
                 <div className="flex flex-col gap-3 md:gap-4">
-                  <h2 className="font-heading text-2xl font-bold text-navy sm:text-4xl">See the World Together</h2>
+                  <h2 className="font-heading text-2xl font-bold text-navy sm:text-4xl">{t(STAGE8_CTA_HEADING)}</h2>
 
                   <div className="flex gap-2">
                     {(["volunteer", "donate", "csr"] as const).map((tab) => (
@@ -3000,7 +3176,7 @@ export default function IntroSequence() {
                             : "border border-navy/30 text-navy hover:bg-navy/10")
                         }
                       >
-                        {tab === "volunteer" ? "Volunteer" : tab === "donate" ? "Donate" : "CSR"}
+                        {t(CTA_TAB_META[tab].label)}
                       </button>
                     ))}
                   </div>
@@ -3012,7 +3188,7 @@ export default function IntroSequence() {
                         extra={
                           <div className="flex flex-col gap-1.5">
                             <span className="font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-black/55">
-                              Amount
+                              {t(AMOUNT_LABEL)}
                             </span>
                             <div className="grid grid-cols-4 gap-2">
                               {DONATION_AMOUNTS.map((value) => (
@@ -3036,10 +3212,10 @@ export default function IntroSequence() {
                         }
                         extraPayload={donationAmount ? { amount: donationAmount } : undefined}
                         disabled={!donationAmount}
-                        submitLabel={donationAmount ? `Pay ₹${donationAmount} via Razorpay` : "Choose an amount"}
-                        feeNote={`Online payment is not live yet. We will email you UPI and bank transfer details to complete the donation. ${TAX_EXEMPTION_NOTE}`}
-                        successTitle="Pledge recorded"
-                        successBody="Thank you. We have your details and will send payment options shortly."
+                        submitLabel={donationAmount ? t(PAY_VIA_RAZORPAY(donationAmount)) : t(CHOOSE_AN_AMOUNT)}
+                        feeNote={`${t(DONATE_FEE_NOTE_PREFIX)} ${t(TAX_EXEMPTION_NOTE)}`}
+                        successTitle={t(PLEDGE_RECORDED)}
+                        successBody={t(DONATE_SUCCESS_BODY)}
                       />
                     )}
 
@@ -3048,22 +3224,33 @@ export default function IntroSequence() {
                         formType="Volunteer"
                         select={{
                           name: "area",
-                          label: "Which area?",
-                          placeholder: "Choose an area",
-                          options: VOLUNTEER_AREAS,
-                          value: ctaArea,
-                          onChange: setCtaArea,
+                          label: t(WHICH_AREA_LABEL),
+                          placeholder: t(CHOOSE_AN_AREA),
+                          // Options display in the active language, but the
+                          // value stored/submitted is always the English
+                          // area name — a stable key for the lead sheet,
+                          // independent of which language picked it.
+                          options: VOLUNTEER_AREAS.map((area) => t(area)),
+                          value: ctaArea ? t(VOLUNTEER_AREAS.find((area) => area.en === ctaArea) ?? { en: ctaArea, hi: ctaArea }) : "",
+                          onChange: (label) => {
+                            const match = VOLUNTEER_AREAS.find((area) => t(area) === label);
+                            setCtaArea(match ? match.en : label);
+                          },
                         }}
-                        submitLabel="Sign up to volunteer"
-                        successBody="Thank you for offering your time. Our volunteer coordinator will be in touch shortly."
+                        // Overrides the submitted "area" field with the
+                        // stable English key instead of the select's own
+                        // (possibly Hindi) displayed value.
+                        extraPayload={{ area: ctaArea }}
+                        submitLabel={t(SIGN_UP_TO_VOLUNTEER)}
+                        successBody={t(VOLUNTEER_SUCCESS_BODY)}
                       />
                     )}
 
                     {ctaTab === "csr" && (
                       <LeadForm
                         formType="CSR"
-                        submitLabel="Submit enquiry"
-                        successBody="Thank you. Our partnerships team will be in touch to discuss how we can work together."
+                        submitLabel={t(SUBMIT_ENQUIRY)}
+                        successBody={t(CSR_SUCCESS_BODY)}
                       />
                     )}
                   </div>
@@ -3093,7 +3280,7 @@ export default function IntroSequence() {
               ref={stage9HeadingRef}
               className="text-center font-heading text-2xl font-bold text-navy opacity-0 sm:text-4xl"
             >
-              What People Say
+              {t(TESTIMONIALS_HEADING)}
             </h2>
 
             <div ref={stage9CardsRef} className="grid gap-3 md:gap-8 md:grid-cols-3">
@@ -3103,15 +3290,15 @@ export default function IntroSequence() {
                     &ldquo;
                   </span>
                   <p className="font-body text-xs leading-5 text-black/80 italic md:-mt-4 md:text-sm md:leading-6">
-                    {testimonial.quote}
+                    {t(testimonial.quote)}
                   </p>
                   <div className="mt-auto flex items-center gap-3">
                     <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full">
                       <Image src={testimonial.image} alt="" fill sizes="40px" className="object-cover" />
                     </div>
                     <div>
-                      <p className="font-heading text-sm font-bold text-navy">{testimonial.name}</p>
-                      <p className="font-body text-xs text-black/50">{testimonial.role}</p>
+                      <p className="font-heading text-sm font-bold text-navy">{t(testimonial.name)}</p>
+                      <p className="font-body text-xs text-black/50">{t(testimonial.role)}</p>
                     </div>
                   </div>
                 </div>
@@ -3140,10 +3327,10 @@ export default function IntroSequence() {
               ref={stage10HeadingRef}
               className="text-center font-heading text-2xl font-bold text-navy opacity-0 sm:text-4xl"
             >
-              Aligned with the UN Sustainable Development Goals
+              {t(SDG_SECTION_HEADING)}
             </h2>
             <p className="mx-auto hidden max-w-2xl text-center font-body text-sm leading-6 text-black/60 sm:block">
-              Our work maps directly onto five of the UN&apos;s Sustainable Development Goals.
+              {t(SDG_SECTION_SUBHEADING)}
             </p>
 
             <div ref={stage10CardsRef} className="mt-2 grid grid-cols-5 gap-1.5 sm:mt-4 sm:gap-4">
@@ -3163,7 +3350,7 @@ export default function IntroSequence() {
                   >
                     <span className="font-heading text-base font-bold sm:text-4xl">{goal.number}</span>
                     <span className="hidden font-body text-xs leading-tight font-semibold sm:block">
-                      {goal.title}
+                      {t(goal.title)}
                     </span>
                   </button>
                 );
@@ -3178,9 +3365,9 @@ export default function IntroSequence() {
                   style={{ borderColor: active.color }}
                 >
                   <p className="font-heading text-sm font-bold sm:text-base" style={{ color: active.color }}>
-                    Goal {active.number}: {active.title}
+                    Goal {active.number}: {t(active.title)}
                   </p>
-                  <p className="mt-1 font-body text-xs leading-5 text-black/70 sm:text-sm">{active.description}</p>
+                  <p className="mt-1 font-body text-xs leading-5 text-black/70 sm:text-sm">{t(active.description)}</p>
                 </div>
               );
             })()}
@@ -3204,7 +3391,7 @@ export default function IntroSequence() {
               aria-controls={panelId}
               className="rounded-full bg-white px-3.5 py-2 font-heading text-xs font-semibold text-black shadow-lg ring-1 ring-black/10 transition-colors hover:bg-orange hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange sm:px-5 sm:py-2.5 sm:text-sm"
             >
-              {isPaused ? "Resume intro" : "Pause & learn more"}
+              {isPaused ? t(RESUME_INTRO_LABEL) : t(PAUSE_LEARN_MORE_LABEL)}
             </button>
           )}
           <button
@@ -3212,7 +3399,7 @@ export default function IntroSequence() {
             onClick={handleSkip}
             className="rounded-full bg-white px-3.5 py-2 font-heading text-xs font-semibold text-black shadow-lg ring-1 ring-black/10 transition-colors hover:bg-orange hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange sm:px-5 sm:py-2.5 sm:text-sm"
           >
-            Skip intro
+            {t(SKIP_INTRO_LABEL)}
           </button>
         </div>
       )}
@@ -3221,7 +3408,7 @@ export default function IntroSequence() {
         <div
           id={panelId}
           role="region"
-          aria-label={`About ${currentStage.label}`}
+          aria-label={`About ${t(currentStage.label)}`}
           onKeyDown={handlePanelKeyDown}
           className="fixed inset-x-6 bottom-6 z-50 mx-auto max-w-xl rounded-2xl bg-white p-6 text-left shadow-2xl ring-1 ring-black/10 sm:p-8"
         >
@@ -3230,15 +3417,15 @@ export default function IntroSequence() {
             tabIndex={-1}
             className="font-heading text-2xl font-semibold text-navy outline-none"
           >
-            {currentStage.label}
+            {t(currentStage.label)}
           </h2>
-          <p className="mt-3 text-base leading-7 text-black/80">{currentStage.description}</p>
+          <p className="mt-3 text-base leading-7 text-black/80">{t(currentStage.description)}</p>
           <button
             type="button"
             onClick={handleResume}
             className="mt-5 rounded-full bg-navy px-5 py-2.5 font-heading text-sm font-semibold text-white transition-colors hover:bg-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange"
           >
-            Resume intro
+            {t(RESUME_INTRO_LABEL)}
           </button>
         </div>
       )}

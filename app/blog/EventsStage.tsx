@@ -1,27 +1,50 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { POSTS } from "../lib/posts-data";
 import { StageIntro } from "../components/shared/StageIntro";
+import { useLanguage, type Lang } from "../components/shared/LanguageContext";
 
 const BLOG_POSTS = [...POSTS].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+const COPY = {
+  title: { en: "Blog", hi: "ब्लॉग" },
+  upcomingEvents: { en: "upcoming events", hi: "आगामी कार्यक्रम" },
+};
+
+function formatDate(iso: string, lang: Lang) {
+  return new Date(iso).toLocaleDateString(lang === "hi" ? "hi-IN" : "en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 export function EventsStage() {
+  const { t, lang } = useLanguage();
   return (
     <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-start gap-3 sm:gap-5">
       <StageIntro
-        title="Blog"
+        title={t(COPY.title)}
         subtitle={
-          <>
-            Event recaps, updates, and what we&apos;ve learned along the way. For dates still to come, see{" "}
-            <Link href="/events" className="font-semibold text-navy underline underline-offset-2">
-              upcoming events
-            </Link>
-            .
-          </>
+          lang === "hi" ? (
+            <>
+              कार्यक्रमों की रिकैप, अपडेट और हमने रास्ते में जो सीखा। आने वाली तारीखों के लिए{" "}
+              <Link href="/events" className="font-semibold text-navy underline underline-offset-2">
+                {t(COPY.upcomingEvents)}
+              </Link>{" "}
+              देखें।
+            </>
+          ) : (
+            <>
+              Event recaps, updates, and what we&apos;ve learned along the way. For dates still to come, see{" "}
+              <Link href="/events" className="font-semibold text-navy underline underline-offset-2">
+                {t(COPY.upcomingEvents)}
+              </Link>
+              .
+            </>
+          )
         }
       />
 
@@ -56,10 +79,10 @@ export function EventsStage() {
                   {post.eventCategory ? ` · ${post.eventCategory}` : ""}
                 </span>
                 <h3 className="font-heading text-sm font-bold leading-snug text-navy group-hover:text-orange">
-                  {post.title}
+                  {t(post.title)}
                 </h3>
-                <p className="line-clamp-2 font-body text-xs leading-5 text-black/60">{post.excerpt}</p>
-                <p className="mt-auto pt-1 font-body text-[11px] text-black/45">{formatDate(post.date)}</p>
+                <p className="line-clamp-2 font-body text-xs leading-5 text-black/60">{t(post.excerpt)}</p>
+                <p className="mt-auto pt-1 font-body text-[11px] text-black/45">{formatDate(post.date, lang)}</p>
               </div>
             </Link>
           ))}

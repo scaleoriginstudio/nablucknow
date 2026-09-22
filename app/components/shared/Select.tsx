@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { FIELD_CLASS } from "./constants";
 import { Icon } from "./Icon";
+import { useLanguage } from "./LanguageContext";
+
+const DEFAULT_PLACEHOLDER = { en: "Please choose", hi: "कृपया चुनें" };
 
 /** A dropdown styled to match the site rather than a native `<select>` —
     on Android, a native select's option list is rendered entirely by the
@@ -17,7 +20,7 @@ import { Icon } from "./Icon";
     error, exactly like a failed field would read anywhere else on the site. */
 export function Select({
   label,
-  placeholder = "Please choose",
+  placeholder,
   options,
   value,
   onChange,
@@ -38,6 +41,8 @@ export function Select({
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
+  const { t } = useLanguage();
+  const resolvedPlaceholder = placeholder ?? t(DEFAULT_PLACEHOLDER);
 
   useEffect(() => {
     if (!open) return;
@@ -69,7 +74,7 @@ export function Select({
           (error ? "border-red-500" : "")
         }
       >
-        <span className={value ? "truncate text-black" : "truncate text-black/40"}>{value || placeholder}</span>
+        <span className={value ? "truncate text-black" : "truncate text-black/40"}>{value || resolvedPlaceholder}</span>
         <Icon
           name={open ? "expand_less" : "expand_more"}
           size={18}

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Montserrat, Libre_Baskerville } from "next/font/google";
+import { Montserrat, Libre_Baskerville, Noto_Sans_Devanagari, Noto_Serif_Devanagari } from "next/font/google";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "./lib/site";
 import { OverlayProvider } from "./components/shared/OverlayContext";
+import { LanguageProvider } from "./components/shared/LanguageContext";
 import { Overlays } from "./components/shared/Overlays";
 import { FloatingActions } from "./components/shared/FloatingActions";
 import "./globals.css";
@@ -18,6 +19,24 @@ const body = Libre_Baskerville({
   subsets: ["latin"],
   weight: ["400", "700"],
   style: ["normal", "italic"],
+  display: "swap",
+});
+
+// Montserrat/Libre Baskerville have no Devanagari glyphs. These two sit
+// second in the --font-heading/--font-body stacks in globals.css, so the
+// browser falls back to them per-glyph — Hindi words woven into English
+// copy (and full Hindi mode) render correctly with no per-string markup.
+const headingHi = Noto_Sans_Devanagari({
+  variable: "--font-heading-hi",
+  subsets: ["devanagari"],
+  weight: ["500", "600", "700", "800"],
+  display: "swap",
+});
+
+const bodyHi = Noto_Serif_Devanagari({
+  variable: "--font-body-hi",
+  subsets: ["devanagari"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -39,7 +58,10 @@ export const metadata: Metadata = {
     default: SITE_NAME,
     template: "%s | National Association for the Blind",
   },
-  description: SITE_DESCRIPTION,
+  // Metadata/OpenGraph/JSON-LD are server-rendered once with no client
+  // language context available, so English stays canonical here regardless
+  // of the page's toggle state — an intentional scope boundary, not a gap.
+  description: SITE_DESCRIPTION.en,
   keywords: KEYWORDS,
   alternates: {
     canonical: "/",
@@ -50,13 +72,13 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: SITE_NAME,
     title: SITE_NAME,
-    description: SITE_DESCRIPTION,
+    description: SITE_DESCRIPTION.en,
     images: [{ url: "/img/logo.png", width: 1080, height: 1080, alt: "National Association for the Blind logo" }],
   },
   twitter: {
     card: "summary_large_image",
     title: SITE_NAME,
-    description: SITE_DESCRIPTION,
+    description: SITE_DESCRIPTION.en,
     images: ["/img/logo.png"],
   },
   robots: {
@@ -86,7 +108,7 @@ const organizationJsonLd = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${heading.variable} ${body.variable}`}>
+    <html lang="en" className={`${heading.variable} ${body.variable} ${headingHi.variable} ${bodyHi.variable}`}>
       <head>
         {/* Material Symbols, Google's icon set, used site-wide instead of
             hand-drawn SVGs wherever an icon is needed. */}
@@ -96,11 +118,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body className="min-h-full bg-white font-body text-black antialiased">
-        <OverlayProvider>
-          {children}
-          <Overlays />
-          <FloatingActions />
-        </OverlayProvider>
+        <LanguageProvider>
+          <OverlayProvider>
+            {children}
+            <Overlays />
+            <FloatingActions />
+          </OverlayProvider>
+        </LanguageProvider>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
