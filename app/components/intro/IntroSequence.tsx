@@ -49,7 +49,7 @@ const NEXT_SECTION_LABEL: Record<number, Bilingual> = {
 };
 const HERO_HEADLINE: Bilingual = {
   en: "Seeing the world together.",
-  hi: "साथ मिलकर दुनिया को देखना।",
+  hi: "सुदृष्टि सदृष्टि।",
 };
 const STAGE1_HEADLINE: Bilingual = {
   en: "National Association for the Blind, State Chapter, Lucknow",
