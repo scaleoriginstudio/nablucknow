@@ -205,24 +205,24 @@ const VISIBLE_JOURNEY_ROWS = 3;
 // milestones in the timeline beside this list.
 const IMPACT_STATS: { value: Bilingual; text: Bilingual }[] = [
   {
-    value: { en: "Eye camps,", hi: "नेत्र शिविर," },
+    value: { en: "Eye camps", hi: "नेत्र शिविर" },
     text: {
-      en: "health check-ups, and screenings that bring eye care directly into the community.",
-      hi: "स्वास्थ्य जांच और स्क्रीनिंग, जो आंखों की देखभाल सीधे समुदाय तक पहुंचाते हैं।",
+      en: "and health check-ups for the community.",
+      hi: "और स्वास्थ्य जांच, समुदाय के लिए।",
     },
   },
   {
     value: { en: "Counselling", hi: "काउंसलिंग" },
     text: {
-      en: "for parents and awareness in the community, building real understanding and inclusion.",
-      hi: "माता-पिता के लिए काउंसलिंग और समुदाय में जागरूकता, जो असली समझ और समावेश बनाती है।",
+      en: "for parents and community awareness.",
+      hi: "माता-पिता के लिए, और सामुदायिक जागरूकता।",
     },
   },
   {
-    value: { en: "Aids and appliances,", hi: "सहायक उपकरण," },
+    value: { en: "Aids & appliances", hi: "सहायक उपकरण" },
     text: {
-      en: "plus educational materials, distributed to support independence and learning.",
-      hi: "साथ ही शैक्षणिक सामग्री, जो स्वतंत्रता और सीखने में सहयोग के लिए बांटी जाती है।",
+      en: "for independence and learning.",
+      hi: "स्वतंत्रता और सीखने के लिए।",
     },
   },
 ];
