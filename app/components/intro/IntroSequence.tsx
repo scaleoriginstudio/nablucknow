@@ -138,53 +138,92 @@ const STAGE3_POINTS: { icon: string; text: Bilingual }[] = [
   },
 ];
 const JOURNEY_HEADING_LABEL: Bilingual = { en: "Our journey", hi: "हमारी यात्रा" };
-const JOURNEY_QUANTIFIED_WORD: Bilingual = { en: "quantified", hi: "आंकड़ों में" };
+const JOURNEY_QUANTIFIED_WORD: Bilingual = { en: "in practice", hi: "अमल में" };
 const JOURNEY_ENTRIES: { year: string; text: Bilingual }[] = [
   {
-    year: "1997",
+    year: "1989–90",
     text: {
-      en: "National Association for the Blind, State Chapter, Lucknow, is founded to serve visually impaired individuals across Uttar Pradesh.",
-      hi: "नेशनल एसोसिएशन फॉर द ब्लाइंड, स्टेट चैप्टर, लखनऊ की स्थापना उत्तर प्रदेश भर के दृष्टिबाधित लोगों की सेवा के लिए की गई।",
+      en: "NAB Lucknow is established in Chinhat, Lucknow, launching a Community-Based Rehabilitation (CBR) programme — the start of our seva in Uttar Pradesh.",
+      hi: "NAB Lucknow की स्थापना लखनऊ के चिनहट में हुई, साथ ही एक कम्युनिटी-बेस्ड रिहैबिलिटेशन (CBR) प्रोग्राम शुरू हुआ — उत्तर प्रदेश में हमारी सेवा की शुरुआत।",
+    },
+  },
+  {
+    year: "1995",
+    text: {
+      en: "With support from the Ministry of Human Resource Development, we start an Integrated Education for Disabled Children (IEDC) programme.",
+      hi: "मानव संसाधन विकास मंत्रालय (Ministry of HRD) के सहयोग से, हम एक इंटीग्रेटेड एजुकेशन फॉर डिसेबल्ड चिल्ड्रन (IEDC) प्रोग्राम शुरू करते हैं।",
+    },
+  },
+  {
+    year: "2001",
+    text: {
+      en: "We implement the District Primary Education Programme (DPEP), bringing inclusive schooling closer to where children already are.",
+      hi: "हम डिस्ट्रिक्ट प्राइमरी एजुकेशन प्रोग्राम (DPEP) लागू करते हैं, जिससे समावेशी शिक्षा बच्चों के और करीब पहुंचती है।",
     },
   },
   {
     year: "2005",
     text: {
-      en: "Our first residential school opens, offering free primary education to visually impaired children.",
-      hi: "हमारा पहला आवासीय स्कूल शुरू हुआ, जो दृष्टिबाधित बच्चों को मुफ़्त प्राथमिक शिक्षा देता है।",
+      en: "A home-based programme for children with multiple disabilities begins, supported by Perkins International — reaching families where the child already lives.",
+      hi: "पर्किन्स इंटरनेशनल (Perkins International) के सहयोग से, कई दिव्यांगताओं वाले बच्चों के लिए एक होम-बेस्ड प्रोग्राम शुरू होता है — परिवार तक वहीं पहुंचकर, जहां बच्चा रहता है।",
     },
   },
   {
-    year: "2014",
+    year: "2006",
     text: {
-      en: "A vocational training and employment support programme launches, placing graduates in corporate and government roles.",
-      hi: "एक वोकेशनल ट्रेनिंग और रोज़गार सहायता प्रोग्राम शुरू हुआ, जिसने स्नातकों को कॉर्पोरेट और सरकारी नौकरियों में जगह दिलाई।",
+      en: "We undertake a health project in Rudauli Block, District Barabanki, carrying eye care beyond Lucknow itself.",
+      hi: "हम रुदौली ब्लॉक, जिला बाराबंकी में एक हेल्थ प्रोजेक्ट चलाते हैं, जिससे आंखों की देखभाल लखनऊ से आगे भी पहुंचती है।",
     },
   },
   {
-    year: "2023",
+    year: "2009",
     text: {
-      en: "Family counselling and early-intervention services expand to reach families across the state.",
-      hi: "पारिवारिक काउंसलिंग और अर्ली-इंटरवेंशन सेवाएं पूरे राज्य के परिवारों तक पहुंचने के लिए विस्तारित हुईं।",
+      en: "The Integrated Education Programme grows to five districts and 20 units — the same saath, reaching much further.",
+      hi: "इंटीग्रेटेड एजुकेशन प्रोग्राम अब पांच जिलों और 20 यूनिट्स तक फैल चुका है — वही साथ, अब कहीं ज़्यादा दूर तक।",
+    },
+  },
+  {
+    year: "2012",
+    text: {
+      en: "A computer training programme launches with the support of NAB India, opening a new, practical path to independent work.",
+      hi: "NAB India के सहयोग से एक कंप्यूटर ट्रेनिंग प्रोग्राम शुरू होता है, जो स्वतंत्र काम की ओर एक नया, व्यावहारिक रास्ता खोलता है।",
+    },
+  },
+  {
+    year: "2015",
+    text: {
+      en: "With Amway's support, the computer training programme continues and grows — new batches, the same hausla.",
+      hi: "Amway के सहयोग से कंप्यूटर ट्रेनिंग प्रोग्राम जारी रहता है और आगे बढ़ता है — नए बैच, वही हौसला।",
     },
   },
 ];
 const JOURNEY_ENTRY_HEIGHT = 96;
 const VISIBLE_JOURNEY_ROWS = 3;
-// Each pointer reads as a single sentence: the figure sits inline at the
-// head of the line rather than stacked above a separate label.
-const IMPACT_STATS: { value: string; text: Bilingual }[] = [
+// Each pointer reads as a single sentence: a short bold lead-in sits
+// inline at the head of the line rather than stacked above a separate
+// label — the other major, ongoing activities alongside the dated
+// milestones in the timeline beside this list.
+const IMPACT_STATS: { value: Bilingual; text: Bilingual }[] = [
   {
-    value: "5,000+",
-    text: { en: "people supported since we began in 1997.", hi: "लोगों की मदद की गई है, 1997 में हमारी शुरुआत के बाद से।" },
+    value: { en: "Eye camps,", hi: "नेत्र शिविर," },
+    text: {
+      en: "health check-ups, and screenings that bring eye care directly into the community.",
+      hi: "स्वास्थ्य जांच और स्क्रीनिंग, जो आंखों की देखभाल सीधे समुदाय तक पहुंचाते हैं।",
+    },
   },
   {
-    value: "200+",
-    text: { en: "students taught to read and learn in our schools.", hi: "छात्रों को हमारे स्कूलों में पढ़ना और सीखना सिखाया गया है।" },
+    value: { en: "Counselling", hi: "काउंसलिंग" },
+    text: {
+      en: "for parents and awareness in the community, building real understanding and inclusion.",
+      hi: "माता-पिता के लिए काउंसलिंग और समुदाय में जागरूकता, जो असली समझ और समावेश बनाती है।",
+    },
   },
   {
-    value: "1,000+",
-    text: { en: "families steadied through early counselling.", hi: "परिवारों को शुरुआती काउंसलिंग के ज़रिए संभाला गया है।" },
+    value: { en: "Aids and appliances,", hi: "सहायक उपकरण," },
+    text: {
+      en: "plus educational materials, distributed to support independence and learning.",
+      hi: "साथ ही शैक्षणिक सामग्री, जो स्वतंत्रता और सीखने में सहयोग के लिए बांटी जाती है।",
+    },
   },
 ];
 const TIMELINE_SHIFT_X = 180;
@@ -2808,7 +2847,7 @@ export default function IntroSequence() {
                     style={{ top: i * journeyEntryHeight }}
                   >
                     <p className="font-body text-sm leading-6 text-white/80">
-                      <span className="text-2xl font-bold text-white">{stat.value}</span> {t(stat.text)}
+                      <span className="text-2xl font-bold text-white">{t(stat.value)}</span> {t(stat.text)}
                     </p>
                   </div>
                 ))}
@@ -2869,7 +2908,7 @@ export default function IntroSequence() {
                   className="opacity-0"
                 >
                   <p className="font-body text-base leading-6 text-white/80">
-                    <span className="text-2xl font-bold text-white">{stat.value}</span> {t(stat.text)}
+                    <span className="text-2xl font-bold text-white">{t(stat.value)}</span> {t(stat.text)}
                   </p>
                 </div>
               ))}
