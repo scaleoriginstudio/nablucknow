@@ -2350,7 +2350,7 @@ export default function IntroSequence() {
       >
         <video
           ref={videoElRef}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover grayscale"
           src="/img/heroplacement.mp4"
           autoPlay
           muted
