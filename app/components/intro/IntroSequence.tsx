@@ -98,7 +98,7 @@ const STAGE3_MISSION_TEXT: Bilingual = {
   en: "Inclusive education, counselling, and training, from childhood to an independent career.",
   hi: "समावेशी शिक्षा, काउंसलिंग और प्रशिक्षण — बचपन से लेकर एक स्वतंत्र करियर तक।",
 };
-const STAGE3_PHOTO_ALT: Bilingual = {
+const STAGE4_PHOTO_ALT: Bilingual = {
   en: "A smiling schoolboy types on a keyboard while two classmates read beside him.",
   hi: "एक मुस्कुराता हुआ स्कूली छात्र कीबोर्ड पर टाइप कर रहा है, और उसके बगल में दो सहपाठी पढ़ रही हैं।",
 };
@@ -720,6 +720,9 @@ export default function IntroSequence() {
   const activeStageRef = useRef<Stage>(0);
   const isTransitioningRef = useRef(false);
   const transitionTokenRef = useRef(0);
+  // The last stage transition's timeline, so the next one can fast-forward
+  // it before starting (see goToStage).
+  const stageTimelineRef = useRef<gsap.core.Timeline | null>(null);
   // The logo's "jump home" walks back one adjacent stage at a time (the only
   // transition shape goToStage knows how to run), forced instant so the walk
   // reads as a single jump rather than a rewind through every stage.
@@ -1108,6 +1111,12 @@ export default function IntroSequence() {
     const goToStage = (next: Stage) => {
       const current = activeStageRef.current;
       if (isTransitioningRef.current || next === current) return;
+      // The 2s safety-net unlock can fire while a long transition (2->3's
+      // wipe plus the staggered vision reveal) is still playing. Left
+      // running, its late tweens land on top of the new stage — stage 3's
+      // mission reappearing on stage 4, the stepper re-inverted for 03.
+      // Snap it to its end state first so the new transition starts clean.
+      stageTimelineRef.current?.progress(1);
       isTransitioningRef.current = true;
       // Flip the "which stage is active" state (and with it, the stepper
       // number and inert flags) right when the transition starts, in step
@@ -1133,6 +1142,7 @@ export default function IntroSequence() {
         unlock(myToken);
       };
       const tl = gsap.timeline({ onComplete: release });
+      stageTimelineRef.current = tl;
       window.setTimeout(release, 2000);
 
       if (current === 1 && next === 2) {
@@ -2782,16 +2792,6 @@ export default function IntroSequence() {
               <p className="font-body text-lg leading-8 text-white md:text-2xl md:leading-10">
                 {t(STAGE3_MISSION_TEXT)}
               </p>
-              {/* Cut-out photo; the mask fades out the hard-cropped table
-                  edge at the bottom so it melts into the navy field. */}
-              <Image
-                src="/img/nab/students-keyboard.png"
-                alt={t(STAGE3_PHOTO_ALT)}
-                width={1449}
-                height={1085}
-                sizes="(min-width: 768px) 400px, 90vw"
-                className="mt-4 h-auto w-full max-w-sm [mask-image:linear-gradient(to_bottom,black_70%,transparent)] md:max-w-none"
-              />
             </div>
             </div>
           </div>
@@ -2928,6 +2928,22 @@ export default function IntroSequence() {
               ))}
             </div>
           </div>
+
+          {/* Cut-out photo, parked in the bottom-right corner so its
+              hard-cropped table edges run off the screen. xl+ only: below
+              that it would sit on the centred timeline. It fades out on
+              stage 5, where the timeline slides right into this space. */}
+          <Image
+            src="/img/nab/students-keyboard.png"
+            alt={t(STAGE4_PHOTO_ALT)}
+            width={1449}
+            height={1085}
+            sizes="28vw"
+            style={{ transition: "opacity 500ms ease-out" }}
+            className={`absolute bottom-0 right-0 hidden h-auto w-[28vw] max-w-[520px] [mask-image:linear-gradient(to_right,transparent,black_12%)] xl:block ${
+              activeStage === 4 ? "opacity-100" : "opacity-0"
+            }`}
+          />
         </div>
       )}
 
