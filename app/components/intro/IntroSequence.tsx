@@ -98,6 +98,10 @@ const STAGE3_MISSION_TEXT: Bilingual = {
   en: "Inclusive education, counselling, and training, from childhood to an independent career.",
   hi: "समावेशी शिक्षा, काउंसलिंग और प्रशिक्षण — बचपन से लेकर एक स्वतंत्र करियर तक।",
 };
+const STAGE3_PHOTO_ALT: Bilingual = {
+  en: "A smiling schoolboy types on a keyboard while two classmates read beside him.",
+  hi: "एक मुस्कुराता हुआ स्कूली छात्र कीबोर्ड पर टाइप कर रहा है, और उसके बगल में दो सहपाठी पढ़ रही हैं।",
+};
 // The vision, told as the five threads of work that carry it. Each icon
 // grows into place as its line flies in (see the stage-3 choreographer).
 const STAGE3_POINTS: { icon: string; text: Bilingual }[] = [
@@ -2778,6 +2782,16 @@ export default function IntroSequence() {
               <p className="font-body text-lg leading-8 text-white md:text-2xl md:leading-10">
                 {t(STAGE3_MISSION_TEXT)}
               </p>
+              {/* Cut-out photo; the mask fades out the hard-cropped table
+                  edge at the bottom so it melts into the navy field. */}
+              <Image
+                src="/img/nab/students-keyboard.png"
+                alt={t(STAGE3_PHOTO_ALT)}
+                width={1449}
+                height={1085}
+                sizes="(min-width: 768px) 400px, 90vw"
+                className="mt-4 h-auto w-full max-w-sm [mask-image:linear-gradient(to_bottom,black_70%,transparent)] md:max-w-none"
+              />
             </div>
             </div>
           </div>
