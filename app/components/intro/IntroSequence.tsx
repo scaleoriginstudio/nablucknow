@@ -330,6 +330,10 @@ const VOLUNTEER_SUCCESS_BODY: Bilingual = {
   en: "Thank you for offering your time. Our volunteer coordinator will be in touch shortly.",
   hi: "अपना समय देने के लिए धन्यवाद। हमारे वॉलंटियर समन्वयक जल्द ही आपसे संपर्क करेंगे।",
 };
+const CSR_PAGE_LINK: Bilingual = {
+  en: "Where your CSR goes and how a partnership works",
+  hi: "आपका CSR कहाँ जाता है और साझेदारी कैसे काम करती है",
+};
 const SUBMIT_ENQUIRY: Bilingual = { en: "Submit enquiry", hi: "पूछताछ भेजें" };
 const CSR_SUCCESS_BODY: Bilingual = {
   en: "Thank you. Our partnerships team will be in touch to discuss how we can work together.",
@@ -3336,11 +3340,19 @@ export default function IntroSequence() {
                     )}
 
                     {ctaTab === "csr" && (
+                      <div className="flex flex-col gap-3">
+                      <Link
+                        href="/csr"
+                        className="inline-flex items-center gap-1 self-start font-heading text-sm font-semibold text-orange underline-offset-2 hover:underline"
+                      >
+                        {t(CSR_PAGE_LINK)} →
+                      </Link>
                       <LeadForm
                         formType="CSR"
                         submitLabel={t(SUBMIT_ENQUIRY)}
                         successBody={t(CSR_SUCCESS_BODY)}
                       />
+                      </div>
                     )}
                   </div>
                 </div>

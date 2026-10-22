@@ -2,13 +2,14 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "./lib/site";
 import { POSTS } from "./lib/posts-data";
 
-// Every crawlable route. The homepage plus the six fixed pages, then one
+// Every crawlable route. The homepage plus the seven fixed pages, then one
 // entry per blog/event recap article.
 const STATIC_PATHS = [
   { path: "/", priority: 1, changeFrequency: "monthly" as const },
   { path: "/events", priority: 0.8, changeFrequency: "weekly" as const },
   { path: "/blog", priority: 0.8, changeFrequency: "weekly" as const },
   { path: "/programs", priority: 0.8, changeFrequency: "monthly" as const },
+  { path: "/csr", priority: 0.9, changeFrequency: "monthly" as const },
   { path: "/contact", priority: 0.6, changeFrequency: "yearly" as const },
   { path: "/volunteer", priority: 0.7, changeFrequency: "monthly" as const },
   { path: "/donate", priority: 0.9, changeFrequency: "monthly" as const },

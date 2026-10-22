@@ -14,6 +14,7 @@ export const NAV_LINKS: { label: Bilingual; href: string }[] = [
   { label: { en: "Events", hi: "इवेंट्स" }, href: "/events" },
   { label: { en: "Blog", hi: "ब्लॉग" }, href: "/blog" },
   { label: { en: "Programs", hi: "कार्यक्रम" }, href: "/programs" },
+  { label: { en: "CSR", hi: "CSR" }, href: "/csr" },
   { label: { en: "Contact us", hi: "संपर्क करें" }, href: "/contact" },
 ];
 

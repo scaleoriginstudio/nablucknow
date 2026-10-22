@@ -8,7 +8,7 @@ import { FOOTER_QUICK_LINKS, FOOTER_GET_INVOLVED, FOOTER_CONTACT, FOOTER_SOCIALS
 const GET_INVOLVED_HREF: Record<string, string> = {
   Volunteer: "/volunteer",
   Donate: "/donate",
-  "CSR Partnerships": "/programs",
+  "CSR Partnerships": "/csr",
 };
 
 const ORG_NAME = "National Association for the Blind";
