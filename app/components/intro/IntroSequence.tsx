@@ -243,10 +243,10 @@ const TEAM_PANEL_LABELS: Bilingual[] = [
 const FEATURED_MEMBER = {
   photo: "/img/nab/ratna-kaul.jpg",
   name: { en: "Smt. Ratna Kaul", hi: "श्रीमती रत्ना कौल" } as Bilingual,
-  role: { en: "Hindi writer & social worker", hi: "हिंदी लेखिका एवं समाजसेविका" } as Bilingual,
+  role: { en: "Lekhika & Samajsevika", hi: "लेखिका एवं समाजसेविका" } as Bilingual,
   text: {
-    en: "A Hindi lekhika and samajsevika, Smt. Ratna Kaul has long stood with NAB Lucknow's belief that a visually impaired child deserves the same books, the same classroom and the same future as any other. We are grateful for her guidance and her saath (साथ).",
-    hi: "हिंदी लेखिका और समाजसेविका श्रीमती रत्ना कौल लंबे समय से NAB Lucknow के इस विश्वास के साथ खड़ी हैं कि एक दृष्टिबाधित बच्चे को भी वही किताबें, वही कक्षा और वही भविष्य मिलना चाहिए जो किसी और बच्चे को मिलता है। उनके मार्गदर्शन और साथ के लिए हम आभारी हैं।",
+    en: "A lekhika (writer) and samajsevika (social worker), Smt. Ratna Kaul has long stood with NAB Lucknow's belief that a visually impaired child deserves the same books, the same classroom and the same future as any other. We are grateful for her guidance and her saath (साथ).",
+    hi: "लेखिका और समाजसेविका श्रीमती रत्ना कौल लंबे समय से NAB Lucknow के इस विश्वास के साथ खड़ी हैं कि एक दृष्टिबाधित बच्चे को भी वही किताबें, वही कक्षा और वही भविष्य मिलना चाहिए जो किसी और बच्चे को मिलता है। उनके मार्गदर्शन और साथ के लिए हम आभारी हैं।",
   } as Bilingual,
   alt: {
     en: "Portrait of Smt. Ratna Kaul in a green sari, standing in a garden.",
