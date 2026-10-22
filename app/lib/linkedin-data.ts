@@ -92,7 +92,7 @@ export const LINKEDIN_POSTS: LinkedInPost[] = [
       en: "Over 80 participants walked our guided route blindfolded, cane in hand.",
       hi: "80 से अधिक प्रतिभागियों ने आँखों पर पट्टी बाँधकर, हाथ में केन लिए हमारा निर्धारित मार्ग तय किया।",
     },
-    image: "/img/placeholders/cane-walk.jpg",
+    image: "/img/nab/white-cane-distribution.jpg",
     href: LINKEDIN_URL,
   },
   {

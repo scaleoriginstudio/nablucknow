@@ -36,7 +36,7 @@ export const UPCOMING_EVENTS: UpcomingEvent[] = [
       en: "An evening of inspirational storytelling with a visually impaired actor from the Hindi film industry.",
       hi: "हिंदी फिल्म इंडस्ट्री के एक दृष्टिबाधित अभिनेता के साथ प्रेरणादायक कहानियों की एक शाम।",
     },
-    image: "/img/nab/sensitisation-session.jpg",
+    image: "/img/nab/white-cane-handover.jpg",
     location: "Karwaan Studio, Lucknow",
   },
   {

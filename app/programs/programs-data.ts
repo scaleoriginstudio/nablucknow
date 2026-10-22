@@ -36,8 +36,8 @@ export const PROGRAMS: Program[] = [
     },
     format: "Fundraising Talk",
     audience: "Corporate teams",
-    image: "/img/nab/sensitisation-session.jpg",
-    imageAlt: "A guest greets visually impaired students during a sensitisation session in a college auditorium",
+    image: "/img/nab/computer-training.jpg",
+    imageAlt: "Guests and students holding certificates at a NAB Lucknow ceremony",
     hook: {
       en: "An honest conversation on what workplace inclusion for people with visual impairment actually looks like beyond compliance: hiring practices, accessible tooling, and the everyday accommodations that let colleagues do their best work. Saath (साथ) chalna, sirf policy nahi.",
       hi: "इस बातचीत में यह ईमानदारी से बताया जाता है कि दृष्टिबाधित लोगों के लिए कार्यस्थल में समावेशिता कंप्लायंस से आगे असल में कैसी दिखती है: भर्ती की प्रक्रिया, सुलभ टूल्स, और वे रोज़मर्रा की व्यवस्थाएँ जो सहकर्मियों को अपना सर्वश्रेष्ठ काम करने देती हैं।",
@@ -94,8 +94,8 @@ export const PROGRAMS: Program[] = [
     },
     format: "Sponsored Walk",
     audience: "Corporate teams & school groups",
-    image: "/img/placeholders/cane-walk.jpg",
-    imageAlt: "A person walking outdoors with a white cane",
+    image: "/img/nab/white-cane-handover.jpg",
+    imageAlt: "A guest hands a white cane to a visually impaired student at a NAB Lucknow white cane distribution",
     hook: {
       en: "Put on a blindfold, pick up a smart cane, and walk a short guided route the way many of our students do every day: a direct, physical way to understand what independent mobility without sight actually takes — ek saath (एक साथ), step by step.",
       hi: "आँखों पर पट्टी बाँधिए, हाथ में स्मार्ट केन लीजिए, और वही छोटा-सा निर्धारित मार्ग तय कीजिए जो हमारे कई विद्यार्थी हर दिन तय करते हैं: बिना दृष्टि के आत्मनिर्भर चलने-फिरने को सीधे, शरीर से महसूस करने का एक तरीका।",

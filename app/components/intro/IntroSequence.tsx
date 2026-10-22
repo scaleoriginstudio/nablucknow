@@ -80,7 +80,7 @@ const STAGE2_STORIES: { word: Bilingual; headline: Bilingual; image: string; hre
       en: "Ten minutes with a cane and a blindfold changes how a room thinks about access.",
       hi: "छड़ी और आँखों पर पट्टी बांधकर बिताए दस मिनट ही यह बदल देते हैं कि एक कमरा पहुंच के बारे में कैसे सोचता है।",
     },
-    image: "/img/nab/sensitisation-session.jpg",
+    image: "/img/nab/white-cane-distribution.jpg",
     href: "/blog/white-cane-day-walk-2025",
   },
   {
