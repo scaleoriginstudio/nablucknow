@@ -28,8 +28,8 @@ const COPY = {
     hi: "दृष्टि खोने का मतलब पढ़ाई, काम या बाकी सबके साथ अपनी जगह खोना नहीं होना चाहिए। 35 से अधिक वर्षों से हम ब्रेल कक्षा से पहली तनख्वाह तक का पुल बना रहे हैं, और इस सफ़र में कॉर्पोरेट साझेदार हमारे साथ रहे हैं। आपका CSR खर्च ऐसे प्रोग्रामों में जाता है जिनका लंबा अनुभव, स्पष्ट बजट और भरोसेमंद रिपोर्टिंग है।",
   },
   whyPhotoAlt: {
-    en: "Visually impaired students with braille slates around a classroom table",
-    hi: "कक्षा की मेज़ के चारों ओर ब्रेल स्लेट के साथ दृष्टिबाधित विद्यार्थी",
+    en: "Young students reading braille slates around a classroom table",
+    hi: "कक्षा की मेज़ के चारों ओर ब्रेल स्लेट पढ़ते छोटे विद्यार्थी",
   },
   whereTitle: { en: "Where your CSR goes", hi: "आपका CSR कहाँ जाता है" },
   whereSubtitle: {
@@ -63,10 +63,6 @@ const COPY = {
   success: {
     en: "Thank you. Our partnerships team will be in touch to discuss how we can work together.",
     hi: "धन्यवाद। हमारी पार्टनरशिप टीम आगे साथ काम करने की चर्चा के लिए जल्द संपर्क करेगी।",
-  },
-  formPhotoAlt: {
-    en: "A guest hands a white cane to a visually impaired student at a NAB Lucknow event",
-    hi: "NAB Lucknow के एक कार्यक्रम में एक अतिथि दृष्टिबाधित विद्यार्थी को व्हाइट केन देते हुए",
   },
 };
 
@@ -110,7 +106,7 @@ export function CsrWhyStage() {
           </div>
           <div className="relative hidden aspect-[4/3] overflow-hidden rounded-3xl shadow-lg ring-1 ring-black/10 md:block">
             <Image
-              src="/img/nab/braille-classroom.jpg"
+              src="/img/nab/braille-class-boys.jpg"
               alt={t(COPY.whyPhotoAlt)}
               fill
               sizes="40vw"
@@ -236,9 +232,6 @@ export function CsrStartStage() {
       <StageBody>
         <div className="grid gap-6 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-10">
           <div className="flex flex-col gap-4">
-            <div className="relative hidden aspect-[4/3] overflow-hidden rounded-3xl ring-1 ring-black/10 md:block">
-              <Image src="/img/nab/white-cane-handover.jpg" alt={t(COPY.formPhotoAlt)} fill sizes="35vw" className="object-cover" />
-            </div>
             <div className="flex flex-col gap-2 rounded-2xl border border-black/10 p-4 font-body text-sm text-black/70">
               <p className={eyebrow}>{t(COPY.orReach)}</p>
               <a href={`mailto:${FOOTER_CONTACT.email}`} className="flex items-center gap-2 hover:underline">

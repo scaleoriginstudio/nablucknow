@@ -28,8 +28,9 @@ export function GlassBackdrop({ image, priority = false }: { image?: string; pri
 }
 
 type CommonProps = {
-  /** Photo shown in the left panel (right of the form on wide screens). */
-  image: string;
+  /** Photo shown in the left panel (right of the form on wide screens).
+      Optional: without it the card is just the form, centred and narrower. */
+  image?: string;
   imageAlt?: string;
   eyebrow?: string;
   title: string;
@@ -74,6 +75,7 @@ function Split({
   return (
     <>
       {/* Desktop only: the photo is a fixed side panel next to the form. */}
+      {image && (
       <div className="relative hidden shrink-0 overflow-hidden md:block md:w-2/5">
         <Image src={image} alt={imageAlt} fill sizes="40vw" className="object-cover" />
         <div
@@ -88,6 +90,7 @@ function Split({
           <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-6 text-white">{aside}</div>
         )}
       </div>
+      )}
 
       {/* The single scroll surface. On mobile the photo lives inside it and
           scrolls away with the content, so a drag anywhere on the card
@@ -97,10 +100,12 @@ function Split({
         data-stage-scroll=""
         className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]"
       >
-        <div className="relative h-44 w-full shrink-0 overflow-hidden md:hidden">
-          <Image src={image} alt={imageAlt} fill sizes="100vw" className="object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-navy/25 to-transparent" />
-        </div>
+        {image && (
+          <div className="relative h-44 w-full shrink-0 overflow-hidden md:hidden">
+            <Image src={image} alt={imageAlt} fill sizes="100vw" className="object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-navy/25 to-transparent" />
+          </div>
+        )}
 
         <div className="flex flex-col gap-4 p-6 md:p-9">
           <div className="flex flex-col gap-1.5">
@@ -180,7 +185,8 @@ function PageShell({ imageSide = "left", ...rest }: PageProps) {
           stepper above it. */}
       <div
         className={
-          "flex h-full min-h-0 w-full max-w-5xl flex-col overflow-hidden rounded-3xl border border-white/40 bg-white/85 shadow-2xl backdrop-blur-2xl md:max-h-[560px] " +
+          "flex h-full min-h-0 w-full flex-col overflow-hidden rounded-3xl border border-white/40 bg-white/85 shadow-2xl backdrop-blur-2xl md:max-h-[560px] " +
+          (rest.image ? "max-w-5xl " : "max-w-2xl ") +
           (imageSide === "right" ? "md:flex-row-reverse" : "md:flex-row")
         }
       >

@@ -5,6 +5,9 @@ import { UpiDonationFlow } from "./UpiPayment";
 import { CAUSES, causeProgress, formatINR } from "../../lib/causes-data";
 import { useLanguage } from "./LanguageContext";
 
+/** Not a cause photo: those already appear on the homepage cause cards. */
+export const DONATE_IMAGE = "/img/nab/eye-checkup.jpg";
+
 const EYEBROW = { en: "Support a cause", hi: "किसी अभियान का साथ दें" };
 const TITLE = { en: "Donate to NAB Lucknow", hi: "NAB Lucknow को दान करें" };
 const INTRO = {
@@ -53,7 +56,7 @@ export function DonateOverlay({ onClose }: { onClose: () => void }) {
       variant="modal"
       titleId="donate-overlay-title"
       onClose={onClose}
-      image={CAUSES[0].image}
+      image={DONATE_IMAGE}
       imageAlt=""
       eyebrow={t(EYEBROW)}
       title={t(TITLE)}

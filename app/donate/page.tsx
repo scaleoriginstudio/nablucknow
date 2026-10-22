@@ -13,7 +13,7 @@ export default function DonatePage() {
   return (
     <main>
       <StagePager
-        background={<GlassBackdrop image="/img/nab/cover-page.jpg" priority />}
+        background={<GlassBackdrop />}
         stages={[<DonateStage key="donate" />]}
       />
     </main>

@@ -55,7 +55,7 @@ export function ContactStage() {
   };
 
   const details = (onDark: boolean) => (
-    <div className={"flex flex-col gap-3 font-body text-sm " + (onDark ? "text-white/90" : "text-black/70")}>
+    <div className={"grid gap-3 font-body text-sm sm:grid-cols-2 " + (onDark ? "text-white/90" : "text-black/70")}>
       <a
         href={MAPS_HREF}
         target="_blank"
@@ -83,16 +83,11 @@ export function ContactStage() {
   return (
     <GlassFormShell
       variant="page"
-      image="/img/nab/braille-classroom.jpg"
-      imageAlt=""
       eyebrow={t(COPY.eyebrow)}
       title={t(COPY.title)}
       intro={t(COPY.intro)}
-      aside={details(true)}
     >
-      {/* The aside only shows over the desktop photo; phones get the same
-          details here, above the form. */}
-      <div className="rounded-xl border border-black/10 p-4 md:hidden">{details(false)}</div>
+      <div className="rounded-xl border border-black/10 p-4">{details(false)}</div>
       {sent ? (
         <div className="flex items-start gap-3 rounded-xl border border-navy/15 bg-navy/5 p-4">
           <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-navy text-white">

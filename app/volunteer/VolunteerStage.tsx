@@ -39,7 +39,7 @@ export function VolunteerStage() {
     <GlassFormShell
       variant="page"
       image="/img/nab/dance.jpg"
-      imageAlt="A volunteer working with NAB students"
+      imageAlt="Students performing a dance at a NAB Lucknow event"
       eyebrow={t(COPY.eyebrow)}
       title={t(COPY.title)}
       intro={t(COPY.intro)}

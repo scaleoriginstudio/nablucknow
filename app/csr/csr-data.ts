@@ -49,10 +49,10 @@ export const FOCUS_AREAS: FocusArea[] = [
   {
     slug: "inclusive-schools",
     icon: "school",
-    image: "/img/nab/braille-pegboard.jpg",
+    image: "/img/nab/bani.jpg",
     imageAlt: {
-      en: "A young student smiles while reading a braille peg board in class",
-      hi: "कक्षा में ब्रेल पेग बोर्ड पढ़ते हुए मुस्कुराता एक छोटा विद्यार्थी",
+      en: "A student at a braille writer in class",
+      hi: "कक्षा में ब्रेल राइटर पर एक विद्यार्थी",
     },
     title: { en: "Inclusive schools", hi: "समावेशी स्कूल" },
     body: {
@@ -73,10 +73,10 @@ export const FOCUS_AREAS: FocusArea[] = [
   {
     slug: "vocational-training",
     icon: "computer",
-    image: "/img/nab/computer-training.jpg",
+    image: "/img/nab/computer.jpg",
     imageAlt: {
-      en: "Guests and students holding certificates at a NAB Lucknow training ceremony",
-      hi: "NAB Lucknow के एक ट्रेनिंग समारोह में प्रमाणपत्र लिए अतिथि और विद्यार्थी",
+      en: "A group of NAB Lucknow students and trainees",
+      hi: "NAB Lucknow के विद्यार्थियों और प्रशिक्षुओं का एक समूह",
     },
     title: { en: "Vocational training", hi: "व्यावसायिक प्रशिक्षण" },
     body: {

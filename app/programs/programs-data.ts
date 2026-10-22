@@ -36,8 +36,8 @@ export const PROGRAMS: Program[] = [
     },
     format: "Fundraising Talk",
     audience: "Corporate teams",
-    image: "/img/nab/computer-training.jpg",
-    imageAlt: "Guests and students holding certificates at a NAB Lucknow ceremony",
+    image: "/img/nab/care.jpg",
+    imageAlt: "A full hall of students, staff and guests at a NAB Lucknow gathering",
     hook: {
       en: "An honest conversation on what workplace inclusion for people with visual impairment actually looks like beyond compliance: hiring practices, accessible tooling, and the everyday accommodations that let colleagues do their best work. Saath (साथ) chalna, sirf policy nahi.",
       hi: "इस बातचीत में यह ईमानदारी से बताया जाता है कि दृष्टिबाधित लोगों के लिए कार्यस्थल में समावेशिता कंप्लायंस से आगे असल में कैसी दिखती है: भर्ती की प्रक्रिया, सुलभ टूल्स, और वे रोज़मर्रा की व्यवस्थाएँ जो सहकर्मियों को अपना सर्वश्रेष्ठ काम करने देती हैं।",
@@ -65,8 +65,8 @@ export const PROGRAMS: Program[] = [
     },
     format: "Street Performance",
     audience: "Schools & corporate campuses",
-    image: "/img/nab/dance.jpg",
-    imageAlt: "Visually impaired students performing on stage at a NAB Lucknow event",
+    image: "/img/nab/cover-page.jpg",
+    imageAlt: "Students in costume with guests after a NAB Lucknow cultural performance",
     hook: {
       en: "A musical street play performed entirely by visually impaired students, trained over several weeks by professional street artists and theatre directors. No scripts read off a page, every line and cue learned by ear — pure hausla (हौसला) on stage.",
       hi: "पूरी तरह दृष्टिबाधित विद्यार्थियों द्वारा प्रस्तुत एक संगीतमय नुक्कड़ नाटक, जिसे हफ्तों तक पेशेवर स्ट्रीट आर्टिस्टों और थिएटर डायरेक्टरों ने प्रशिक्षित किया है। कोई स्क्रिप्ट पढ़ी नहीं जाती, हर संवाद और क्यू कान से सीखा जाता है।",

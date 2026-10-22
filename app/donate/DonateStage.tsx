@@ -2,8 +2,7 @@
 
 import { GlassFormShell } from "../components/shared/GlassFormShell";
 import { UpiDonationFlow } from "../components/shared/UpiPayment";
-import { CausesAside } from "../components/shared/DonateOverlay";
-import { CAUSES } from "../lib/causes-data";
+import { CausesAside, DONATE_IMAGE } from "../components/shared/DonateOverlay";
 import { useLanguage } from "../components/shared/LanguageContext";
 
 const COPY = {
@@ -23,7 +22,7 @@ export function DonateStage() {
   return (
     <GlassFormShell
       variant="page"
-      image={CAUSES[0].image}
+      image={DONATE_IMAGE}
       imageAlt=""
       eyebrow={t(COPY.eyebrow)}
       title={t(COPY.title)}

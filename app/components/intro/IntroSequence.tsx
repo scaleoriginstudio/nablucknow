@@ -89,7 +89,7 @@ const STAGE2_STORIES: { word: Bilingual; headline: Bilingual; image: string; hre
       en: "We stay past the training, past the interview, until the first month is behind them.",
       hi: "हम ट्रेनिंग और इंटरव्यू के बाद भी साथ रहते हैं, जब तक नौकरी का पहला महीना पूरा नहीं हो जाता।",
     },
-    image: "/img/nab/vocational.jpg",
+    image: "/img/nab/computer-training.jpg",
     href: "/blog/why-accessible-hiring-matters",
   },
 ];
@@ -316,7 +316,7 @@ const SKIP_INTRO_LABEL: Bilingual = { en: "Skip intro", hi: "इंट्रो 
 const PAUSE_LEARN_MORE_LABEL: Bilingual = { en: "Pause & learn more", hi: "रोकें और जानें" };
 const RESUME_INTRO_LABEL: Bilingual = { en: "Resume intro", hi: "इंट्रो जारी रखें" };
 const CTA_TAB_META = {
-  volunteer: { label: { en: "Volunteer", hi: "वॉलंटियर" } as Bilingual, image: "/img/nab/dance.jpg" },
+  volunteer: { label: { en: "Volunteer", hi: "वॉलंटियर" } as Bilingual, image: "/img/nab/teacher.jpg" },
   donate: { label: { en: "Donate", hi: "दान करें" } as Bilingual, image: "/img/nab/braille-pegs.jpg" },
   csr: { label: { en: "CSR", hi: "CSR" } as Bilingual, image: "/img/nab/compitions.jpg" },
 } as const;
