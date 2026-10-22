@@ -57,12 +57,12 @@ const STAGE1_HEADLINE: Bilingual = {
   hi: "National Association for the Blind, State Chapter, Lucknow",
 };
 const STAGE1_PARAGRAPH: Bilingual = {
-  en: "Since 1989 we have worked so that losing your sight in Uttar Pradesh need not mean losing your schooling, your work, or your place alongside everyone else — your saath in the world. Every programme we run points at one thing: an inclusive, ordinary, independent life.",
+  en: "Since 1989 we have worked so that losing your sight in Uttar Pradesh need not mean losing your schooling, your work, or your place alongside everyone else: your saath in the world. Every programme we run points at one thing: an inclusive, ordinary, independent life.",
   hi: "1989 से हम इसलिए काम कर रहे हैं ताकि उत्तर प्रदेश में किसी की दृष्टि जाने का मतलब उसकी पढ़ाई, काम या बाकी सबके साथ उसकी जगह खोना न हो। हमारा हर प्रोग्राम एक ही बात की ओर इशारा करता है: एक समावेशी, सामान्य और स्वतंत्र ज़िंदगी।",
 };
 const STAGE2_PARAGRAPH: Bilingual = {
-  en: "For more than 35 years we have worked with visually impaired people in Lucknow and across Uttar Pradesh, from primary schooling through family counselling to employment. Every programme is built for inclusion, not separation — the aim is a full, ordinary life for every person we support, alongside everyone else — ek saath — not a lesser version of one apart from them.",
-  hi: "35 से अधिक वर्षों से हम लखनऊ और उत्तर प्रदेश भर में दृष्टिबाधित लोगों के साथ काम कर रहे हैं — प्राथमिक शिक्षा से लेकर पारिवारिक काउंसलिंग और रोज़गार तक। हर प्रोग्राम समावेशन के लिए बनाया गया है, अलगाव के लिए नहीं — मकसद यही है कि हम जिस भी व्यक्ति की मदद करते हैं, उसे बाकी सबके साथ एक पूरी, सामान्य ज़िंदगी मिले, किसी अलग या कमतर ज़िंदगी की बजाय।",
+  en: "For more than 35 years we have worked with visually impaired people in Lucknow and across Uttar Pradesh, from primary schooling through family counselling to employment. Every programme is built for inclusion, not separation. The aim is a full, ordinary life for every person we support, alongside everyone else (ek saath), not a lesser version of one apart from them.",
+  hi: "35 से अधिक वर्षों से हम लखनऊ और उत्तर प्रदेश भर में दृष्टिबाधित लोगों के साथ काम कर रहे हैं, प्राथमिक शिक्षा से लेकर पारिवारिक काउंसलिंग और रोज़गार तक। हर प्रोग्राम समावेशन के लिए बनाया गया है, अलगाव के लिए नहीं। मकसद यही है कि हम जिस भी व्यक्ति की मदद करते हैं, उसे बाकी सबके साथ एक पूरी, सामान्य ज़िंदगी मिले, किसी अलग या कमतर ज़िंदगी की बजाय।",
 };
 const STAGE2_STORIES: { word: Bilingual; headline: Bilingual; image: string; href: string }[] = [
   {
@@ -97,7 +97,7 @@ const STAGE3_VISION_LABEL: Bilingual = { en: "Our Vision", hi: "हमारा 
 const STAGE3_MISSION_LABEL: Bilingual = { en: "Our Mission", hi: "हमारा उद्देश्य" };
 const STAGE3_MISSION_TEXT: Bilingual = {
   en: "Inclusive education, counselling, and training, from childhood to an independent career.",
-  hi: "समावेशी शिक्षा, काउंसलिंग और प्रशिक्षण — बचपन से लेकर एक स्वतंत्र करियर तक।",
+  hi: "समावेशी शिक्षा, काउंसलिंग और प्रशिक्षण, बचपन से लेकर एक स्वतंत्र करियर तक।",
 };
 const STAGE4_PHOTO_ALT: Bilingual = {
   en: "A smiling schoolboy types on a keyboard while two classmates read beside him.",
@@ -148,8 +148,8 @@ const JOURNEY_ENTRIES: { year: string; text: Bilingual }[] = [
   {
     year: "1989–90",
     text: {
-      en: "NAB Lucknow is established in Chinhat, Lucknow, launching a Community-Based Rehabilitation (CBR) programme — the start of our seva in Uttar Pradesh.",
-      hi: "NAB Lucknow की स्थापना लखनऊ के चिनहट में हुई, साथ ही एक कम्युनिटी-बेस्ड रिहैबिलिटेशन (CBR) प्रोग्राम शुरू हुआ — उत्तर प्रदेश में हमारी सेवा की शुरुआत।",
+      en: "NAB Lucknow is established in Chinhat, Lucknow, launching a Community-Based Rehabilitation (CBR) programme: the start of our seva in Uttar Pradesh.",
+      hi: "NAB Lucknow की स्थापना लखनऊ के चिनहट में हुई, साथ ही एक कम्युनिटी-बेस्ड रिहैबिलिटेशन (CBR) प्रोग्राम शुरू हुआ। यह उत्तर प्रदेश में हमारी सेवा की शुरुआत थी।",
     },
   },
   {
@@ -169,8 +169,8 @@ const JOURNEY_ENTRIES: { year: string; text: Bilingual }[] = [
   {
     year: "2005",
     text: {
-      en: "A home-based programme for children with multiple disabilities begins, supported by Perkins International — reaching families where the child already lives.",
-      hi: "पर्किन्स इंटरनेशनल (Perkins International) के सहयोग से, कई दिव्यांगताओं वाले बच्चों के लिए एक होम-बेस्ड प्रोग्राम शुरू होता है — परिवार तक वहीं पहुंचकर, जहां बच्चा रहता है।",
+      en: "A home-based programme for children with multiple disabilities begins, supported by Perkins International, reaching families where the child already lives.",
+      hi: "पर्किन्स इंटरनेशनल (Perkins International) के सहयोग से, कई दिव्यांगताओं वाले बच्चों के लिए एक होम-बेस्ड प्रोग्राम शुरू होता है, जो परिवार तक वहीं पहुंचकर, जहां बच्चा रहता है।",
     },
   },
   {
@@ -183,8 +183,8 @@ const JOURNEY_ENTRIES: { year: string; text: Bilingual }[] = [
   {
     year: "2009",
     text: {
-      en: "The Integrated Education Programme grows to five districts and 20 units — the same saath, reaching much further.",
-      hi: "इंटीग्रेटेड एजुकेशन प्रोग्राम अब पांच जिलों और 20 यूनिट्स तक फैल चुका है — वही साथ, अब कहीं ज़्यादा दूर तक।",
+      en: "The Integrated Education Programme grows to five districts and 20 units: the same saath, reaching much further.",
+      hi: "इंटीग्रेटेड एजुकेशन प्रोग्राम अब पांच जिलों और 20 यूनिट्स तक फैल चुका है। वही साथ, अब कहीं ज़्यादा दूर तक।",
     },
   },
   {
@@ -197,8 +197,8 @@ const JOURNEY_ENTRIES: { year: string; text: Bilingual }[] = [
   {
     year: "2015",
     text: {
-      en: "With Amway's support, the computer training programme continues and grows — new batches, the same hausla.",
-      hi: "Amway के सहयोग से कंप्यूटर ट्रेनिंग प्रोग्राम जारी रहता है और आगे बढ़ता है — नए बैच, वही हौसला।",
+      en: "With Amway's support, the computer training programme continues and grows: new batches, the same hausla.",
+      hi: "Amway के सहयोग से कंप्यूटर ट्रेनिंग प्रोग्राम जारी रहता है और आगे बढ़ता है। नए बैच, वही हौसला।",
     },
   },
 ];
@@ -206,7 +206,7 @@ const JOURNEY_ENTRY_HEIGHT = 96;
 const VISIBLE_JOURNEY_ROWS = 3;
 // Each pointer reads as a single sentence: a short bold lead-in sits
 // inline at the head of the line rather than stacked above a separate
-// label — the other major, ongoing activities alongside the dated
+// label, the other major, ongoing activities alongside the dated
 // milestones in the timeline beside this list.
 const IMPACT_STATS: { value: Bilingual; text: Bilingual }[] = [
   {
@@ -321,7 +321,7 @@ const CTA_TAB_META = {
   csr: { label: { en: "CSR", hi: "CSR" } as Bilingual, image: "/img/nab/compitions.jpg" },
 } as const;
 // Copy for the three CTA forms (donate/volunteer/CSR) inside the stage-8
-// tab panel — kept separate from the near-identical DonateOverlay /
+// tab panel, kept separate from the near-identical DonateOverlay /
 // VolunteerOverlay copy since these are shorter, inline variants.
 const WHICH_AREA_LABEL: Bilingual = { en: "Which area?", hi: "कौन सा क्षेत्र?" };
 const CHOOSE_AN_AREA: Bilingual = { en: "Choose an area", hi: "एक क्षेत्र चुनें" };
@@ -353,7 +353,7 @@ const TESTIMONIALS: { quote: Bilingual; name: Bilingual; role: Bilingual; icon: 
   },
   {
     quote: {
-      en: "The training gave me a skill and then a job. More than that — it gave me back my hausla, my independence.",
+      en: "The training gave me a skill and then a job. More than that, it gave me back my hausla, my independence.",
       hi: "ट्रेनिंग ने मुझे एक हुनर दिया और फिर एक नौकरी। उससे भी बढ़कर, इसने मुझे मेरी आज़ादी वापस दी।",
     },
     name: { en: "Programme graduate", hi: "प्रोग्राम स्नातक" },
@@ -468,7 +468,7 @@ const logoStyle = (layout: Layout, isMobile: boolean, atFooter = false): CSSProp
   // Only the chrome (white plate <-> transparent) is CSS-driven here. The
   // logo stays pinned at the header spot in both branches; the trip to the
   // footer's own logo slot (which lives at a different place per viewport)
-  // is a GSAP transform tween that measures the real slot — see the
+  // is a GSAP transform tween that measures the real slot, see the
   // logo-morph effect.
   const transition = "background-color 0.5s ease, padding 0.5s ease, border-radius 0.5s ease";
   if (atFooter) {
@@ -499,7 +499,7 @@ const logoStyle = (layout: Layout, isMobile: boolean, atFooter = false): CSSProp
 };
 
 // On mobile the hero video stays a horizontal 16:9 band under the header
-// instead of stretching to fill the remaining viewport height — the
+// instead of stretching to fill the remaining viewport height, the
 // headline then sits below it rather than overlaid on top.
 const MOBILE_HERO_VIDEO_HEIGHT = "56.25vw";
 
@@ -554,7 +554,7 @@ const headlineStyle = (layout: Layout, isMobile: boolean): CSSProperties =>
           textAlign: "center",
           // Never interactive, and once the visitor is past the hero it sits
           // faded (opacity 0) on top of later stages at z-20. Without this it
-          // silently swallows taps on whatever is beneath it — the SDG grid
+          // silently swallows taps on whatever is beneath it, the SDG grid
           // and its description box on mobile.
           pointerEvents: "none",
         }
@@ -590,8 +590,8 @@ export default function IntroSequence() {
   const isMobile = useIsMobile();
   const panelId = useId();
   const { t } = useLanguage();
-  // Imperative (non-JSX) writes below — textContent assigned straight onto a
-  // DOM node inside GSAP timelines/callbacks rather than rendered by React —
+  // Imperative (non-JSX) writes below, textContent assigned straight onto a
+  // DOM node inside GSAP timelines/callbacks rather than rendered by React , 
   // read the translator through this ref instead of closing over `t`
   // directly. Those callbacks live inside a large useEffect/useGSAP whose own
   // dependency arrays are deliberately left untouched (re-running them would
@@ -691,11 +691,11 @@ export default function IntroSequence() {
   // The ", quantified" that appends itself to "Our journey" on the 4->5
   // step. Split into two refs on purpose: quantifiedWordRef is a plain
   // (non-atomic) inline span carrying only opacity, glued straight onto
-  // "journey" with no gap — Chrome inserts a line-break opportunity before
+  // "journey" with no gap: Chrome inserts a line-break opportunity before
   // an inline-block even with no preceding whitespace, so the comma has to
   // live outside that box to guarantee it never gets orphaned onto its own
   // line. quantifiedInnerRef is the actual inline-block that grows via
-  // max-width, wrapping "quantified" alone — if the phrase doesn't fit, it
+  // max-width, wrapping "quantified" alone, if the phrase doesn't fit, it
   // wraps there, leaving "Our journey," complete on the first line.
   const quantifiedWordRef = useRef<HTMLSpanElement>(null);
   const quantifiedInnerRef = useRef<HTMLSpanElement>(null);
@@ -708,7 +708,7 @@ export default function IntroSequence() {
   const impactStatRefs = useRef<(HTMLDivElement | null)[]>([]);
   // Mobile has no room to shift the timeline aside and reveal stats beside
   // it (that requires the ~270px of open page the desktop layout has to
-  // spare) — instead it crossfades the timeline for a stacked stats block
+  // spare), instead it crossfades the timeline for a stacked stats block
   // in the same spot, so it needs its own container and item refs.
   const impactStatsMobileRef = useRef<HTMLDivElement>(null);
   const impactStatMobileRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -834,12 +834,12 @@ export default function IntroSequence() {
     setLayout("final");
   }, [update]);
 
-  // The logo is a permanent "go home" control once the intro has settled —
+  // The logo is a permanent "go home" control once the intro has settled , 
   // goToStage only knows how to move one adjacent stage at a time, so this
   // walks that same path back to stage 1, forced instant so it reads as a
   // single jump rather than a rewind through every stage in between.
-  // Walks one adjacent stage at a time toward an arbitrary target — the
-  // only transition shape goToStage knows how to run — forced instant so
+  // Walks one adjacent stage at a time toward an arbitrary target, the
+  // only transition shape goToStage knows how to run, forced instant so
   // it reads as a single jump rather than a rewind through every stage in
   // between. Used by both the logo (always target 1) and the clickable
   // stepper numbers (any target).
@@ -873,12 +873,12 @@ export default function IntroSequence() {
     jumpToStage(1);
   }, [jumpToStage]);
 
-  // Phase 1: the sight-loss countdown — the homepage's default landing
+  // Phase 1: the sight-loss countdown, the homepage's default landing
   // experience, simulating vision loss before it "returns" into stage 1.
   useGSAP(
     () => {
       if (layout !== "countdown") return;
-      // The vision-loss countdown runs on every load — it is the point of
+      // The vision-loss countdown runs on every load, it is the point of
       // the homepage. Only a stated OS "reduce motion" preference skips it.
       if (prefersReducedMotion) {
         handleSkip();
@@ -963,8 +963,8 @@ export default function IntroSequence() {
   // wrapper to the destination top/left/size on that render (a plain length
   // can't CSS-transition into the footer slot's calc()/max() anyway), so
   // this only adds the visible travel: a transform tween from the far end
-  // back to zero. Transform is GSAP's alone here — React never writes it to
-  // this element — so nothing clobbers the tween. Kept out of goToStage's
+  // back to zero. Transform is GSAP's alone here: React never writes it to
+  // this element, so nothing clobbers the tween. Kept out of goToStage's
   // timeline so a stalled step can't strand the logo half-morphed.
   useLayoutEffect(() => {
     const prev = logoMorphStageRef.current;
@@ -979,7 +979,7 @@ export default function IntroSequence() {
 
     const instant = prefersReducedMotion || forceInstantRef.current;
     if (toFooter) {
-      // Measure the footer's own (hidden) logo slot — it sits in a
+      // Measure the footer's own (hidden) logo slot, it sits in a
       // different place at every width. The footer is mid-slide-up as this
       // runs, so undo its live translateY to get the resting spot.
       const slotEl = stage11Ref.current?.querySelector<HTMLElement>("[data-footer-logo]");
@@ -1014,7 +1014,7 @@ export default function IntroSequence() {
   }, [activeStage, layout, prefersReducedMotion]);
 
   // Once settled on the hero, wheel/keyboard/touch gestures step between the
-  // hero and stage 1 — the viewport itself never scrolls; content flies
+  // hero and stage 1, the viewport itself never scrolls; content flies
   // out and the next stage's content flies in to replace it.
   useEffect(() => {
     // Shared release path for every lock set by a stage/sub-stage
@@ -1030,7 +1030,7 @@ export default function IntroSequence() {
 
     // Returns a per-frame callback that recolors the header links and the
     // stage-2 stepper based on whether the wipe box's *current* rect
-    // actually overlaps each element right now — a real crossing check,
+    // actually overlaps each element right now, a real crossing check,
     // not a guess at timing.
     const colorInverter = (activeNumber: number) => () => {
       const box = wipeBoxRef.current;
@@ -1044,7 +1044,7 @@ export default function IntroSequence() {
 
       (headerRef.current?.querySelectorAll("a") ?? []).forEach((el) => {
         // The Donate button has its own solid orange fill and always keeps
-        // white text — it doesn't participate in the invert.
+        // white text, it doesn't participate in the invert.
         if (el.classList.contains("bg-orange")) return;
         const covered = rectsOverlap(boxRect, el.getBoundingClientRect());
         const isVolunteer = el.classList.contains("border-navy");
@@ -1128,14 +1128,14 @@ export default function IntroSequence() {
       if (isTransitioningRef.current || next === current) return;
       // The 2s safety-net unlock can fire while a long transition (2->3's
       // wipe plus the staggered vision reveal) is still playing. Left
-      // running, its late tweens land on top of the new stage — stage 3's
+      // running, its late tweens land on top of the new stage, stage 3's
       // mission reappearing on stage 4, the stepper re-inverted for 03.
       // Snap it to its end state first so the new transition starts clean.
       stageTimelineRef.current?.progress(1);
       isTransitioningRef.current = true;
       // Flip the "which stage is active" state (and with it, the stepper
       // number and inert flags) right when the transition starts, in step
-      // with the content that begins animating immediately — not at the
+      // with the content that begins animating immediately, not at the
       // end, which left the stepper showing the old number while the new
       // stage's content was already on screen.
       activeStageRef.current = next;
@@ -1163,7 +1163,7 @@ export default function IntroSequence() {
       if (current === 1 && next === 2) {
         setStory(0);
         // Desktop lands the word list as a left column beside the photo;
-        // mobile lands it as a horizontal row above the photo instead —
+        // mobile lands it as a horizontal row above the photo instead , 
         // each has its own reserved slot, measured here.
         const slotRect = (isMobile ? stage2WordsMobileSlotRef : stage2WordsSlotRef).current?.getBoundingClientRect();
 
@@ -1179,7 +1179,7 @@ export default function IntroSequence() {
         tl.set(stage2Ref.current, { pointerEvents: "auto" });
         tl.to(stage2Ref.current, { opacity: 1, duration: dur ?? 0.35 }, dur ? 0 : "-=0.1");
         // The word list that was peeking up from the bottom of stage 1
-        // is the very same element — it just flies up into its resting spot.
+        // is the very same element, it just flies up into its resting spot.
         if (slotRect) {
           tl.to(
             stage2WordsRef.current,
@@ -1212,7 +1212,7 @@ export default function IntroSequence() {
           ease: "power2.in",
         });
         if (isMobile) {
-          // Back to the same peek spot it rests at ahead of stage 1 —
+          // Back to the same peek spot it rests at ahead of stage 1 , 
           // full width, centered, bottom-anchored.
           tl.to(
             stage2WordsRef.current,
@@ -1250,7 +1250,7 @@ export default function IntroSequence() {
         );
       } else if (current === 2 && next === 3) {
         // The corner tab grows to cover the whole viewport; the header and
-        // stepper invert to white exactly where the navy edge has reached —
+        // stepper invert to white exactly where the navy edge has reached , 
         // checked against real geometry every frame, not just timed to hope
         // it lines up.
         const invert = colorInverter(3);
@@ -1312,7 +1312,7 @@ export default function IntroSequence() {
         tl.set(stage2Ref.current, { pointerEvents: "auto" });
         tl.to(stage2Targets, { opacity: 1, duration: dur ?? 0.3, ease: "power1.in" }, dur ? 0 : "-=0.2");
         tl.call(invert);
-        // The wipe box has fully retreated off-screen — clear the inline
+        // The wipe box has fully retreated off-screen, clear the inline
         // colors it wrote so the stepper/header fall back to their normal
         // class-driven colors instead of staying stuck on a stale value
         // from this wipe the next time a completely unrelated stage
@@ -1323,19 +1323,19 @@ export default function IntroSequence() {
           if (headerRef.current) gsap.set(headerRef.current, { clearProps: "backgroundColor" });
         });
       } else if (current === 3 && next === 4) {
-        // Same navy field as stage 3 — the vision list and mission block
+        // Same navy field as stage 3, the vision list and mission block
         // clear out and "Our Journey, Quantified" flies into the spot the
         // "Our Vision" label just vacated.
         const stage3Grid = [stage3VisionRef.current, stage3MissionRef.current];
 
-        // Always arrive at the Journey timeline fresh, heading-only —
+        // Always arrive at the Journey timeline fresh, heading-only , 
         // any previously revealed entries collapse back instantly, and the
         // scroll window resets to its start.
         journeyIndexRef.current = 0;
         gsap.set(timelineListRef.current, { y: 0 });
         gsap.set(journeyEntryRefs.current.filter(Boolean), { opacity: 0, y: 40 });
         gsap.set(journeyConnectorRefs.current.filter(Boolean), { scaleY: 0 });
-        // Arrive as "Our journey" — the ", quantified" only appends on 4->5.
+        // Arrive as "Our journey", the ", quantified" only appends on 4->5.
         gsap.set(quantifiedWordRef.current, { opacity: 0 });
         gsap.set(quantifiedInnerRef.current, { maxWidth: 0 });
         // The wipe box never moves during this transition (it's already
@@ -1367,7 +1367,7 @@ export default function IntroSequence() {
         impactIndexRef.current = 1;
         colorInverter(5)();
 
-        // "Our journey" gains its ", quantified" as the stats arrive — the
+        // "Our journey" gains its ", quantified" as the stats arrive, the
         // word grows in from zero width so the heading re-centres around it.
         // The comma's own opacity fade is a separate, non-atomic span (see
         // the refs' declaration) so it can never be orphaned from "journey"
@@ -1392,7 +1392,7 @@ export default function IntroSequence() {
         );
 
         if (isMobile) {
-          // No room to shift the timeline aside on a narrow screen — cross-
+          // No room to shift the timeline aside on a narrow screen, cross-
           // fade it for a stacked stats block in the same spot instead.
           gsap.set(impactStatMobileRefs.current.filter(Boolean), { opacity: 0, y: 60 });
           tl.set(timelineRef.current, { pointerEvents: "none" });
@@ -1408,7 +1408,7 @@ export default function IntroSequence() {
         } else {
           // The timeline (heading stays put) slides right to make room, and
           // the first impact stat flies up into the space it vacated on the
-          // left — both part of the same scroll that leaves the timeline.
+          // left, both part of the same scroll that leaves the timeline.
           gsap.set(impactStatRefs.current.filter(Boolean), { opacity: 0, y: 60 });
           tl.to(timelineRef.current, { x: TIMELINE_SHIFT_X, duration: dur ?? 0.6, ease: "power2.inOut" }, 0);
           tl.fromTo(
@@ -1445,7 +1445,7 @@ export default function IntroSequence() {
         setStage6Index(0);
         // A white curtain grows from the bottom-right corner to cover the
         // whole screen in one continuous motion, then retreats the same
-        // way — no separate scale-in step, so it reads as one sweep, not
+        // way, no separate scale-in step, so it reads as one sweep, not
         // several. The Causes section is already sitting there at full
         // opacity the whole time; the curtain's motion is the only thing
         // that reveals it, not a fade-in.
@@ -1464,7 +1464,7 @@ export default function IntroSequence() {
         // reveal reads as "the curtain moved," never as a fade.
         tl.set(stage6Ref.current, { opacity: 1, pointerEvents: "auto" });
         // Collapse the navy field-box back to its corner while the curtain
-        // hides it — stage 6 is white, and a full-screen navy box left
+        // hides it, stage 6 is white, and a full-screen navy box left
         // behind it flashes through the 6->7 fade.
         tl.set(wipeBoxRef.current, {
           top: "auto",
@@ -1532,7 +1532,7 @@ export default function IntroSequence() {
         });
         tl.set(causesWipeRef.current, { pointerEvents: "none" });
       } else if (current === 6 && next === 7) {
-        // Both stages sit on the same white field — a plain fly, no wipe
+        // Both stages sit on the same white field, a plain fly, no wipe
         // needed since there's no backdrop color to hand off.
         setTeam(0);
         tl.set(stage6Ref.current, { pointerEvents: "none" });
@@ -1562,13 +1562,13 @@ export default function IntroSequence() {
         tl.set(stage6Ref.current, { pointerEvents: "auto" });
         tl.to(stage6Ref.current, { opacity: 1, y: 0, duration: dur ?? 0.5, ease: "power2.out" });
       } else if (current === 7 && next === 8) {
-        // Same white field again — plain fly, no wipe needed. Always
+        // Same white field again, plain fly, no wipe needed. Always
         // arrive at stage 8 fresh, showing the marquee sub-section.
         // On desktop the CTA starts as a ghosted peek from the bottom
         // edge, hinting there's more below, so it can snap fully into
         // place later instead of fading in from nothing. There's no spare
         // room below the fold for that hint on a phone, so it starts
-        // fully hidden there instead — the peek read as text smeared over
+        // fully hidden there instead, the peek read as text smeared over
         // the marquee, not a hint of more content.
         stage8SubIndexRef.current = 0;
         gsap.set(stage8MarqueeBlockRef.current, { opacity: 1, y: 0, pointerEvents: "auto" });
@@ -1607,7 +1607,7 @@ export default function IntroSequence() {
           dur ? 0 : "-=0.3",
         );
       } else if (current === 8 && next === 9) {
-        // Same white field — stage 8 lifts out while stage 9's heading, then
+        // Same white field, stage 8 lifts out while stage 9's heading, then
         // its testimonial cards, fly in one by one.
         tl.set(stage8Ref.current, { pointerEvents: "none" });
         tl.set(stage9Ref.current, { pointerEvents: "auto" });
@@ -1640,7 +1640,7 @@ export default function IntroSequence() {
         tl.fromTo(stage9Ref.current, { opacity: 0 }, { opacity: 1, duration: dur ?? 0.25 }, 0);
         flyInHeadingAndCards(tl, stage9HeadingRef.current, stage9CardsRef.current, !!dur);
       } else if (current === 10 && next === 11) {
-        // The footer isn't a numbered step and has no navbar of its own —
+        // The footer isn't a numbered step and has no navbar of its own , 
         // hide the header and stepper entirely rather than inverting them.
         // The footer slides up from below (its own CSS transition off the
         // `active` prop). The persistent logo glides into the footer's logo
@@ -1663,7 +1663,7 @@ export default function IntroSequence() {
         tl.to(stepperGroupRef.current, { opacity: 1, duration: dur ?? 0.3 }, 0);
       } else if (next === 1 && current === 0) {
         // The hero video shrinks and snaps into the photo slot; the hero
-        // heading carries over into the stage 1 heading position — one
+        // heading carries over into the stage 1 heading position, one
         // continuous element for each, not a fade-out/fade-in swap.
         const photoRect = stage1PhotoSlotRef.current?.getBoundingClientRect();
         const headlineRect = stage1HeadlineSlotRef.current?.getBoundingClientRect();
@@ -1688,7 +1688,7 @@ export default function IntroSequence() {
             left: headlineRect.left,
             width: headlineRect.width,
             color: "#23398D",
-            // Matches the hidden slot's own text-2xl/sm:text-4xl sizing —
+            // Matches the hidden slot's own text-2xl/sm:text-4xl sizing , 
             // it was previously a flat 32 regardless of viewport, which ran
             // noticeably larger than intended and, combined with the long
             // STAGE1_HEADLINE string, pushed the paragraph and CTA buttons
@@ -1803,14 +1803,14 @@ export default function IntroSequence() {
     };
 
     // Crossfades between stage 8's sub-sections (marquee, donate CTA, and
-    // more to come) — these are structurally different layouts, not a
+    // more to come), these are structurally different layouts, not a
     // text swap, so each gets its own persistent block faded in turn.
     const cycleStage8Sub = (nextIndex: number) => {
       isTransitioningRef.current = true;
       stage8SubIndexRef.current = nextIndex;
       const dur = prefersReducedMotion ? 0.05 : 0.4;
       // A real timeline (not parallel gsap.to calls) so the outgoing
-      // section is fully gone before the incoming one starts moving in —
+      // section is fully gone before the incoming one starts moving in , 
       // no window where both are visible and overlapping.
       const tl = gsap.timeline();
 
@@ -1821,7 +1821,7 @@ export default function IntroSequence() {
         tl.to(stage8CtaBlockRef.current, { yPercent: 0, opacity: 1, duration: dur, ease: "power2.out" });
       } else {
         tl.set(stage8CtaBlockRef.current, { pointerEvents: "none" });
-        // Ghosted peek on desktop only — see the 7->8 arrival for why.
+        // Ghosted peek on desktop only, see the 7->8 arrival for why.
         tl.to(stage8CtaBlockRef.current, {
           yPercent: isMobile ? 0 : 55,
           opacity: isMobile ? 0 : 0.35,
@@ -1845,7 +1845,7 @@ export default function IntroSequence() {
     // Reveals (or hides) one more journey entry inside a fixed-height
     // window: once entries outnumber what the window can show, the list
     // scrolls up so the newest entry lands at the bottom while the oldest
-    // leaves from the top — same sub-stepping pattern as cycleStory.
+    // leaves from the top, same sub-stepping pattern as cycleStory.
     const cycleJourney = (nextIndex: number) => {
       isTransitioningRef.current = true;
       const prevIndex = journeyIndexRef.current;
@@ -1884,7 +1884,7 @@ export default function IntroSequence() {
       );
     };
 
-    // Reveals (or hides) one more impact stat within stage 5 — the first
+    // Reveals (or hides) one more impact stat within stage 5, the first
     // one already flew in as part of the 4->5 transition itself, so this
     // only ever handles the second and third.
     const cycleImpact = (nextIndex: number) => {
@@ -1927,8 +1927,8 @@ export default function IntroSequence() {
         return;
       }
 
-      // Stage 4 has its own sub-steps — one more journey entry revealed
-      // per step — that must be exhausted before stepping back to stage 3
+      // Stage 4 has its own sub-steps, one more journey entry revealed
+      // per step, that must be exhausted before stepping back to stage 3
       // or forward into stage 5.
       if (activeStageRef.current === 4) {
         const nextJourney = journeyIndexRef.current + delta;
@@ -1940,8 +1940,8 @@ export default function IntroSequence() {
         return;
       }
 
-      // Stage 5 has its own sub-steps — the second and third impact stats
-      // — that must be exhausted before stepping back to stage 4 or
+      // Stage 5 has its own sub-steps, the second and third impact stats
+      //, that must be exhausted before stepping back to stage 4 or
       // forward into stage 6.
       if (activeStageRef.current === 5) {
         const nextImpact = impactIndexRef.current + delta;
@@ -1953,7 +1953,7 @@ export default function IntroSequence() {
         return;
       }
 
-      // Stage 6 is a carousel of the causes — step through each card
+      // Stage 6 is a carousel of the causes, step through each card
       // before stepping back to stage 5 or forward into stage 7.
       if (activeStageRef.current === 6) {
         const nextCause = stage6IndexRef.current + delta;
@@ -1997,7 +1997,7 @@ export default function IntroSequence() {
 
     // One physical scroll gesture (a wheel notch, a trackpad flick, a
     // swipe) fires a burst of events. Without a cooldown that burst steps
-    // several stages at once — most visibly it blew straight past the
+    // several stages at once, most visibly it blew straight past the
     // Sponsors sub-section on the way into stage 8.
     let lastGesture = 0;
     const GESTURE_COOLDOWN = 620;
@@ -2010,8 +2010,8 @@ export default function IntroSequence() {
 
     // A gesture that begins inside something that is actually scrolling on
     // its own right now (marked data-stage-scroll and currently overflowing
-    // — the CTA form on a phone, the sponsor row) scrolls that instead of
-    // stepping the stage — but only while it still has room to move in the
+    //, the CTA form on a phone, the sponsor row) scrolls that instead of
+    // stepping the stage, but only while it still has room to move in the
     // gesture's own direction. Without the boundary check, once inside a
     // scrollable panel a wheel/swipe could never step to another segment
     // again, even after reaching the very top or bottom of it.
@@ -2052,7 +2052,7 @@ export default function IntroSequence() {
 
     let touchStartY = 0;
     let touchScrollEl: HTMLElement | null = null;
-    // Captured once, at the moment the finger lands — not re-checked at
+    // Captured once, at the moment the finger lands, not re-checked at
     // touchend, where the native scroll this same gesture just caused would
     // otherwise make it look like the boundary was always there.
     let touchAtTop = false;
@@ -2093,7 +2093,7 @@ export default function IntroSequence() {
     if (isPaused) panelHeadingRef.current?.focus();
   }, [isPaused]);
 
-  // Story 0/1/2 within stage 2 crossfades on every change — driven purely by
+  // Story 0/1/2 within stage 2 crossfades on every change, driven purely by
   // scroll/keyboard steps, never on a timer.
   useEffect(() => {
     if (!stage2HeadlineRef.current) return;
@@ -2111,7 +2111,7 @@ export default function IntroSequence() {
   // Stage 7's team accordion resizes its panels with a pure CSS transition
   // (see the stage-7 JSX), so no imperative crossfade is needed on change.
 
-  // The CTA tab's form and image tint crossfade on every switch — same
+  // The CTA tab's form and image tint crossfade on every switch, same
   // pattern as the stage 2 stories and stage 7 team members.
   useEffect(() => {
     if (!stage8CtaFormRef.current) return;
@@ -2127,12 +2127,12 @@ export default function IntroSequence() {
   }, [ctaTab, prefersReducedMotion]);
 
   // The corner tab flies in (scales up from its own corner) exactly when
-  // "Empower" is reached, and flies back out the moment it isn't showing —
+  // "Empower" is reached, and flies back out the moment it isn't showing , 
   // never a plain opacity fade.
   useEffect(() => {
     if (!wipeBoxRef.current) return;
     // The box is the navy field behind stages 3-5. Not stage 2 (it sat over
-    // the text column) and not stage 6 (Causes is white — a leftover navy
+    // the text column) and not stage 6 (Causes is white, a leftover navy
     // rectangle showed through the 6->7 fade).
     const showing = activeStage === 3 || activeStage === 4 || activeStage === 5;
     gsap.to(wipeBoxRef.current, {
@@ -2143,7 +2143,7 @@ export default function IntroSequence() {
   }, [activeStage, prefersReducedMotion]);
 
   // Settle enforcer. Every step's exit animation is a GSAP tween, and GSAP's
-  // ticker is paused while the tab is in the background — so a step taken
+  // ticker is paused while the tab is in the background, so a step taken
   // just before switching away (or on a slow device) can leave its outgoing
   // layer stranded half-faded on top of the new stage. This snaps the
   // persistent hero layers and the stepper/header colours back to whatever
@@ -2241,7 +2241,7 @@ export default function IntroSequence() {
 
       {/* Splash hairline: a full-width line pinned to the bottom of the
           screen that draws itself left-to-right in step with the countdown
-          — empty at 100%, complete as sight "returns" to 0%. Width is a
+         empty at 100%, complete as sight "returns" to 0%. Width is a
           scaleX transform so it stays crisp at any viewport size, and
           mix-blend-difference keeps it visible as the field goes from
           black to white behind it. */}
@@ -2258,7 +2258,7 @@ export default function IntroSequence() {
         </div>
       )}
 
-      {/* Decorative vision-simulation layers — purely visual, hidden from AT. */}
+      {/* Decorative vision-simulation layers, purely visual, hidden from AT. */}
       {layout === "countdown" && (
         <>
           <div
@@ -2317,7 +2317,7 @@ export default function IntroSequence() {
         <MobileNav />
       </header>
 
-      {/* The persistent logo — one continuous element from the countdown
+      {/* The persistent logo, one continuous element from the countdown
           through the header and, on the footer stage, into the footer's
           own logo slot (white, chromeless). */}
       <div
@@ -2424,7 +2424,7 @@ export default function IntroSequence() {
         {t(HERO_HEADLINE)}
       </h1>
 
-      {/* The persistent stepper — one continuous element for the whole
+      {/* The persistent stepper, one continuous element for the whole
           journey; only which number is bold ever changes, never a swap. */}
       {layout === "final" && (
         <div
@@ -2446,7 +2446,7 @@ export default function IntroSequence() {
         </div>
       )}
 
-      {/* Discrete progress rail — present only while a numbered stage is
+      {/* Discrete progress rail, present only while a numbered stage is
           showing (never on the hero or the footer), and its marker only
           moves when the active number changes, in step with the stepper. */}
       {layout === "final" && (
@@ -2482,7 +2482,7 @@ export default function IntroSequence() {
       )}
 
       {/* Ghosted prelude: the next section's heading, heading-scale, resting
-          half below the fold and re-flying in on every step — the same
+          half below the fold and re-flying in on every step, the same
           "here's what's next" hint the stage-1 word list gives. */}
       {layout === "final" && NEXT_SECTION_LABEL[activeStage] && (
         <div
@@ -2507,7 +2507,7 @@ export default function IntroSequence() {
       )}
 
       {/* The word list that peeks up from stage 1 and flies into stage 2's
-          left column — one continuous element, never faded out and swapped. */}
+          left column, one continuous element, never faded out and swapped. */}
       {layout === "final" && (
         <div
           ref={stage2WordsRef}
@@ -2536,7 +2536,7 @@ export default function IntroSequence() {
         </div>
       )}
 
-      {/* Stage 1: flies in over the hero once the visitor advances — no page scroll involved. */}
+      {/* Stage 1: flies in over the hero once the visitor advances, no page scroll involved. */}
       {layout === "final" && (
         <div
           ref={stage1Ref}
@@ -2615,14 +2615,14 @@ export default function IntroSequence() {
             top: HEADER_HEIGHT,
             left: 0,
             width: "100vw",
-            // dvh, not vh — see the equivalent note on stage 1's container.
+            // dvh, not vh, see the equivalent note on stage 1's container.
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
           className="z-10 flex flex-col items-center justify-start overflow-hidden bg-white px-8 opacity-0 pointer-events-none md:justify-center"
         >
           <div className="mx-auto w-full max-w-6xl">
             {/* Spacing reserved for the persistent stepper. Taller on
-                mobile — see the equivalent note on stage 1's spacer. */}
+                mobile, see the equivalent note on stage 1's spacer. */}
             <div className="mb-20 h-20 sm:mb-10 sm:h-10" aria-hidden="true" />
 
             <div className="grid items-start gap-4 md:gap-10 md:grid-cols-[minmax(0,220px)_minmax(0,1fr)_minmax(0,1fr)]">
@@ -2692,7 +2692,7 @@ export default function IntroSequence() {
         </div>
       )}
 
-      {/* The corner tab that grows to cover the screen for stage 3 — only
+      {/* The corner tab that grows to cover the screen for stage 3, only
           visible once "Empower" is showing (or once stage 3 is active). */}
       {layout === "final" && (
         <div
@@ -2704,7 +2704,7 @@ export default function IntroSequence() {
             right: 40,
             left: "auto",
             top: "auto",
-            // Smaller on mobile — at the desktop size this corner preview
+            // Smaller on mobile, at the desktop size this corner preview
             // is over 40% of the screen width and collides with content
             // underneath it instead of sitting in unused margin.
             width: isMobile ? 70 : 160,
@@ -2717,7 +2717,7 @@ export default function IntroSequence() {
       )}
 
       {/* The white curtain that flies in from the same corner to cover the
-          screen for the 5<->6 handoff, then retreats back out — the
+          screen for the 5<->6 handoff, then retreats back out, the
           Causes section underneath never fades, only this moves. */}
       {layout === "final" && (
         <div
@@ -2737,7 +2737,7 @@ export default function IntroSequence() {
       )}
 
       {/* Stage 3: the vision told as five threads of work, then the
-          mission — on the navy field the tab reveals. */}
+          mission, on the navy field the tab reveals. */}
       {layout === "final" && (
         <div
           ref={stage3Ref}
@@ -2747,7 +2747,7 @@ export default function IntroSequence() {
             top: HEADER_HEIGHT,
             left: 0,
             width: "100vw",
-            // dvh, not vh — see the equivalent note on stage 1's container.
+            // dvh, not vh, see the equivalent note on stage 1's container.
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
           className="z-[16] flex flex-col items-center justify-start overflow-hidden px-5 pb-4 pt-16 pointer-events-none sm:px-8 md:justify-center md:pb-0 md:pt-0"
@@ -2761,7 +2761,7 @@ export default function IntroSequence() {
             className="max-h-full w-full overflow-y-auto overscroll-contain md:max-h-none md:overflow-visible"
           >
             {/* Clears the fixed number-line stepper, which otherwise sits
-                almost flush against "Our Vision" on narrow phones — mirrors
+                almost flush against "Our Vision" on narrow phones, mirrors
                 the equivalent spacer on stage 4/journey. */}
             <div className="h-5 sm:h-0" aria-hidden="true" />
             <div className="mx-auto grid w-full max-w-5xl items-start gap-6 md:gap-16 md:grid-cols-[1.5fr_1fr]">
@@ -2813,7 +2813,7 @@ export default function IntroSequence() {
         </div>
       )}
 
-      {/* Stage 4: Our Journey — same navy field as stage 3. The heading is
+      {/* Stage 4: Our Journey, same navy field as stage 3. The heading is
           top-anchored the same distance below the number line as the stage
           1/2 content, so the 3->4 heading handoff lands where "Our Vision"
           just was; the timeline hangs off it, absolutely positioned, and
@@ -2834,7 +2834,7 @@ export default function IntroSequence() {
           <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center">
             {/* Stepper clearance. Stage 4 already carries its own pt-16/20,
                 so this only needs to add a little more, not stage 1/2's
-                full spacer — that doubled up and pushed the heading (and
+                full spacer, that doubled up and pushed the heading (and
                 the timeline hanging off it) far down the screen on phones. */}
             <div className="mb-2 h-2 sm:mb-10 sm:h-10" aria-hidden="true" />
             <h2
@@ -2842,7 +2842,7 @@ export default function IntroSequence() {
               className="text-center font-heading text-2xl leading-tight font-bold text-white opacity-0 sm:text-4xl"
             >
               {/* No whitespace between "journey" and the outer span, and
-                  that span is a plain (non-atomic) inline element — Chrome
+                  that span is a plain (non-atomic) inline element: Chrome
                   allows a line break immediately before an inline-block
                   even with no preceding whitespace, so the comma has to
                   live outside the growing box to guarantee it can never be
@@ -2921,7 +2921,7 @@ export default function IntroSequence() {
             </div>
 
             {/* Mobile-only: the timeline crossfades into this stacked stats
-                block rather than shifting aside — there's no room beside a
+                block rather than shifting aside, there's no room beside a
                 near-full-width timeline on a phone screen. Sits in the same
                 slot as the timeline (top-full off the same heading). */}
             <div
@@ -2962,7 +2962,7 @@ export default function IntroSequence() {
         </div>
       )}
 
-      {/* Stage 6: Our Causes — a glass-panelled image card for the active
+      {/* Stage 6: Our Causes, a glass-panelled image card for the active
           cause, flanked by ghosted portrait previews of the causes before
           and after it. Scrolling steps between them. */}
       {layout === "final" && (
@@ -3048,7 +3048,7 @@ export default function IntroSequence() {
               })}
             </div>
 
-            {/* One slot per cause, the current one filled — the same shape
+            {/* One slot per cause, the current one filled, the same shape
                 and count no matter where you are, so it reads as a place in
                 a set rather than a fraction to track. */}
             <div className="flex items-center gap-2" role="tablist" aria-label={t(CAUSES_ARIA)}>
@@ -3071,7 +3071,7 @@ export default function IntroSequence() {
         </div>
       )}
 
-      {/* Stage 7: the team as an expanding row of photo panels — the active
+      {/* Stage 7: the team as an expanding row of photo panels, the active
           member's panel widens to show their note, name and role; the rest
           stay as slim strips. Scroll or tap a panel to move along. */}
       {layout === "final" && (
@@ -3321,7 +3321,7 @@ export default function IntroSequence() {
                           placeholder: t(CHOOSE_AN_AREA),
                           // Options display in the active language, but the
                           // value stored/submitted is always the English
-                          // area name — a stable key for the lead sheet,
+                          // area name, a stable key for the lead sheet,
                           // independent of which language picked it.
                           options: VOLUNTEER_AREAS.map((area) => t(area)),
                           value: ctaArea ? t(VOLUNTEER_AREAS.find((area) => area.en === ctaArea) ?? { en: ctaArea, hi: ctaArea }) : "",
@@ -3362,7 +3362,7 @@ export default function IntroSequence() {
         </div>
       )}
 
-      {/* Stage 9: Testimonials — same white field, symmetric crossfade. */}
+      {/* Stage 9: Testimonials, same white field, symmetric crossfade. */}
       {layout === "final" && (
         <div
           ref={stage9Ref}
@@ -3409,7 +3409,7 @@ export default function IntroSequence() {
         </div>
       )}
 
-      {/* Stage 10: SDGs — same white field, symmetric crossfade. */}
+      {/* Stage 10: SDGs, same white field, symmetric crossfade. */}
       {layout === "final" && (
         <div
           ref={stage10Ref}
@@ -3476,7 +3476,7 @@ export default function IntroSequence() {
         </div>
       )}
 
-      {/* Stage 11: Footer — same shared component every other page ends
+      {/* Stage 11: Footer, same shared component every other page ends
           on, just wired into this page's own symmetric-crossfade stage
           machine instead of the generic StagePager's. */}
       {layout === "final" && <Footer ref={stage11Ref} active={activeStage === 11} morphLogo />}

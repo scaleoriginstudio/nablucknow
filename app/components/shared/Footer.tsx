@@ -10,7 +10,7 @@ import { SiteFooterContent } from "./SiteFooterContent";
     the header is hidden entirely while this is active. Position/opacity are
     driven directly by the `active` prop via a CSS transition rather than an
     imperative GSAP tween, so it can never end up out of sync with whichever
-    stage is actually current — it slides up from below the viewport, the
+    stage is actually current, it slides up from below the viewport, the
     same "solid panel flying in" motion as the stage-2→3 wipe. The content
     itself lives in SiteFooterContent, which the blog pages also use in a
     normal scrolling layout.

@@ -26,7 +26,7 @@ export const FOOTER_QUICK_LINKS: { label: Bilingual; href: string }[] = [
   { label: { en: "Contact us", hi: "संपर्क करें" }, href: "/contact" },
 ];
 
-// Single source for the two header/footer CTA buttons — imported wherever
+// Single source for the two header/footer CTA buttons, imported wherever
 // a "Volunteer" or "Donate" action needs the same word (StagePager,
 // MobileNav, IntroSequence, FloatingActions), instead of each file hard-
 // coding its own copy.

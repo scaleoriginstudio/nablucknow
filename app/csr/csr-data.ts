@@ -57,7 +57,7 @@ export const FOCUS_AREAS: FocusArea[] = [
     title: { en: "Inclusive schools", hi: "समावेशी स्कूल" },
     body: {
       en: "Visually impaired children learning in the same classrooms as their sighted peers, from the earliest years. Early braille literacy is what decides whether a child keeps pace through school, so this is where your funding does the most lasting good.",
-      hi: "दृष्टिबाधित बच्चे शुरुआती वर्षों से ही अपने सहपाठियों के साथ उन्हीं कक्षाओं में पढ़ते हैं। शुरुआती ब्रेल साक्षरता ही तय करती है कि बच्चा स्कूल में साथ चल पाएगा या नहीं — इसलिए यहाँ आपका निवेश सबसे लंबा असर छोड़ता है।",
+      hi: "दृष्टिबाधित बच्चे शुरुआती वर्षों से ही अपने सहपाठियों के साथ उन्हीं कक्षाओं में पढ़ते हैं। शुरुआती ब्रेल साक्षरता ही तय करती है कि बच्चा स्कूल में साथ चल पाएगा या नहीं, इसलिए यहाँ आपका निवेश सबसे लंबा असर छोड़ता है।",
     },
     covers: [
       { en: "Special educators and braille teachers", hi: "विशेष शिक्षक और ब्रेल शिक्षक" },

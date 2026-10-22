@@ -126,7 +126,7 @@ export function ProgramsView() {
         </div>
       </div>
 
-      {/* Circular programme selectors — lifted clear of the floating action
+      {/* Circular programme selectors, lifted clear of the floating action
           button on phones. */}
       <div className="flex shrink-0 items-start justify-center gap-4 pb-16 pt-1 sm:gap-12 sm:pb-0">
         {PROGRAMS.map((p, i) => {

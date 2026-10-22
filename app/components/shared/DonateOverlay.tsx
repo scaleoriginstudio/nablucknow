@@ -12,7 +12,7 @@ const EYEBROW = { en: "Support a cause", hi: "किसी अभियान �
 const TITLE = { en: "Donate to NAB Lucknow", hi: "NAB Lucknow को दान करें" };
 const INTRO = {
   en: "Pay by UPI straight to our bank account. No gateway and no fees: every rupee reaches the work.",
-  hi: "UPI से सीधे हमारे बैंक खाते में भुगतान करें। कोई गेटवे नहीं, कोई शुल्क नहीं — हर रुपया सीधे काम तक पहुँचता है।",
+  hi: "UPI से सीधे हमारे बैंक खाते में भुगतान करें। कोई गेटवे नहीं, कोई शुल्क नहीं। हर रुपया सीधे काम तक पहुँचता है।",
 };
 const SUPPORTS_LABEL = { en: "Your gift supports", hi: "आपका दान इन्हें सहारा देता है" };
 const RAISED_OF_GOAL = (raised: string, goal: string) => ({

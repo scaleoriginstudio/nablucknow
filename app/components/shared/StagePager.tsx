@@ -65,14 +65,14 @@ function StageStepper({
 /** Fixed-viewport, numbered-step page shell shared by every page except the
     homepage (which has its own bespoke intro sequence). Wheel/keyboard/touch
     step between the given stages with a plain symmetric crossfade, then a
-    final unnumbered, full-height footer stage with no navbar of its own —
+    final unnumbered, full-height footer stage with no navbar of its own:
     same shape as the homepage's stage 11.
 
     Opacity/pointer-events are driven straight from React state via inline
     style, not by an imperative GSAP timeline: an earlier version used GSAP
     and its default (unpositioned) .set() calls landed at the wrong point in
-    the timeline, silently leaving the footer's pointer-events — and on a
-    misfire, its opacity — stuck at rest. Plain state-driven CSS transitions
+    the timeline, silently leaving the footer's pointer-events, and on a
+    misfire, its opacity, stuck at rest. Plain state-driven CSS transitions
     can't drift out of sync with the state that owns them. */
 export function StagePager({
   stages,
@@ -86,7 +86,7 @@ export function StagePager({
   background?: React.ReactNode;
   /** One short label per stage, in order. When given, the next stage's
       label peeks in faint at the bottom edge and re-flies into place on
-      every step — the same "here's what's next" ghost the homepage uses. */
+      every step, the same "here's what's next" ghost the homepage uses. */
   stageLabels?: Bilingual[];
 }) {
   const total = stages.length;
@@ -121,7 +121,7 @@ export function StagePager({
 
       // Move focus to the new stage's heading and announce it, so keyboard
       // and screen-reader users track the jump the same way a sighted wheel
-      // user sees it — arrow/wheel stepping otherwise leaves focus behind
+      // user sees it, arrow/wheel stepping otherwise leaves focus behind
       // on whatever the previous stage last had.
       window.setTimeout(() => {
         const heading = next === lastStage ? null : stageHeadingRefs.current[next - 1];
@@ -144,7 +144,7 @@ export function StagePager({
 
     // A scroll gesture that starts inside a form/list that is actually
     // overflowing right now (marked data-stage-scroll) must scroll that
-    // instead of stepping the stage — but only while it still has room to
+    // instead of stepping the stage, but only while it still has room to
     // move in the gesture's own direction. Without the boundary check,
     // once inside a scrollable panel a wheel/swipe could never step to
     // another stage again, even after reaching the top or bottom of it.
@@ -163,7 +163,7 @@ export function StagePager({
     };
 
     // A card's sign-up dialog (portalled to <body>, role="dialog") must
-    // take the scroll for itself — stepping the stage underneath it while
+    // take the scroll for itself, stepping the stage underneath it while
     // it is open is exactly the bug the events audit flagged.
     const modalOpen = () => document.querySelector('[role="dialog"][aria-modal="true"]') !== null;
 
@@ -204,7 +204,7 @@ export function StagePager({
     };
     let touchStartY = 0;
     let touchScrollEl: HTMLElement | null = null;
-    // Captured once, at the moment the finger lands — not re-checked at
+    // Captured once, at the moment the finger lands, not re-checked at
     // touchend, where the native scroll this same gesture just caused would
     // otherwise make it look like the boundary was always there.
     let touchAtTop = false;
@@ -246,7 +246,7 @@ export function StagePager({
   });
 
   // Each stage doesn't just cross-fade: it flies. The one leaving lifts up
-  // and out, the one arriving rises in from below — the same beat as the
+  // and out, the one arriving rises in from below, the same beat as the
   // homepage's 01 -> 02 step. Direction falls out of where a stage sits
   // relative to the active one, so no separate "which way" state is needed.
   const stageFly = (stageNum: number) => {
@@ -262,7 +262,7 @@ export function StagePager({
   };
 
   // The persistent logo glides into the footer's own (hidden) logo slot as
-  // the footer flies up, and back to the header when it leaves — the
+  // the footer flies up, and back to the header when it leaves, the
   // homepage's footer morph, now on every stage page.
   const logoRef = useRef<HTMLAnchorElement>(null);
   const logoImgRef = useRef<HTMLImageElement>(null);
@@ -277,7 +277,7 @@ export function StagePager({
     wasFooterRef.current = onFooter;
     const header = { x: 16, y: 8, w: 80 };
     // Measure the footer's own (hidden) logo slot so the morph lands on it
-    // at any width — the footer is still sliding up as this runs, so undo
+    // at any width, the footer is still sliding up as this runs, so undo
     // its live translateY to get the resting position.
     const slotEl = footerRef.current?.querySelector<HTMLElement>("[data-footer-logo]");
     let slot = { x: 16, y: window.innerHeight / 2 - 132, w: 60 };

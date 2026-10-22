@@ -80,7 +80,7 @@ export function LeadForm({
     event.preventDefault();
     if (disabled || busy) return;
     // The dropdown is a custom listbox, not a real <select>, so it can't
-    // lean on the browser's own required-field validation — check it here
+    // lean on the browser's own required-field validation, check it here
     // instead, the same way a failed field reads anywhere else on the site.
     if (select && !select.value) {
       setSelectError(t(SELECT_REQUIRED_ERROR));

@@ -36,7 +36,7 @@ export const POSTS: Post[] = [
       },
       {
         en: "This is why our admissions work begins with families, often before a child is school age. Early braille literacy, orientation and mobility, and a classroom that assumes the child will keep up are what let our students sit the same board exams as everyone else and pass them.",
-        hi: "इसीलिए हमारा दाखिला संबंधी काम परिवारों से शुरू होता है, अक्सर बच्चे के स्कूल जाने की उम्र से पहले ही। जल्दी ब्रेल साक्षरता, ओरिएंटेशन और मोबिलिटी ट्रेनिंग, और ऐसी कक्षा जो यह मान कर चले कि बच्चा साथ चलेगा — यही सब मिलकर हमारे विद्यार्थियों को बाकी सबके जैसे बोर्ड परीक्षा में बैठने और उसे पास करने लायक बनाते हैं।",
+        hi: "इसीलिए हमारा दाखिला संबंधी काम परिवारों से शुरू होता है, अक्सर बच्चे के स्कूल जाने की उम्र से पहले ही। जल्दी ब्रेल साक्षरता, ओरिएंटेशन और मोबिलिटी ट्रेनिंग, और ऐसी कक्षा जो यह मान कर चले कि बच्चा साथ चलेगा, यही सब मिलकर हमारे विद्यार्थियों को बाकी सबके जैसे बोर्ड परीक्षा में बैठने और उसे पास करने लायक बनाते हैं।",
       },
       {
         en: "For most of our students, the years between five and eight decide whether school is a place they belong or a place they are visiting. We would rather not leave that to chance.",
@@ -60,7 +60,7 @@ export const POSTS: Post[] = [
     body: [
       {
         en: "Once a hire is made, corporate partners tend to ask the same question: what now? Accessible hiring does not end at the offer letter. Screen readers, document formats, and a manager who understands what independence looks like matter as much as the interview.",
-        hi: "भर्ती हो जाने के बाद कॉर्पोरेट पार्टनर अक्सर एक ही सवाल पूछते हैं: अब आगे क्या? सुलभ भर्ती केवल ऑफर लेटर पर खत्म नहीं होती। स्क्रीन रीडर, दस्तावेज़ों का सही फॉर्मेट, और ऐसा मैनेजर जो आत्मनिर्भरता का मतलब समझता हो — ये सब इंटरव्यू जितने ही ज़रूरी हैं।",
+        hi: "भर्ती हो जाने के बाद कॉर्पोरेट पार्टनर अक्सर एक ही सवाल पूछते हैं: अब आगे क्या? सुलभ भर्ती केवल ऑफर लेटर पर खत्म नहीं होती। स्क्रीन रीडर, दस्तावेज़ों का सही फॉर्मेट, और ऐसा मैनेजर जो आत्मनिर्भरता का मतलब समझता हो, ये सब इंटरव्यू जितने ही ज़रूरी हैं।",
       },
       {
         en: "Organisations that get this right treat accessibility as infrastructure rather than accommodation. They build it once, and every future hire benefits without filing a special request.",
@@ -216,7 +216,7 @@ export const POSTS: Post[] = [
     body: [
       {
         en: "Our year-end online fundraiser closed out fully funded, covering a full year of audiobook recording for our library, every session paid for by an individual donor.",
-        hi: "हमारा साल के अंत का ऑनलाइन फंडरेज़र पूरी तरह फंडेड होकर समाप्त हुआ, जिसने हमारी लाइब्रेरी के लिए पूरे एक साल की ऑडियोबुक रिकॉर्डिंग को कवर किया — हर सेशन किसी न किसी व्यक्तिगत दानदाता के सहयोग से पूरा हुआ।",
+        hi: "हमारा साल के अंत का ऑनलाइन फंडरेज़र पूरी तरह फंडेड होकर समाप्त हुआ, जिसने हमारी लाइब्रेरी के लिए पूरे एक साल की ऑडियोबुक रिकॉर्डिंग को कवर किया। हर सेशन किसी न किसी व्यक्तिगत दानदाता के सहयोग से पूरा हुआ।",
       },
       {
         en: "Recording continues through 2026 with volunteer readers from three partner colleges.",

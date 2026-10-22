@@ -24,7 +24,7 @@ const body = Libre_Baskerville({
 
 // Montserrat/Libre Baskerville have no Devanagari glyphs. These two sit
 // second in the --font-heading/--font-body stacks in globals.css, so the
-// browser falls back to them per-glyph — Hindi words woven into English
+// browser falls back to them per-glyph: Hindi words woven into English
 // copy (and full Hindi mode) render correctly with no per-string markup.
 const headingHi = Noto_Sans_Devanagari({
   variable: "--font-heading-hi",
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   },
   // Metadata/OpenGraph/JSON-LD are server-rendered once with no client
   // language context available, so English stays canonical here regardless
-  // of the page's toggle state — an intentional scope boundary, not a gap.
+  // of the page's toggle state, an intentional scope boundary, not a gap.
   description: SITE_DESCRIPTION.en,
   keywords: KEYWORDS,
   alternates: {

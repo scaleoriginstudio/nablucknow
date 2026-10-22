@@ -13,13 +13,13 @@ export const useStageActive = () => useContext(StageActiveContext);
 /** The heading block every numbered stage opens with: a centred title and
     an optional line of supporting text, held a constant distance below the
     number line (the stage's own top-aligned layout does that) and flown up
-    into place whenever the stage becomes active — the same beat on every
+    into place whenever the stage becomes active, the same beat on every
     page, so Events, Blog and the rest read as one system.
 
     An off-screen stage's provider reports `active: false`, so its heading
     already sits in the hidden (dropped, transparent) state; the crossfade
     into view then plays the rise. The first stage shown on load is active
-    from the first render, so it is simply painted in place — no way for it
+    from the first render, so it is simply painted in place, no way for it
     to be stranded invisible if the tab never gets a frame. */
 export function StageIntro({
   title,

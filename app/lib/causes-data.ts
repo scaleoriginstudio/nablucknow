@@ -28,7 +28,7 @@ export const CAUSES: Cause[] = [
     },
     description: {
       en: "A dedicated campus with accessible classrooms, hostel space and braille-equipped learning areas: a school designed around visually impaired students from the ground up, rather than retrofitted for them after the fact, so their vidya (विद्या) grows on solid ground.",
-      hi: "सुलभ कक्षाओं, छात्रावास और ब्रेल-सुसज्जित लर्निंग एरिया वाला एक समर्पित परिसर — ऐसा स्कूल जो हमारे विद्यार्थियों को ध्यान में रखकर शुरू से बनाया गया हो, बाद में उनके लिए ढाला हुआ नहीं। नींव से लेकर छत तक, हर हिस्सा उन्हीं के लिए सोचा गया है।",
+      hi: "सुलभ कक्षाओं, छात्रावास और ब्रेल-सुसज्जित लर्निंग एरिया वाला एक समर्पित परिसर: ऐसा स्कूल जो हमारे विद्यार्थियों को ध्यान में रखकर शुरू से बनाया गया हो, बाद में उनके लिए ढाला हुआ नहीं। नींव से लेकर छत तक, हर हिस्सा उन्हीं के लिए सोचा गया है।",
     },
   },
   {
@@ -39,7 +39,7 @@ export const CAUSES: Cause[] = [
       hi: "दृष्टिबाधित विद्यार्थियों के लिए जीवन-कौशल और गृह विज्ञान कार्यशालाएँ",
     },
     description: {
-      en: "Hands-on sessions in cooking, personal care and household management, so that independence at home comes as naturally as independence at school or at work — apna ghar, apne haathon se.",
+      en: "Hands-on sessions in cooking, personal care and household management, so that independence at home comes as naturally as independence at school or at work. Apna ghar, apne haathon se.",
       hi: "खाना बनाने, स्वयं की देखभाल और घर के प्रबंधन की व्यावहारिक कार्यशालाएँ, ताकि घर पर आत्मनिर्भरता उतनी ही सहज बने जितनी स्कूल या काम पर। छोटी-छोटी आदतें ही असली हौसला बनाती हैं।",
     },
   },

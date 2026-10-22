@@ -28,7 +28,7 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [lang, setLangState] = useState<Lang>("en");
   // Guards the write-back effect below from firing with the default "en"
-  // before the read effect has had a chance to restore a stored "hi" —
+  // before the read effect has had a chance to restore a stored "hi" , 
   // without this, mount would briefly write "en" and stomp the saved choice.
   const [hydrated, setHydrated] = useState(false);
 
@@ -38,14 +38,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       // Reading localStorage can only happen post-mount (it doesn't exist
       // during SSR), so restoring a stored "hi" necessarily means setting
       // state from inside this effect rather than from a render-time
-      // initializer — the standard, hydration-safe shape for this exact
+      // initializer, the standard, hydration-safe shape for this exact
       // "starts as the SSR default, then syncs from client-only storage"
       // case, even though the lint rule below is tuned for the more common
       // (and genuinely wrong) case of mirroring already-known render state.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       if (stored === "en" || stored === "hi") setLangState(stored);
     } catch {
-      // localStorage unavailable (private mode, disabled storage) — fall back to "en".
+      // localStorage unavailable (private mode, disabled storage), fall back to "en".
     }
     setHydrated(true);
   }, []);
@@ -59,7 +59,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     try {
       window.localStorage.setItem(STORAGE_KEY, lang);
     } catch {
-      // Ignore write failures — the toggle still works for the rest of the session.
+      // Ignore write failures, the toggle still works for the rest of the session.
     }
   }, [lang, hydrated]);
 

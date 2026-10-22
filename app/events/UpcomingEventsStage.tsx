@@ -73,7 +73,7 @@ function googleCalendarUrl(event: UpcomingEvent, title: string, description: str
 function SignUpModal({ event, onClose, onRegistered }: { event: UpcomingEvent; onClose: () => void; onRegistered: () => void }) {
   const { t, lang } = useLanguage();
   // Which event the dropdown currently has selected (only affects the
-  // submitted payload, same as before — the modal's own title/intro/meta
+  // submitted payload, same as before, the modal's own title/intro/meta
   // always reflect the event that was clicked to open it).
   const [selectedSlug, setSelectedSlug] = useState(event.slug);
   const events = upcomingEvents();

@@ -17,7 +17,7 @@
   --color-navy: var(--color-navy);
   --color-orange: var(--color-orange);
   --color-orange-bright: var(--color-orange-bright);
-  /* Devanagari fallback sits second in each stack — the browser resolves
+  /* Devanagari fallback sits second in each stack, the browser resolves
      font fallback per-glyph, so Hindi words woven into English copy (and
      full Hindi mode) render in the matching Devanagari face automatically,
      with no per-string markup needed. */
@@ -30,11 +30,11 @@ body {
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
-  /* This page-level box never scrolls by design — every real scroll
+  /* This page-level box never scrolls by design, every real scroll
      region on the site is a nested [data-stage-scroll] element. Mobile
      Chrome can still force a real (if tiny) document scroll of its own
-     accord — e.g. nudging the page while bringing a focused field clear
-     of the on-screen keyboard — and when it does, the styled scrollbar
+     accord, e.g. nudging the page while bringing a focused field clear
+     of the on-screen keyboard, and when it does, the styled scrollbar
      below painted a stray navy bar down the right edge of the hero.
      overflow: hidden already blocks user-driven scrolling; this also
      blocks the visible affordance for that one still-possible case. */
@@ -49,7 +49,7 @@ body::-webkit-scrollbar {
 
 /* Opt-out for pages that are normal long-form scrolling documents rather
    than the pinned, wheel-stepped stage experience the rule above is for
-   (e.g. a blog article) — the global overflow:hidden left nothing to
+   (e.g. a blog article), the global overflow:hidden left nothing to
    scroll no matter how long the article was. This is the one place a
    document-level scrollbar is actually wanted, so it opts back in to the
    thin styled bar every other scroll region on the site uses. */
@@ -69,7 +69,7 @@ body {
   color: var(--color-black);
 }
 
-/* One scrollbar for every scroll region on the site — the pinned-stage
+/* One scrollbar for every scroll region on the site, the pinned-stage
    forms and lists, the blog and programs panels, the footer. Slim, no
    arrows, a navy (brand) rounded thumb; it goes white inside any navy
    panel so it reads on the dark ground. */
@@ -102,7 +102,7 @@ body {
   background: rgba(255, 255, 255, 0.75);
 }
 
-/* Google's Material Symbols icon font — base rule from Google's own setup
+/* Google's Material Symbols icon font, base rule from Google's own setup
    guide. Render a glyph with <span className="material-symbols-outlined">
    name</span>; the ligature turns the plain-text ligature name into the
    icon glyph. Weight/fill are tuned per-use via inline fontVariationSettings. */
@@ -134,7 +134,7 @@ body {
   }
 }
 
-/* Infinite sponsor marquee — the track is rendered twice back to back and
+/* Infinite sponsor marquee, the track is rendered twice back to back and
    translated by exactly half its width for a seamless loop. */
 @keyframes marquee {
   from {
@@ -154,11 +154,11 @@ body {
 }
 
 /* The splash hairline (bottom of the screen) is drawn imperatively in step
-   with the countdown — see IntroSequence's update(). No keyframes needed. */
+   with the countdown, see IntroSequence's update(). No keyframes needed. */
 
 /* Ghosted prelude of the next section: a heading-scale label that rises to
-   rest half below the fold — on screen enough to read, off screen enough
-   to say "keep going" — re-flying on every stage change. */
+   rest half below the fold, on screen enough to read, off screen enough
+   to say "keep going", re-flying on every stage change. */
 @keyframes prelude-fly-in {
   from {
     transform: translateY(calc(42% + 26px));

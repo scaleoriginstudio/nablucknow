@@ -19,7 +19,7 @@ const COPY = {
     hi: "हमें अपने बारे में थोड़ा बताएं और यह भी कि आप किस तरह मदद करना चाहेंगे। हमारी वॉलंटियर कोऑर्डिनेटर कुछ ही दिनों में आपसे संपर्क करके आपको किसी प्रोग्राम से जोड़ेगी।",
   },
   quote: {
-    en: "Every hour a volunteer gives here becomes a skill one of our students carries for life — a small saath (साथ) that stays with them long after.",
+    en: "Every hour a volunteer gives here becomes a skill one of our students carries for life: a small saath (साथ) that stays with them long after.",
     hi: "यहाँ एक स्वयंसेवक का दिया हर घंटा हमारे किसी विद्यार्थी के लिए जीवन भर काम आने वाला कौशल बन जाता है।",
   },
   whichArea: { en: "Which area?", hi: "कौन सा क्षेत्र?" },
@@ -64,7 +64,7 @@ export function VolunteerStage() {
           label: t(COPY.whichArea),
           placeholder: t(COPY.chooseArea),
           // Options display in the active language; the stored/submitted
-          // value stays the English area name — a stable key for the lead
+          // value stays the English area name, a stable key for the lead
           // sheet, independent of which language picked it.
           options: VOLUNTEER_AREAS.map((a) => t(a)),
           value: area ? t(VOLUNTEER_AREAS.find((a) => a.en === area) ?? { en: area, hi: area }) : "",

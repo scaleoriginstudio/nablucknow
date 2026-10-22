@@ -62,8 +62,8 @@ export function FloatingActions() {
       // pointer-events-none here, with auto restored on each actionable
       // child below: collapsed, the hidden WhatsApp/Donate row still
       // occupies its normal flex height (just invisible), and without this
-      // the whole wrapper's box — including that empty space above the "+"
-      // button — silently ate clicks meant for whatever sits underneath it
+      // the whole wrapper's box, including that empty space above the "+"
+      // button, silently ate clicks meant for whatever sits underneath it
       // on the page (the hero's own Donate button, on phones).
       className="pointer-events-none fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-5 z-40 flex flex-col items-end gap-3"
     >

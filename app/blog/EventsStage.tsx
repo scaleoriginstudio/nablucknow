@@ -50,7 +50,7 @@ export function EventsStage() {
 
       {/* One scroll surface: when the cards outrun the pinned viewport this
           region takes the wheel/touch gesture (data-stage-scroll) instead of
-          stepping the stage — the same behaviour as the homepage's forms. */}
+          stepping the stage, the same behaviour as the homepage's forms. */}
       <div
         data-stage-scroll=""
         className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 [-webkit-overflow-scrolling:touch]"

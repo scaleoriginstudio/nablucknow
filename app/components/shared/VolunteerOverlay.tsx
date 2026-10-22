@@ -42,7 +42,7 @@ export function VolunteerOverlay({ onClose }: { onClose: () => void }) {
           label: t(WHICH_AREA_LABEL),
           placeholder: t(CHOOSE_AREA_PLACEHOLDER),
           // Options display in the active language; the stored/submitted
-          // value stays the English area name — a stable key for the lead
+          // value stays the English area name, a stable key for the lead
           // sheet, independent of which language picked it.
           options: VOLUNTEER_AREAS.map((a) => t(a)),
           value: area ? t(VOLUNTEER_AREAS.find((a) => a.en === area) ?? { en: area, hi: area }) : "",

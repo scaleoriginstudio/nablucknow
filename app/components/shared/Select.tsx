@@ -7,7 +7,7 @@ import { useLanguage } from "./LanguageContext";
 
 const DEFAULT_PLACEHOLDER = { en: "Please choose", hi: "कृपया चुनें" };
 
-/** A dropdown styled to match the site rather than a native `<select>` —
+/** A dropdown styled to match the site rather than a native `<select>` , 
     on Android, a native select's option list is rendered entirely by the
     OS and cannot be styled at all, which read as a jarring, generic system
     sheet dropped onto an otherwise on-brand form. This renders its own
@@ -16,7 +16,7 @@ const DEFAULT_PLACEHOLDER = { en: "Please choose", hi: "कृपया चु�
     Validation can't lean on the browser's built-in "required" handling
     (that needs a real, focusable form control, and a hidden mirror input
     both fails to focus on validation and fails to submit silently in some
-    browsers) — so an empty value is instead surfaced as a normal inline
+    browsers), so an empty value is instead surfaced as a normal inline
     error, exactly like a failed field would read anywhere else on the site. */
 export function Select({
   label,

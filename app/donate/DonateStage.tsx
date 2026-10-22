@@ -13,7 +13,7 @@ const COPY = {
   },
   intro: {
     en: "Pay by UPI straight to our bank account. No gateway and no fees: every rupee reaches the work.",
-    hi: "UPI से सीधे हमारे बैंक खाते में भुगतान करें। कोई गेटवे नहीं, कोई शुल्क नहीं — हर रुपया सीधे काम तक पहुँचता है।",
+    hi: "UPI से सीधे हमारे बैंक खाते में भुगतान करें। कोई गेटवे नहीं, कोई शुल्क नहीं। हर रुपया सीधे काम तक पहुँचता है।",
   },
 };
 

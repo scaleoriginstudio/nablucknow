@@ -34,7 +34,7 @@ const COPY = {
   whereTitle: { en: "Where your CSR goes", hi: "आपका CSR कहाँ जाता है" },
   whereSubtitle: {
     en: "Two primary focus areas, from a child's first braille lesson to a first job.",
-    hi: "दो मुख्य क्षेत्र — बच्चे के पहले ब्रेल पाठ से पहली नौकरी तक।",
+    hi: "दो मुख्य क्षेत्र: बच्चे के पहले ब्रेल पाठ से पहली नौकरी तक।",
   },
   primary: { en: "Primary focus", hi: "मुख्य क्षेत्र" },
   covers: { en: "Your funding covers", hi: "आपकी फंडिंग से" },

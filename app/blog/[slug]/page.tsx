@@ -13,7 +13,7 @@ export function generateStaticParams() {
 }
 
 // Metadata (page <title>, meta description) is generated server-side with
-// no active-language context, so it always uses the English copy — SEO
+// no active-language context, so it always uses the English copy: SEO
 // chrome, not the reader-facing text the language toggle controls.
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;

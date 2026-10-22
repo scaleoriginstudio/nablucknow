@@ -52,8 +52,8 @@ export const UPCOMING_EVENTS: UpcomingEvent[] = [
     eventCategory: "Fundraiser & Awareness",
     cost: 999,
     description: {
-      en: "Blindfolded, shape your own clay diya for Ganesh Chaturthi — a hands-on way to feel what our students navigate by touch every day.",
-      hi: "आँखों पर पट्टी बाँधकर गणेश चतुर्थी के लिए अपना खुद का मिट्टी का दीया बनाइए — यह महसूस करने का एक प्रत्यक्ष तरीका कि हमारे विद्यार्थी रोज़ स्पर्श के सहारे कैसे आगे बढ़ते हैं।",
+      en: "Blindfolded, shape your own clay diya for Ganesh Chaturthi: a hands-on way to feel what our students navigate by touch every day.",
+      hi: "आँखों पर पट्टी बाँधकर गणेश चतुर्थी के लिए अपना खुद का मिट्टी का दीया बनाइए। यह महसूस करने का एक प्रत्यक्ष तरीका कि हमारे विद्यार्थी रोज़ स्पर्श के सहारे कैसे आगे बढ़ते हैं।",
     },
     image: "/img/nab/vocational.jpg",
     location: "NBC, Indira Nagar, Lucknow",

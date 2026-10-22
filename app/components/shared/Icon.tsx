@@ -1,5 +1,5 @@
 /** A Google Material Symbol, rendered as an outline (unfilled) glyph.
-    Real, established icon set — no hand-drawn SVG paths. Usage:
+    Real, established icon set, no hand-drawn SVG paths. Usage:
     <Icon name="visibility" size={28} className="text-white" /> */
 export function Icon({
   name,
