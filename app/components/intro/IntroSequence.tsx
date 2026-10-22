@@ -18,7 +18,7 @@ import { useGSAP } from "@gsap/react";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { SIGHT_STAGES, stageForValue, type SightStage } from "./stages";
-import { NAV_LINKS, VOLUNTEER_AREAS, VOLUNTEER_LABEL, DONATE_LABEL } from "../shared/constants";
+import { NAV_LINKS, VOLUNTEER_AREAS, TAX_EXEMPTION_NOTE, VOLUNTEER_LABEL, DONATE_LABEL } from "../shared/constants";
 import { Footer } from "../shared/Footer";
 import { MobileNav } from "../shared/MobileNav";
 import { LanguageToggle } from "../shared/LanguageToggle";
@@ -323,11 +323,6 @@ const CTA_TAB_META = {
 // Copy for the three CTA forms (donate/volunteer/CSR) inside the stage-8
 // tab panel — kept separate from the near-identical DonateOverlay /
 // VolunteerOverlay copy since these are shorter, inline variants.
-const DONATE_TAB_NOTE: Bilingual = {
-  en: "Already paid? Send us your details and we will email your 80G tax receipt. NAB Lucknow is registered under Section 12A, and every gift qualifies for a deduction under Section 80G.",
-  hi: "भुगतान कर दिया? अपनी जानकारी भेजें, हम आपको 80G कर-रसीद ईमेल कर देंगे। NAB Lucknow, Section 12A के अंतर्गत पंजीकृत है, और हर दान धारा 80G के तहत कर छूट के लिए पात्र है।",
-};
-const DONATE_TAB_RECEIPT_CTA: Bilingual = { en: "Get my 80G receipt", hi: "मेरी 80G रसीद पाएं" };
 const WHICH_AREA_LABEL: Bilingual = { en: "Which area?", hi: "कौन सा क्षेत्र?" };
 const CHOOSE_AN_AREA: Bilingual = { en: "Choose an area", hi: "एक क्षेत्र चुनें" };
 const SIGN_UP_TO_VOLUNTEER: Bilingual = { en: "Sign up to volunteer", hi: "वॉलंटियर के लिए साइन अप करें" };
@@ -3309,14 +3304,7 @@ export default function IntroSequence() {
                     {ctaTab === "donate" && (
                       <div className="flex flex-col gap-3">
                         <UpiPayCard compact />
-                        <p className="font-body text-xs leading-5 text-black/60">{t(DONATE_TAB_NOTE)}</p>
-                        <button
-                          type="button"
-                          onClick={openDonate}
-                          className="inline-flex items-center justify-center gap-2 self-start rounded-full bg-orange px-7 py-2.5 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy"
-                        >
-                          {t(DONATE_TAB_RECEIPT_CTA)}
-                        </button>
+                        <p className="font-body text-xs leading-5 text-black/55">{t(TAX_EXEMPTION_NOTE)}</p>
                       </div>
                     )}
 
