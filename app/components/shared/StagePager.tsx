@@ -10,7 +10,7 @@ import { HEADER_HEIGHT, NAV_LINKS, VOLUNTEER_LABEL, DONATE_LABEL } from "./const
 import { Footer } from "./Footer";
 import { MobileNav } from "./MobileNav";
 import { LanguageToggle } from "./LanguageToggle";
-import { useLanguage } from "./LanguageContext";
+import { useLanguage, type Bilingual } from "./LanguageContext";
 import { useOverlay } from "./OverlayContext";
 import { StageActiveProvider } from "./StageIntro";
 
@@ -87,7 +87,7 @@ export function StagePager({
   /** One short label per stage, in order. When given, the next stage's
       label peeks in faint at the bottom edge and re-flies into place on
       every step — the same "here's what's next" ghost the homepage uses. */
-  stageLabels?: string[];
+  stageLabels?: Bilingual[];
 }) {
   const total = stages.length;
   const lastStage = total + 1;
@@ -475,7 +475,7 @@ export function StagePager({
               "font-heading text-2xl font-bold sm:text-4xl " + (background ? "text-white" : "text-navy")
             }
           >
-            {stageLabels[active]}
+            {t(stageLabels[active])}
           </span>
         </div>
       )}

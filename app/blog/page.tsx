@@ -14,7 +14,10 @@ export default function BlogPage() {
     <main>
       <StagePager
         stages={[<EventsStage key="events" />, <LinkedInStage key="linkedin" />]}
-        stageLabels={["Blog", "On LinkedIn"]}
+        stageLabels={[
+          { en: "Blog", hi: "ब्लॉग" },
+          { en: "On LinkedIn", hi: "LinkedIn पर" },
+        ]}
       />
     </main>
   );

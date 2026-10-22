@@ -1,12 +1,12 @@
 import type { Bilingual } from "../components/shared/LanguageContext";
+import { LINKEDIN_URL } from "../components/shared/constants";
 
 export type LinkedInPost = {
   title: Bilingual;
   excerpt: Bilingual;
   image: string;
-  // No confirmed NAB Lucknow LinkedIn page exists yet, so every href is a
-  // placeholder until real published posts are linked here, the same pattern
-  // as the LinkedIn entry in FOOTER_SOCIALS.
+  // Each card opens NAB Lucknow's LinkedIn page; swap in an individual
+  // post's URL here once it is published there.
   href: string;
 };
 
@@ -21,7 +21,7 @@ export const LINKEDIN_POSTS: LinkedInPost[] = [
       hi: "जब कोई कंपनी अपना पहला दृष्टिबाधित कर्मचारी रखती है, तो असल में क्या बदलता है।",
     },
     image: "/img/nab/computer-training.jpg",
-    href: "#",
+    href: LINKEDIN_URL,
   },
   {
     title: {
@@ -32,8 +32,8 @@ export const LINKEDIN_POSTS: LinkedInPost[] = [
       en: "Screen readers did not replace braille. This is what our classrooms look like today.",
       hi: "स्क्रीन रीडर ने ब्रेल की जगह नहीं ली। आज हमारी कक्षाएँ कुछ ऐसी दिखती हैं।",
     },
-    image: "/img/nab/care.jpg",
-    href: "#",
+    image: "/img/nab/braille-class-boys.jpg",
+    href: LINKEDIN_URL,
   },
   {
     title: {
@@ -44,8 +44,8 @@ export const LINKEDIN_POSTS: LinkedInPost[] = [
       en: "The three questions we ask every new corporate partner before we design a programme.",
       hi: "किसी भी नए कॉर्पोरेट पार्टनर से प्रोग्राम डिज़ाइन करने से पहले हम जो तीन सवाल पूछते हैं।",
     },
-    image: "/img/nab/cover-page.jpg",
-    href: "#",
+    image: "/img/nab/computer-training.jpg",
+    href: LINKEDIN_URL,
   },
   {
     title: {
@@ -56,8 +56,8 @@ export const LINKEDIN_POSTS: LinkedInPost[] = [
       en: "Recognising a graduating vocational-training batch of ten students.",
       hi: "वोकेशनल ट्रेनिंग पूरी कर रहे दस विद्यार्थियों के बैच का सम्मान।",
     },
-    image: "/img/nab/dance.jpg",
-    href: "#",
+    image: "/img/nab/cover-page.jpg",
+    href: LINKEDIN_URL,
   },
   {
     title: {
@@ -69,7 +69,7 @@ export const LINKEDIN_POSTS: LinkedInPost[] = [
       hi: "कक्षा में सीखे कौशल किस तरह कॉर्पोरेट और सरकारी नौकरियों में बदलते हैं।",
     },
     image: "/img/nab/vocational.jpg",
-    href: "#",
+    href: LINKEDIN_URL,
   },
   {
     title: {
@@ -81,7 +81,7 @@ export const LINKEDIN_POSTS: LinkedInPost[] = [
       hi: "हमारे प्राइमरी और ब्रेल साक्षरता प्रोग्राम को चलाने वाले शिक्षक।",
     },
     image: "/img/nab/teacher.jpg",
-    href: "#",
+    href: LINKEDIN_URL,
   },
   {
     title: {
@@ -92,8 +92,8 @@ export const LINKEDIN_POSTS: LinkedInPost[] = [
       en: "Over 80 participants walked our guided route blindfolded, cane in hand.",
       hi: "80 से अधिक प्रतिभागियों ने आँखों पर पट्टी बाँधकर, हाथ में केन लिए हमारा निर्धारित मार्ग तय किया।",
     },
-    image: "/img/nab/eye-checkup.jpg",
-    href: "#",
+    image: "/img/placeholders/cane-walk.jpg",
+    href: LINKEDIN_URL,
   },
   {
     title: {
@@ -104,8 +104,8 @@ export const LINKEDIN_POSTS: LinkedInPost[] = [
       en: "Our outreach camps bring diagnosis and referral within reach of families who need it most.",
       hi: "हमारे आउटरीच कैंप ज़रूरतमंद परिवारों तक जाँच और रेफरल की सुविधा पहुँचाते हैं।",
     },
-    image: "/img/nab/compitions.jpg",
-    href: "#",
+    image: "/img/nab/eye-checkup.jpg",
+    href: LINKEDIN_URL,
   },
   {
     title: {
@@ -117,6 +117,6 @@ export const LINKEDIN_POSTS: LinkedInPost[] = [
       hi: "तीन पूर्व विद्यार्थी बता रहे हैं वो नौकरी, दिनचर्या और कौशल, जो वे हमारे प्रोग्राम से साथ ले गए।",
     },
     image: "/img/nab/computer.jpg",
-    href: "#",
+    href: LINKEDIN_URL,
   },
 ];

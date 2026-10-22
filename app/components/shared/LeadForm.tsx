@@ -89,7 +89,15 @@ export function LeadForm({
     const form = event.currentTarget;
     const data = new FormData(form);
 
+    // Any named input a caller puts in the `extra` slot (a donation amount,
+    // a UPI reference) is submitted too, under its own name.
+    const extraFields: LeadPayload = {};
+    for (const [key, value] of data.entries()) {
+      if (typeof value === "string" && value !== "") extraFields[key] = value;
+    }
+
     const payload: LeadPayload = {
+      ...extraFields,
       name: String(data.get("name") ?? ""),
       number: String(data.get("number") ?? ""),
       email: String(data.get("email") ?? ""),

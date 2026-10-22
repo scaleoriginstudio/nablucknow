@@ -16,8 +16,9 @@ export type UpcomingEvent = {
   location: string;
 };
 
-// Every upcoming event is paid: registration always goes through the
-// Razorpay step, no free sign-ups.
+// Every upcoming event is paid: the entry fee is collected by UPI once a
+// place is confirmed. Events whose date has passed drop off the Upcoming
+// page on their own (see upcomingEvents), so a stale listing never shows.
 export const UPCOMING_EVENTS: UpcomingEvent[] = [
   {
     slug: "talk-with-visually-impaired-bollywood-actor",
@@ -35,7 +36,7 @@ export const UPCOMING_EVENTS: UpcomingEvent[] = [
       en: "An evening of inspirational storytelling with a visually impaired actor from the Hindi film industry.",
       hi: "हिंदी फिल्म इंडस्ट्री के एक दृष्टिबाधित अभिनेता के साथ प्रेरणादायक कहानियों की एक शाम।",
     },
-    image: "/img/placeholders/talk-inclusion.jpg",
+    image: "/img/nab/sensitisation-session.jpg",
     location: "Karwaan Studio, Lucknow",
   },
   {
@@ -54,7 +55,16 @@ export const UPCOMING_EVENTS: UpcomingEvent[] = [
       en: "Blindfolded, shape your own clay diya for Ganesh Chaturthi — a hands-on way to feel what our students navigate by touch every day.",
       hi: "आँखों पर पट्टी बाँधकर गणेश चतुर्थी के लिए अपना खुद का मिट्टी का दीया बनाइए — यह महसूस करने का एक प्रत्यक्ष तरीका कि हमारे विद्यार्थी रोज़ स्पर्श के सहारे कैसे आगे बढ़ते हैं।",
     },
-    image: "/img/placeholders/clay-diya.jpg",
+    image: "/img/nab/vocational.jpg",
     location: "NBC, Indira Nagar, Lucknow",
   },
 ];
+
+/** Events that have not yet ended, soonest first. Evaluated at render, in
+    India time, so a listing disappears the day after it happens. */
+export function upcomingEvents(now: Date = new Date()): UpcomingEvent[] {
+  return UPCOMING_EVENTS.filter((event) => {
+    const end = new Date(`${event.date}T${event.time}:00+05:30`).getTime() + event.durationHours * 3_600_000;
+    return end > now.getTime();
+  }).sort((a, b) => a.date.localeCompare(b.date));
+}

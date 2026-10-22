@@ -8,7 +8,7 @@ import { useLanguage } from "../components/shared/LanguageContext";
 
 const STATS = [
   { value: "150+", label: { en: "Active volunteers", hi: "सक्रिय स्वयंसेवक" } },
-  { value: "30+", label: { en: "Years of programmes", hi: "वर्षों से चल रहे प्रोग्राम" } },
+  { value: "35+", label: { en: "Years of programmes", hi: "वर्षों से चल रहे प्रोग्राम" } },
 ];
 
 const COPY = {

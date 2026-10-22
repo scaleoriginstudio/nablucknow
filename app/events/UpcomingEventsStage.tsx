@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { UPCOMING_EVENTS, type UpcomingEvent } from "./events-data";
+import { upcomingEvents, type UpcomingEvent } from "./events-data";
 import { GlassFormShell } from "../components/shared/GlassFormShell";
 import { LeadForm } from "../components/shared/LeadForm";
 import { StageIntro } from "../components/shared/StageIntro";
@@ -23,6 +23,16 @@ const COPY = {
   youAreRegistered: { en: "You're registered. See you there!", hi: "आपका पंजीकरण हो गया है। वहाँ मिलते हैं!" },
   addToCalendar: { en: "Add to Google Calendar", hi: "Google कैलेंडर में जोड़ें" },
   signUp: { en: "Sign up", hi: "साइन अप करें" },
+  noneTitle: { en: "Our next events are being planned", hi: "हमारे अगले कार्यक्रमों की योजना बन रही है" },
+  noneBody: {
+    en: "Nothing is open for registration right now. Leave your details and we will tell you first when the next walk, workshop or talk is announced.",
+    hi: "अभी किसी कार्यक्रम के लिए पंजीकरण खुला नहीं है। अपनी जानकारी दें, अगली वॉक, वर्कशॉप या टॉक की घोषणा होते ही हम सबसे पहले आपको बताएंगे।",
+  },
+  notifyMe: { en: "Notify me", hi: "मुझे सूचित करें" },
+  notifyThanks: {
+    en: "Thank you. You will hear from us as soon as the next event is announced.",
+    hi: "धन्यवाद। अगले कार्यक्रम की घोषणा होते ही हम आपसे संपर्क करेंगे।",
+  },
 };
 
 function feeNoteCopy(cost: number) {
@@ -66,7 +76,8 @@ function SignUpModal({ event, onClose, onRegistered }: { event: UpcomingEvent; o
   // submitted payload, same as before — the modal's own title/intro/meta
   // always reflect the event that was clicked to open it).
   const [selectedSlug, setSelectedSlug] = useState(event.slug);
-  const selectedEvent = UPCOMING_EVENTS.find((e) => e.slug === selectedSlug) ?? event;
+  const events = upcomingEvents();
+  const selectedEvent = events.find((e) => e.slug === selectedSlug) ?? event;
 
   return (
     <GlassFormShell
@@ -86,10 +97,10 @@ function SignUpModal({ event, onClose, onRegistered }: { event: UpcomingEvent; o
           name: "event",
           label: t(COPY.whichEvent),
           placeholder: t(COPY.chooseEvent),
-          options: UPCOMING_EVENTS.map((e) => t(e.title)),
+          options: events.map((e) => t(e.title)),
           value: t(selectedEvent.title),
           onChange: (v) => {
-            const match = UPCOMING_EVENTS.find((e) => t(e.title) === v);
+            const match = events.find((e) => t(e.title) === v);
             if (match) setSelectedSlug(match.slug);
           },
         }}
@@ -175,14 +186,33 @@ function EventCard({ event }: { event: UpcomingEvent }) {
 
 export function UpcomingEventsStage() {
   const { t } = useLanguage();
+  const events = upcomingEvents();
   return (
     <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-start gap-3 sm:gap-6">
-      <StageIntro title={t(COPY.heading)} subtitle={t(COPY.subtitle)} />
-      <div className="grid gap-2 sm:grid-cols-3 sm:gap-6">
-        {UPCOMING_EVENTS.map((event) => (
-          <EventCard key={event.slug} event={event} />
-        ))}
-      </div>
+      <StageIntro title={t(COPY.heading)} subtitle={events.length > 0 ? t(COPY.subtitle) : undefined} />
+      {events.length > 0 ? (
+        <div className="grid gap-2 sm:grid-cols-3 sm:gap-6">
+          {events.map((event) => (
+            <EventCard key={event.slug} event={event} />
+          ))}
+        </div>
+      ) : (
+        <div
+          data-stage-scroll=""
+          className="mx-auto flex min-h-0 w-full max-w-2xl flex-col gap-4 overflow-y-auto overscroll-contain rounded-2xl border border-black/10 bg-white p-5 shadow-sm sm:p-7"
+        >
+          <div className="flex items-start gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-navy/10 text-navy">
+              <Icon name="event_upcoming" size={22} weight={400} />
+            </span>
+            <div>
+              <h3 className="font-heading text-base font-bold text-navy sm:text-lg">{t(COPY.noneTitle)}</h3>
+              <p className="mt-1 font-body text-sm leading-6 text-black/65">{t(COPY.noneBody)}</p>
+            </div>
+          </div>
+          <LeadForm formType="EventUpdates" submitLabel={t(COPY.notifyMe)} successBody={t(COPY.notifyThanks)} />
+        </div>
+      )}
     </div>
   );
 }

@@ -31,15 +31,15 @@ export const PROGRAMS: Program[] = [
       hi: "कार्यस्थल में सच्ची समावेशिता",
     },
     subtitle: {
-      en: "A fundraising talk by Mrs. Amita Dubey, for corporate teams",
-      hi: "श्रीमती अमिता दुबे द्वारा कॉर्पोरेट टीमों के लिए एक फंडरेज़िंग टॉक",
+      en: "A fundraising talk by Smt. Amita Dubey, Vice President, NAB Lucknow, for corporate teams",
+      hi: "NAB Lucknow की उपाध्यक्ष श्रीमती अमिता दुबे द्वारा कॉर्पोरेट टीमों के लिए एक फंडरेज़िंग टॉक",
     },
     format: "Fundraising Talk",
     audience: "Corporate teams",
-    image: "/img/placeholders/talk-inclusion.jpg",
-    imageAlt: "A speaker addressing an audience at a conference",
+    image: "/img/nab/sensitisation-session.jpg",
+    imageAlt: "A guest greets visually impaired students during a sensitisation session in a college auditorium",
     hook: {
-      en: "An honest conversation on what workplace inclusion for people with visual impairment actually looks like beyond compliance: hiring practices, accessible tooling, and the everyday accommodations that let colleagues do their best work — saath (साथ) chalna, sirf policy nahi.",
+      en: "An honest conversation on what workplace inclusion for people with visual impairment actually looks like beyond compliance: hiring practices, accessible tooling, and the everyday accommodations that let colleagues do their best work. Saath (साथ) chalna, sirf policy nahi.",
       hi: "इस बातचीत में यह ईमानदारी से बताया जाता है कि दृष्टिबाधित लोगों के लिए कार्यस्थल में समावेशिता कंप्लायंस से आगे असल में कैसी दिखती है: भर्ती की प्रक्रिया, सुलभ टूल्स, और वे रोज़मर्रा की व्यवस्थाएँ जो सहकर्मियों को अपना सर्वश्रेष्ठ काम करने देती हैं।",
     },
     highlights: [
@@ -65,8 +65,8 @@ export const PROGRAMS: Program[] = [
     },
     format: "Street Performance",
     audience: "Schools & corporate campuses",
-    image: "/img/placeholders/street-performance.jpg",
-    imageAlt: "Performers in traditional costume on an outdoor stage",
+    image: "/img/nab/dance.jpg",
+    imageAlt: "Visually impaired students performing on stage at a NAB Lucknow event",
     hook: {
       en: "A musical street play performed entirely by visually impaired students, trained over several weeks by professional street artists and theatre directors. No scripts read off a page, every line and cue learned by ear — pure hausla (हौसला) on stage.",
       hi: "पूरी तरह दृष्टिबाधित विद्यार्थियों द्वारा प्रस्तुत एक संगीतमय नुक्कड़ नाटक, जिसे हफ्तों तक पेशेवर स्ट्रीट आर्टिस्टों और थिएटर डायरेक्टरों ने प्रशिक्षित किया है। कोई स्क्रिप्ट पढ़ी नहीं जाती, हर संवाद और क्यू कान से सीखा जाता है।",

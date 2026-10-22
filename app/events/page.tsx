@@ -14,7 +14,10 @@ export default function EventsPage() {
     <main>
       <StagePager
         stages={[<UpcomingEventsStage key="upcoming" />, <PastEventsStage key="past" />]}
-        stageLabels={["Upcoming Events", "Past Events"]}
+        stageLabels={[
+          { en: "Upcoming Events", hi: "आगामी कार्यक्रम" },
+          { en: "Past Events", hi: "बीते कार्यक्रम" },
+        ]}
       />
     </main>
   );

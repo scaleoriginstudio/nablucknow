@@ -54,32 +54,45 @@ export function ContactStage() {
     setSent(true);
   };
 
+  const details = (onDark: boolean) => (
+    <div className={"flex flex-col gap-3 font-body text-sm " + (onDark ? "text-white/90" : "text-black/70")}>
+      <a
+        href={MAPS_HREF}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-start gap-2 leading-6 hover:underline"
+      >
+        <Icon name="location_on" size={18} className="mt-0.5 shrink-0" />
+        {FOOTER_CONTACT.address}
+      </a>
+      <div className="flex flex-col gap-1">
+        {FOOTER_CONTACT.phones.map((phone) => (
+          <a key={phone} href={`tel:${phone.replace(/[^\d+]/g, "")}`} className="flex items-center gap-2 hover:underline">
+            <Icon name="call" size={18} className="shrink-0" />
+            {phone}
+          </a>
+        ))}
+        <a href={`mailto:${FOOTER_CONTACT.email}`} className="flex items-center gap-2 hover:underline">
+          <Icon name="mail" size={18} className="shrink-0" />
+          {FOOTER_CONTACT.email}
+        </a>
+      </div>
+    </div>
+  );
+
   return (
     <GlassFormShell
       variant="page"
-      image="/img/nab/care.jpg"
+      image="/img/nab/braille-classroom.jpg"
       imageAlt=""
       eyebrow={t(COPY.eyebrow)}
       title={t(COPY.title)}
       intro={t(COPY.intro)}
-      aside={
-        <div className="flex flex-col gap-3 font-body text-sm text-white/90">
-          <a href={MAPS_HREF} target="_blank" rel="noopener noreferrer" className="leading-6 hover:underline">
-            {FOOTER_CONTACT.address}
-          </a>
-          <div className="flex flex-col gap-0.5">
-            {FOOTER_CONTACT.phones.map((phone) => (
-              <a key={phone} href={`tel:${phone.replace(/[^\d+]/g, "")}`} className="hover:underline">
-                {phone}
-              </a>
-            ))}
-            <a href={`mailto:${FOOTER_CONTACT.email}`} className="hover:underline">
-              {FOOTER_CONTACT.email}
-            </a>
-          </div>
-        </div>
-      }
+      aside={details(true)}
     >
+      {/* The aside only shows over the desktop photo; phones get the same
+          details here, above the form. */}
+      <div className="rounded-xl border border-black/10 p-4 md:hidden">{details(false)}</div>
       {sent ? (
         <div className="flex items-start gap-3 rounded-xl border border-navy/15 bg-navy/5 p-4">
           <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-navy text-white">

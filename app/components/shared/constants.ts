@@ -45,6 +45,16 @@ export const TAX_EXEMPTION_NOTE: Bilingual = {
   hi: "NAB Lucknow, Section 12A के अंतर्गत पंजीकृत है। हर दान, आयकर अधिनियम, 1961 की धारा 80G के तहत कर छूट के लिए पात्र है।",
 };
 
+// NAB Lucknow takes donations by UPI only (no payment gateway), straight
+// into its SBI account. The QR is cropped from the bank-issued NAB-1.pdf
+// standee, so it is the exact code SBI generated for this account.
+export const UPI = {
+  id: "9839682888@sbi",
+  payee: "National Association for the Blind",
+  qr: "/img/nab/upi-qr.png",
+  apps: "BHIM · Google Pay · PhonePe · Paytm · YONO SBI",
+};
+
 // The single source for the "which area?" choice on every volunteer form
 // (the overlay, the /volunteer page, and the homepage CTA tab).
 export const VOLUNTEER_AREAS: Bilingual[] = [
@@ -63,10 +73,11 @@ export const FOOTER_CONTACT = {
   email: "nablucknow1@gmail.com",
 };
 
-// LinkedIn has no confirmed real NAB Lucknow page yet, so this href is a placeholder.
+export const LINKEDIN_URL = "https://www.linkedin.com/company/national-association-for-the-blind-lucknow/";
+
 export const FOOTER_SOCIALS = [
   { name: "Facebook", href: "https://www.facebook.com/nablucknow1989/" },
-  { name: "LinkedIn", href: "#" },
+  { name: "LinkedIn", href: LINKEDIN_URL },
   { name: "Instagram", href: "https://www.instagram.com/nab_lucknow/" },
   { name: "Youtube", href: "https://www.youtube.com/channel/UCwo8D9N2W7c_7AAGVwOcV4g" },
 ];

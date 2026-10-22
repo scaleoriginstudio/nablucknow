@@ -18,13 +18,14 @@ import { useGSAP } from "@gsap/react";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { SIGHT_STAGES, stageForValue, type SightStage } from "./stages";
-import { NAV_LINKS, VOLUNTEER_AREAS, TAX_EXEMPTION_NOTE, VOLUNTEER_LABEL, DONATE_LABEL } from "../shared/constants";
+import { NAV_LINKS, VOLUNTEER_AREAS, VOLUNTEER_LABEL, DONATE_LABEL } from "../shared/constants";
 import { Footer } from "../shared/Footer";
 import { MobileNav } from "../shared/MobileNav";
 import { LanguageToggle } from "../shared/LanguageToggle";
 import { Icon } from "../shared/Icon";
 import { LeadForm } from "../shared/LeadForm";
-import { CAUSES, formatINR } from "../../lib/causes-data";
+import { UpiPayCard } from "../shared/UpiPayment";
+import { CAUSES, causeProgress, formatINR } from "../../lib/causes-data";
 import { useOverlay } from "../shared/OverlayContext";
 import { useLanguage, type Bilingual } from "../shared/LanguageContext";
 
@@ -56,12 +57,12 @@ const STAGE1_HEADLINE: Bilingual = {
   hi: "National Association for the Blind, State Chapter, Lucknow",
 };
 const STAGE1_PARAGRAPH: Bilingual = {
-  en: "For over thirty years we have worked so that losing your sight in Uttar Pradesh need not mean losing your schooling, your work, or your place alongside everyone else — your saath in the world. Every programme we run points at one thing: an inclusive, ordinary, independent life.",
-  hi: "तीस से अधिक वर्षों से हम इसलिए काम कर रहे हैं ताकि उत्तर प्रदेश में किसी की दृष्टि जाने का मतलब उसकी पढ़ाई, काम या बाकी सबके साथ उसकी जगह खोना न हो। हमारा हर प्रोग्राम एक ही बात की ओर इशारा करता है: एक समावेशी, सामान्य और स्वतंत्र ज़िंदगी।",
+  en: "Since 1989 we have worked so that losing your sight in Uttar Pradesh need not mean losing your schooling, your work, or your place alongside everyone else — your saath in the world. Every programme we run points at one thing: an inclusive, ordinary, independent life.",
+  hi: "1989 से हम इसलिए काम कर रहे हैं ताकि उत्तर प्रदेश में किसी की दृष्टि जाने का मतलब उसकी पढ़ाई, काम या बाकी सबके साथ उसकी जगह खोना न हो। हमारा हर प्रोग्राम एक ही बात की ओर इशारा करता है: एक समावेशी, सामान्य और स्वतंत्र ज़िंदगी।",
 };
 const STAGE2_PARAGRAPH: Bilingual = {
-  en: "For more than 30 years we have worked with visually impaired people in Lucknow and across Uttar Pradesh, from primary schooling through family counselling to employment. Every programme is built for inclusion, not separation — the aim is a full, ordinary life for every person we support, alongside everyone else — ek saath — not a lesser version of one apart from them.",
-  hi: "30 से अधिक वर्षों से हम लखनऊ और उत्तर प्रदेश भर में दृष्टिबाधित लोगों के साथ काम कर रहे हैं — प्राथमिक शिक्षा से लेकर पारिवारिक काउंसलिंग और रोज़गार तक। हर प्रोग्राम समावेशन के लिए बनाया गया है, अलगाव के लिए नहीं — मकसद यही है कि हम जिस भी व्यक्ति की मदद करते हैं, उसे बाकी सबके साथ एक पूरी, सामान्य ज़िंदगी मिले, किसी अलग या कमतर ज़िंदगी की बजाय।",
+  en: "For more than 35 years we have worked with visually impaired people in Lucknow and across Uttar Pradesh, from primary schooling through family counselling to employment. Every programme is built for inclusion, not separation — the aim is a full, ordinary life for every person we support, alongside everyone else — ek saath — not a lesser version of one apart from them.",
+  hi: "35 से अधिक वर्षों से हम लखनऊ और उत्तर प्रदेश भर में दृष्टिबाधित लोगों के साथ काम कर रहे हैं — प्राथमिक शिक्षा से लेकर पारिवारिक काउंसलिंग और रोज़गार तक। हर प्रोग्राम समावेशन के लिए बनाया गया है, अलगाव के लिए नहीं — मकसद यही है कि हम जिस भी व्यक्ति की मदद करते हैं, उसे बाकी सबके साथ एक पूरी, सामान्य ज़िंदगी मिले, किसी अलग या कमतर ज़िंदगी की बजाय।",
 };
 const STAGE2_STORIES: { word: Bilingual; headline: Bilingual; image: string; href: string }[] = [
   {
@@ -70,7 +71,7 @@ const STAGE2_STORIES: { word: Bilingual; headline: Bilingual; image: string; hre
       en: "A child who learns braille at five reads as fast as anyone in the class.",
       hi: "जो बच्चा पाँच साल की उम्र में ब्रेल सीखना शुरू करता है, वह क्लास में किसी से कम तेज़ नहीं पढ़ पाता।",
     },
-    image: "/img/nab/care.jpg",
+    image: "/img/nab/braille-pegboard.jpg",
     href: "/blog/what-early-education-changes",
   },
   {
@@ -79,7 +80,7 @@ const STAGE2_STORIES: { word: Bilingual; headline: Bilingual; image: string; hre
       en: "Ten minutes with a cane and a blindfold changes how a room thinks about access.",
       hi: "छड़ी और आँखों पर पट्टी बांधकर बिताए दस मिनट ही यह बदल देते हैं कि एक कमरा पहुंच के बारे में कैसे सोचता है।",
     },
-    image: "/img/nab/teacher.jpg",
+    image: "/img/nab/sensitisation-session.jpg",
     href: "/blog/white-cane-day-walk-2025",
   },
   {
@@ -231,35 +232,57 @@ const IMPACT_STATS: { value: Bilingual; text: Bilingual }[] = [
   },
 ];
 const TIMELINE_SHIFT_X = 180;
-const TEAM_MEMBERS: { photo: string; name: string; role: Bilingual; message: Bilingual }[] = [
-  {
-    photo: "/img/placeholderimg.png",
-    name: "Anjali Verma",
-    role: { en: "Programme Director", hi: "प्रोग्राम डायरेक्टर" },
-    message: {
-      en: "Most children arrive at our school unable to read. A few months later they are reading braille on their own — that hausla is the part of this work I have never got used to.",
-      hi: "ज़्यादातर बच्चे हमारे स्कूल में बिना पढ़ना जाने आते हैं। कुछ ही महीनों बाद वे खुद से ब्रेल पढ़ने लगते हैं। इस काम का यही हिस्सा है जिसकी आदत मुझे आज तक नहीं पड़ी।",
-    },
-  },
-  {
-    photo: "/img/placeholderimg.png",
-    name: "Rohit Malhotra",
-    role: { en: "Head of Vocational Training", hi: "वोकेशनल ट्रेनिंग प्रमुख" },
-    message: {
-      en: "We teach a trade, then we help our students get hired. Every placement letter is apna proof: a job someone was once told they would never hold.",
-      hi: "हम एक हुनर सिखाते हैं, फिर अपने छात्रों को नौकरी दिलाने में मदद करते हैं। हर प्लेसमेंट लेटर एक ऐसी नौकरी है, जिसके बारे में किसी से कभी कहा गया था कि वह कभी नहीं मिलेगी।",
-    },
-  },
-  {
-    photo: "/img/placeholderimg.png",
-    name: "Kavita Nair",
-    role: { en: "Family Counsellor", hi: "फैमिली काउंसलर" },
-    message: {
-      en: "Parents often arrive more anxious than their children. Most of my work is with them — building their hausla. Once a family expects their child to have a future, the child usually does.",
-      hi: "अक्सर माता-पिता अपने बच्चों से ज़्यादा चिंतित होकर आते हैं। मेरा ज़्यादातर काम उन्हीं के साथ होता है। जब एक परिवार अपने बच्चे के भविष्य पर भरोसा करने लगता है, तो अक्सर बच्चा वाकई वहां पहुंच जाता है।",
-    },
-  },
+// Stage 7 steps through two panels: a special mention for Smt. Ratna
+// Kaul, then the executive committee as listed by NAB Lucknow. There are
+// no committee photos, so members read as monogram name cards.
+const TEAM_PANEL_COUNT = 2;
+const TEAM_PANEL_LABELS: Bilingual[] = [
+  { en: "Special mention", hi: "विशेष उल्लेख" },
+  { en: "Executive committee", hi: "कार्यकारिणी समिति" },
 ];
+const FEATURED_MEMBER = {
+  photo: "/img/nab/ratna-kaul.jpg",
+  name: { en: "Smt. Ratna Kaul", hi: "श्रीमती रत्ना कौल" } as Bilingual,
+  role: { en: "Hindi writer & social worker", hi: "हिंदी लेखिका एवं समाजसेविका" } as Bilingual,
+  text: {
+    en: "A Hindi lekhika and samajsevika, Smt. Ratna Kaul has long stood with NAB Lucknow's belief that a visually impaired child deserves the same books, the same classroom and the same future as any other. We are grateful for her guidance and her saath (साथ).",
+    hi: "हिंदी लेखिका और समाजसेविका श्रीमती रत्ना कौल लंबे समय से NAB Lucknow के इस विश्वास के साथ खड़ी हैं कि एक दृष्टिबाधित बच्चे को भी वही किताबें, वही कक्षा और वही भविष्य मिलना चाहिए जो किसी और बच्चे को मिलता है। उनके मार्गदर्शन और साथ के लिए हम आभारी हैं।",
+  } as Bilingual,
+  alt: {
+    en: "Portrait of Smt. Ratna Kaul in a green sari, standing in a garden.",
+    hi: "हरी साड़ी में बगीचे में खड़ी श्रीमती रत्ना कौल का चित्र।",
+  } as Bilingual,
+};
+const OFFICE_BEARERS: { name: Bilingual; role: Bilingual }[] = [
+  { name: { en: "Dr. Rama Shankhdhar", hi: "डॉ. रमा शंखधर" }, role: { en: "President", hi: "अध्यक्ष" } },
+  { name: { en: "Smt. Amita Dubey", hi: "श्रीमती अमिता दुबे" }, role: { en: "Vice President", hi: "उपाध्यक्ष" } },
+  { name: { en: "Dr. Shashi Prabha Gupta", hi: "डॉ. शशि प्रभा गुप्ता" }, role: { en: "General Secretary", hi: "महासचिव" } },
+  { name: { en: "Shri Anurag Mishra", hi: "श्री अनुराग मिश्रा" }, role: { en: "Treasurer", hi: "कोषाध्यक्ष" } },
+  { name: { en: "Smt. Manju Kacker", hi: "श्रीमती मंजू कक्कड़" }, role: { en: "Joint Secretary", hi: "संयुक्त सचिव" } },
+  { name: { en: "Smt. Manju Rawat", hi: "श्रीमती मंजू रावत" }, role: { en: "Joint Secretary", hi: "संयुक्त सचिव" } },
+];
+const EXECUTIVE_MEMBERS: Bilingual[] = [
+  { en: "Smt. Alka Bhattacharya", hi: "श्रीमती अलका भट्टाचार्य" },
+  { en: "Smt. Vidya Kandwal", hi: "श्रीमती विद्या कंडवाल" },
+  { en: "Shri Anmol K. Sharma", hi: "श्री अनमोल के. शर्मा" },
+  { en: "Smt. Bala Sharma", hi: "श्रीमती बाला शर्मा" },
+  { en: "Smt. Shashwati Banerjee", hi: "श्रीमती शाश्वती बनर्जी" },
+];
+const OFFICE_BEARERS_LABEL: Bilingual = { en: "Office bearers", hi: "पदाधिकारी" };
+const EXECUTIVE_MEMBERS_LABEL: Bilingual = { en: "Executive members", hi: "कार्यकारिणी सदस्य" };
+const TEAM_PANELS_ARIA: Bilingual = { en: "Team", hi: "टीम" };
+
+/** "Dr. Rama Shankhdhar" -> "RS": initials without the honorific. */
+function monogram(name: string) {
+  return name
+    .replace(/^(Dr|Smt|Shri)\.?\s+/i, "")
+    .split(/\s+/)
+    .filter((part) => /^[A-Za-z]{2,}/.test(part))
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+}
 const SPONSORS = [
   "State Bank of India",
   "Jigyasa - Be The Change",
@@ -271,9 +294,9 @@ const SPONSORS = [
   "Inner Wheel Club of Ladies",
   "Tata Capital (United Way, Mumbai)",
 ];
-const DONATION_AMOUNTS = [500, 1000, 2500, 5000];
 const STAGE8_SUB_COUNT = 2;
 const READ_MORE_LABEL: Bilingual = { en: "Read More", hi: "और पढ़ें" };
+const CAUSE_UPI_NOTE: Bilingual = { en: "80G tax-exempt · Pay by UPI", hi: "80G कर-मुक्त · UPI से भुगतान" };
 const CAUSES_HEADING: Bilingual = { en: "Our Causes", hi: "हमारे अभियान" };
 const SPONSORS_HEADING: Bilingual = { en: "Our Sponsors", hi: "हमारे प्रायोजक" };
 const TEAM_HEADING: Bilingual = { en: "Meet the Team", hi: "हमारी टीम से मिलें" };
@@ -286,33 +309,25 @@ const SDG_SECTION_SUBHEADING: Bilingual = {
   en: "Our work maps directly onto five of the UN's Sustainable Development Goals.",
   hi: "हमारा काम सीधे संयुक्त राष्ट्र के पांच सतत विकास लक्ष्यों से जुड़ा है।",
 };
+const SDG_GOAL_PREFIX: Bilingual = { en: "Goal", hi: "लक्ष्य" };
+const CAUSES_ARIA: Bilingual = { en: "Causes", hi: "अभियान" };
 const STAGE8_CTA_HEADING: Bilingual = { en: "See the World Together", hi: "दुनिया को साथ देखें" };
 const SKIP_INTRO_LABEL: Bilingual = { en: "Skip intro", hi: "इंट्रो छोड़ें" };
 const PAUSE_LEARN_MORE_LABEL: Bilingual = { en: "Pause & learn more", hi: "रोकें और जानें" };
 const RESUME_INTRO_LABEL: Bilingual = { en: "Resume intro", hi: "इंट्रो जारी रखें" };
 const CTA_TAB_META = {
   volunteer: { label: { en: "Volunteer", hi: "वॉलंटियर" } as Bilingual, image: "/img/nab/dance.jpg" },
-  donate: { label: { en: "Donate", hi: "दान करें" } as Bilingual, image: "/img/nab/computer-training.jpg" },
+  donate: { label: { en: "Donate", hi: "दान करें" } as Bilingual, image: "/img/nab/braille-pegs.jpg" },
   csr: { label: { en: "CSR", hi: "CSR" } as Bilingual, image: "/img/nab/compitions.jpg" },
 } as const;
 // Copy for the three CTA forms (donate/volunteer/CSR) inside the stage-8
 // tab panel — kept separate from the near-identical DonateOverlay /
 // VolunteerOverlay copy since these are shorter, inline variants.
-const AMOUNT_LABEL: Bilingual = { en: "Amount", hi: "राशि" };
-const CHOOSE_AN_AMOUNT: Bilingual = { en: "Choose an amount", hi: "एक राशि चुनें" };
-const PAY_VIA_RAZORPAY = (amount: number): Bilingual => ({
-  en: `Pay ₹${amount} via Razorpay`,
-  hi: `Razorpay से ₹${amount} भुगतान करें`,
-});
-const DONATE_FEE_NOTE_PREFIX: Bilingual = {
-  en: "Online payment is not live yet. We will email you UPI and bank transfer details to complete the donation.",
-  hi: "ऑनलाइन भुगतान अभी शुरू नहीं हुआ है। दान पूरा करने के लिए हम आपको UPI और बैंक ट्रांसफर की जानकारी ईमेल करेंगे।",
+const DONATE_TAB_NOTE: Bilingual = {
+  en: "Already paid? Send us your details and we will email your 80G tax receipt. NAB Lucknow is registered under Section 12A, and every gift qualifies for a deduction under Section 80G.",
+  hi: "भुगतान कर दिया? अपनी जानकारी भेजें, हम आपको 80G कर-रसीद ईमेल कर देंगे। NAB Lucknow, Section 12A के अंतर्गत पंजीकृत है, और हर दान धारा 80G के तहत कर छूट के लिए पात्र है।",
 };
-const PLEDGE_RECORDED: Bilingual = { en: "Pledge recorded", hi: "संकल्प दर्ज हुआ" };
-const DONATE_SUCCESS_BODY: Bilingual = {
-  en: "Thank you. We have your details and will send payment options shortly.",
-  hi: "धन्यवाद। हमें आपकी जानकारी मिल गई है, हम जल्द ही भुगतान के विकल्प भेजेंगे।",
-};
+const DONATE_TAB_RECEIPT_CTA: Bilingual = { en: "Get my 80G receipt", hi: "मेरी 80G रसीद पाएं" };
 const WHICH_AREA_LABEL: Bilingual = { en: "Which area?", hi: "कौन सा क्षेत्र?" };
 const CHOOSE_AN_AREA: Bilingual = { en: "Choose an area", hi: "एक क्षेत्र चुनें" };
 const SIGN_UP_TO_VOLUNTEER: Bilingual = { en: "Sign up to volunteer", hi: "वॉलंटियर के लिए साइन अप करें" };
@@ -325,15 +340,17 @@ const CSR_SUCCESS_BODY: Bilingual = {
   en: "Thank you. Our partnerships team will be in touch to discuss how we can work together.",
   hi: "धन्यवाद। हमारी पार्टनरशिप टीम आगे साथ काम करने की चर्चा के लिए जल्द संपर्क करेगी।",
 };
-const TESTIMONIALS: { quote: Bilingual; name: Bilingual; role: Bilingual; image: string }[] = [
+// The people quoted are not named, so each card carries a role icon
+// rather than a stand-in photo of a stranger.
+const TESTIMONIALS: { quote: Bilingual; name: Bilingual; role: Bilingual; icon: string }[] = [
   {
     quote: {
-      en: "My daughter came to NAB unable to read a single word. Two years later, she reads Braille faster than I read print. I don't have words for what this place has given our parivaar.",
+      en: "My daughter came to NAB unable to read a single word. Two years later, she reads Braille faster than I read print. I don't have words for what this place has given our parivaar (परिवार).",
       hi: "मेरी बेटी NAB में तब आई थी जब उसे एक भी शब्द पढ़ना नहीं आता था। दो साल बाद, वह ब्रेल इतनी तेज़ पढ़ती है जितना मैं छपा हुआ भी नहीं पढ़ पाती। इस जगह ने हमें जो दिया है, उसके लिए मेरे पास शब्द नहीं हैं।",
     },
     name: { en: "Parent of a student", hi: "एक विद्यार्थी के अभिभावक" },
     role: { en: "Lucknow", hi: "लखनऊ" },
-    image: "/img/placeholders/testimonial-parent.jpg",
+    icon: "family_restroom",
   },
   {
     quote: {
@@ -342,7 +359,7 @@ const TESTIMONIALS: { quote: Bilingual; name: Bilingual; role: Bilingual; image:
     },
     name: { en: "Programme graduate", hi: "प्रोग्राम स्नातक" },
     role: { en: "Vocational training, 2022 batch", hi: "वोकेशनल ट्रेनिंग, 2022 बैच" },
-    image: "/img/placeholders/testimonial-graduate.jpg",
+    icon: "school",
   },
   {
     quote: {
@@ -351,7 +368,7 @@ const TESTIMONIALS: { quote: Bilingual; name: Bilingual; role: Bilingual; image:
     },
     name: { en: "Long-time donor", hi: "पुराने दानदाता" },
     role: { en: "Supporter since 2019", hi: "2019 से सहयोगी" },
-    image: "/img/placeholders/testimonial-donor.jpg",
+    icon: "volunteer_activism",
   },
 ];
 // Official UN SDG brand colours, limited to the goals NAB's work maps to
@@ -599,7 +616,6 @@ export default function IntroSequence() {
   const [currentStage, setCurrentStage] = useState<SightStage>(SIGHT_STAGES[0]);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [ctaTab, setCtaTab] = useState<"volunteer" | "donate" | "csr">("donate");
-  const [donationAmount, setDonationAmount] = useState<number | null>(null);
   const [ctaArea, setCtaArea] = useState("");
   const [selectedSdg, setSelectedSdg] = useState<number>(SDG_GOALS[0].number);
   const [activeStage, setActiveStage] = useState<Stage>(0);
@@ -1954,7 +1970,7 @@ export default function IntroSequence() {
       // exhausted before stepping back to stage 6 or forward into stage 8.
       if (activeStageRef.current === 7) {
         const nextTeam = teamIndexRef.current + delta;
-        if (nextTeam >= 0 && nextTeam < TEAM_MEMBERS.length) {
+        if (nextTeam >= 0 && nextTeam < TEAM_PANEL_COUNT) {
           cycleTeam(nextTeam);
           return;
         }
@@ -2971,7 +2987,7 @@ export default function IntroSequence() {
                 const pos = i - stage6Index;
                 const isActive = pos === 0;
                 const off = Math.abs(pos);
-                const pct = Math.min(100, Math.round((cause.raisedAmount / cause.goalAmount) * 100));
+                const pct = causeProgress(cause);
                 const cardStyle: CSSProperties = {
                   position: "absolute",
                   left: "50%",
@@ -3001,19 +3017,23 @@ export default function IntroSequence() {
                         <p className="hidden font-body text-sm leading-6 text-white/90 md:line-clamp-2 md:block">
                           {t(cause.description)}
                         </p>
-                        <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-white/25">
-                          <div className="h-full rounded-full bg-orange" style={{ width: `${pct}%` }} />
-                        </div>
+                        {pct !== null && (
+                          <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-white/25">
+                            <div className="h-full rounded-full bg-orange" style={{ width: `${pct}%` }} />
+                          </div>
+                        )}
                         <div className="flex items-center justify-between gap-2">
                           <span className="font-body text-[11px] text-white/85 md:text-xs">
-                            {formatINR(cause.raisedAmount)} of {formatINR(cause.goalAmount)}
+                            {pct !== null
+                              ? `${formatINR(cause.raisedAmount ?? 0)} / ${formatINR(cause.goalAmount ?? 0)}`
+                              : t(CAUSE_UPI_NOTE)}
                           </span>
                           <button
                             type="button"
                             onClick={openDonate}
                             className="shrink-0 rounded-full bg-white px-4 py-1.5 font-heading text-xs font-semibold text-navy transition-colors hover:bg-orange hover:text-white"
                           >
-                            Donate
+                            {t(DONATE_LABEL)}
                           </button>
                         </div>
                       </div>
@@ -3032,7 +3052,7 @@ export default function IntroSequence() {
             {/* One slot per cause, the current one filled — the same shape
                 and count no matter where you are, so it reads as a place in
                 a set rather than a fraction to track. */}
-            <div className="flex items-center gap-2" role="tablist" aria-label="Causes">
+            <div className="flex items-center gap-2" role="tablist" aria-label={t(CAUSES_ARIA)}>
               {CAUSES.map((cause, i) => (
                 <button
                   key={cause.slug}
@@ -3078,76 +3098,111 @@ export default function IntroSequence() {
 
             <div
               ref={stage7TextRef}
-              className="flex w-full justify-center gap-2 opacity-0 md:gap-3"
-              // Shorter than the stage is tall, leaving clear space below the
-              // row for the ghosted stage-8 heading.
-              style={{ height: isMobile ? 300 : 360 }}
+              className="relative w-full opacity-0"
+              // Shorter than the stage is tall, leaving clear space below
+              // for the ghosted stage-8 heading.
+              style={{ height: isMobile ? 390 : 380 }}
             >
-              {TEAM_MEMBERS.map((member, i) => {
-                const isActive = i === teamIndex;
-                return (
-                  <button
-                    type="button"
-                    key={member.name}
-                    onClick={() => setTeam(i)}
-                    aria-pressed={isActive}
-                    className="group relative overflow-hidden rounded-3xl ring-1 ring-black/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
-                    style={{
-                      // Fixed widths, not flex-grow: the open panel stays
-                      // portrait (~0.75 of its height) instead of stretching
-                      // into a landscape band, and the strips stay narrow.
-                      flexGrow: 0,
-                      flexBasis: isActive ? (isMobile ? 210 : 300) : isMobile ? 52 : 80,
-                      minWidth: 0,
-                      transition: prefersReducedMotion
-                        ? "none"
-                        : "flex-basis 0.55s cubic-bezier(.22,1,.36,1)",
-                    }}
-                  >
+              {/* Panel 1: special mention. */}
+              <div
+                inert={teamIndex !== 0}
+                className="absolute inset-0 flex flex-col items-center gap-4 md:flex-row md:items-center md:justify-center md:gap-12"
+                style={{
+                  opacity: teamIndex === 0 ? 1 : 0,
+                  transform: `translateY(${teamIndex === 0 ? 0 : -24}px)`,
+                  transition: prefersReducedMotion ? "none" : "opacity .45s ease, transform .55s cubic-bezier(.22,1,.36,1)",
+                }}
+              >
+                <div className="flex w-full items-center gap-4 md:w-auto">
+                  <div className="relative h-36 w-28 shrink-0 overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/10 md:h-[340px] md:w-[264px] md:rounded-3xl">
                     <Image
-                      src={member.photo}
-                      alt={isActive ? `${member.name}, ${t(member.role)}` : ""}
+                      src={FEATURED_MEMBER.photo}
+                      alt={t(FEATURED_MEMBER.alt)}
                       fill
-                      sizes="(max-width: 768px) 90vw, 620px"
-                      className="object-cover"
+                      sizes="(max-width: 768px) 112px, 264px"
+                      className="object-cover object-top"
                     />
-                    <span
-                      className={
-                        "absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/70 via-black/15 to-transparent p-3 transition-opacity duration-300 " +
-                        (isActive ? "opacity-0" : "opacity-100")
-                      }
+                  </div>
+                  <div className="md:hidden">
+                    <span className="font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-orange">
+                      {t(TEAM_PANEL_LABELS[0])}
+                    </span>
+                    <p className="font-heading text-xl font-bold leading-tight text-navy">{t(FEATURED_MEMBER.name)}</p>
+                    <p className="font-body text-xs text-black/55">{t(FEATURED_MEMBER.role)}</p>
+                  </div>
+                </div>
+                <div className="flex max-w-xl flex-col gap-3">
+                  <span className="hidden font-heading text-xs font-bold uppercase tracking-[0.2em] text-orange md:block">
+                    {t(TEAM_PANEL_LABELS[0])}
+                  </span>
+                  <p className="hidden font-heading text-4xl font-bold leading-tight text-navy md:block">
+                    {t(FEATURED_MEMBER.name)}
+                  </p>
+                  <p className="hidden font-body text-sm text-black/55 md:block">{t(FEATURED_MEMBER.role)}</p>
+                  <p className="border-l-2 border-orange pl-4 font-body text-sm leading-6 text-black/75 md:mt-2 md:text-base md:leading-7">
+                    {t(FEATURED_MEMBER.text)}
+                  </p>
+                </div>
+              </div>
+
+              {/* Panel 2: the executive committee. */}
+              <div
+                inert={teamIndex !== 1}
+                className="absolute inset-0 flex flex-col gap-3 md:gap-5"
+                style={{
+                  opacity: teamIndex === 1 ? 1 : 0,
+                  transform: `translateY(${teamIndex === 1 ? 0 : 24}px)`,
+                  transition: prefersReducedMotion ? "none" : "opacity .45s ease, transform .55s cubic-bezier(.22,1,.36,1)",
+                }}
+              >
+                <span className="font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-orange md:text-xs">
+                  {t(OFFICE_BEARERS_LABEL)}
+                </span>
+                <ul className="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3">
+                  {OFFICE_BEARERS.map((member) => (
+                    <li
+                      key={member.name.en}
+                      className="flex items-center gap-2.5 rounded-2xl border border-black/10 p-2 md:gap-3 md:p-3"
                     >
-                      <span className="font-heading text-xs font-bold text-white [writing-mode:vertical-rl] md:text-sm">
-                        {member.name}
+                      <span
+                        aria-hidden="true"
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-navy font-heading text-xs font-bold text-white md:h-12 md:w-12 md:text-sm"
+                      >
+                        {monogram(member.name.en)}
                       </span>
-                    </span>
-                    <span
-                      className={
-                        "absolute inset-x-0 bottom-0 m-2.5 flex flex-col gap-2 rounded-2xl border border-white/25 bg-black/35 p-4 text-left text-white backdrop-blur-xl transition-opacity duration-300 md:m-4 md:p-5 " +
-                        (isActive ? "opacity-100" : "pointer-events-none opacity-0")
-                      }
+                      <span className="min-w-0">
+                        <span className="block font-heading text-xs font-bold leading-tight text-navy md:text-base">
+                          {t(member.name)}
+                        </span>
+                        <span className="block font-body text-[11px] text-black/55 md:text-xs">{t(member.role)}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <span className="mt-1 font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-orange md:mt-2 md:text-xs">
+                  {t(EXECUTIVE_MEMBERS_LABEL)}
+                </span>
+                <ul className="flex flex-wrap gap-1.5 md:gap-2">
+                  {EXECUTIVE_MEMBERS.map((name) => (
+                    <li
+                      key={name.en}
+                      className="rounded-full border border-navy/20 bg-navy/5 px-3 py-1 font-heading text-[11px] font-semibold text-navy md:px-4 md:py-1.5 md:text-sm"
                     >
-                      <p className="font-body text-xs italic leading-5 text-white/90 md:text-sm md:leading-6">
-                        &ldquo;{t(member.message)}&rdquo;
-                      </p>
-                      <div>
-                        <p className="font-heading text-sm font-bold md:text-lg">{member.name}</p>
-                        <p className="font-body text-[11px] text-white/70 md:text-xs">{t(member.role)}</p>
-                      </div>
-                    </span>
-                  </button>
-                );
-              })}
+                      {t(name)}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
-            <div className="flex items-center gap-2" role="tablist" aria-label="Team members">
-              {TEAM_MEMBERS.map((member, i) => (
+            <div className="flex items-center gap-2" role="tablist" aria-label={t(TEAM_PANELS_ARIA)}>
+              {TEAM_PANEL_LABELS.map((label, i) => (
                 <button
-                  key={member.name}
+                  key={label.en}
                   type="button"
                   role="tab"
                   aria-selected={i === teamIndex}
-                  aria-label={member.name}
+                  aria-label={t(label)}
                   onClick={() => setTeam(i)}
                   className={
                     "h-1.5 rounded-full transition-all duration-300 " +
@@ -3252,40 +3307,17 @@ export default function IntroSequence() {
 
                   <div ref={stage8CtaFormRef}>
                     {ctaTab === "donate" && (
-                      <LeadForm
-                        formType="Donate"
-                        extra={
-                          <div className="flex flex-col gap-1.5">
-                            <span className="font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-black/55">
-                              {t(AMOUNT_LABEL)}
-                            </span>
-                            <div className="grid grid-cols-4 gap-2">
-                              {DONATION_AMOUNTS.map((value) => (
-                                <button
-                                  key={value}
-                                  type="button"
-                                  onClick={() => setDonationAmount(value)}
-                                  aria-pressed={donationAmount === value}
-                                  className={
-                                    "rounded-lg border py-1.5 font-heading text-sm font-semibold transition-colors " +
-                                    (donationAmount === value
-                                      ? "border-navy bg-navy text-white"
-                                      : "border-black/15 text-black/60 hover:border-navy hover:text-navy")
-                                  }
-                                >
-                                  ₹{value}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        }
-                        extraPayload={donationAmount ? { amount: donationAmount } : undefined}
-                        disabled={!donationAmount}
-                        submitLabel={donationAmount ? t(PAY_VIA_RAZORPAY(donationAmount)) : t(CHOOSE_AN_AMOUNT)}
-                        feeNote={`${t(DONATE_FEE_NOTE_PREFIX)} ${t(TAX_EXEMPTION_NOTE)}`}
-                        successTitle={t(PLEDGE_RECORDED)}
-                        successBody={t(DONATE_SUCCESS_BODY)}
-                      />
+                      <div className="flex flex-col gap-3">
+                        <UpiPayCard compact />
+                        <p className="font-body text-xs leading-5 text-black/60">{t(DONATE_TAB_NOTE)}</p>
+                        <button
+                          type="button"
+                          onClick={openDonate}
+                          className="inline-flex items-center justify-center gap-2 self-start rounded-full bg-orange px-7 py-2.5 font-heading text-sm font-semibold text-white transition-colors hover:bg-navy"
+                        >
+                          {t(DONATE_TAB_RECEIPT_CTA)}
+                        </button>
+                      </div>
                     )}
 
                     {ctaTab === "volunteer" && (
@@ -3362,9 +3394,9 @@ export default function IntroSequence() {
                     {t(testimonial.quote)}
                   </p>
                   <div className="mt-auto flex items-center gap-3">
-                    <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full">
-                      <Image src={testimonial.image} alt="" fill sizes="40px" className="object-cover" />
-                    </div>
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-navy/10 text-navy">
+                      <Icon name={testimonial.icon} size={20} weight={400} />
+                    </span>
                     <div>
                       <p className="font-heading text-sm font-bold text-navy">{t(testimonial.name)}</p>
                       <p className="font-body text-xs text-black/50">{t(testimonial.role)}</p>
@@ -3434,7 +3466,7 @@ export default function IntroSequence() {
                   style={{ borderColor: active.color }}
                 >
                   <p className="font-heading text-sm font-bold sm:text-base" style={{ color: active.color }}>
-                    Goal {active.number}: {t(active.title)}
+                    {t(SDG_GOAL_PREFIX)} {active.number}: {t(active.title)}
                   </p>
                   <p className="mt-1 font-body text-xs leading-5 text-black/70 sm:text-sm">{t(active.description)}</p>
                 </div>
