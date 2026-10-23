@@ -70,7 +70,9 @@ export const VOLUNTEER_AREAS: Bilingual[] = [
 
 export const FOOTER_CONTACT = {
   address: "1710, First Floor, Lekhraj Dollar, Near Fire Station, Indira Nagar, Lucknow - 226016",
-  phones: ["(0522) 4234028", "+91 98398 42037"],
+  // The second number is the WhatsApp line: FloatingActions and the 80G
+  // receipt note read phones[1] for it.
+  phones: ["+91 98396 82888", "+91 92191 93930"],
   email: "nablucknow1@gmail.com",
 };
 

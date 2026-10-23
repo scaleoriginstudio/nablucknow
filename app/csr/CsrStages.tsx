@@ -238,10 +238,11 @@ export function CsrStartStage() {
                 <Icon name="mail" size={18} className="shrink-0 text-navy" />
                 {FOOTER_CONTACT.email}
               </a>
-              {FOOTER_CONTACT.phones.map((phone) => (
+              {FOOTER_CONTACT.phones.map((phone, i) => (
                 <a key={phone} href={`tel:${phone.replace(/[^\d+]/g, "")}`} className="flex items-center gap-2 hover:underline">
                   <Icon name="call" size={18} className="shrink-0 text-navy" />
                   {phone}
+                  {i === 1 && " (WhatsApp)"}
                 </a>
               ))}
               <p className="mt-1 text-xs leading-5 text-black/55">{t(COPY.dueDiligence)}</p>

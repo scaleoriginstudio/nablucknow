@@ -66,10 +66,11 @@ export function ContactStage() {
         {FOOTER_CONTACT.address}
       </a>
       <div className="flex flex-col gap-1">
-        {FOOTER_CONTACT.phones.map((phone) => (
+        {FOOTER_CONTACT.phones.map((phone, i) => (
           <a key={phone} href={`tel:${phone.replace(/[^\d+]/g, "")}`} className="flex items-center gap-2 hover:underline">
             <Icon name="call" size={18} className="shrink-0" />
             {phone}
+            {i === 1 && " (WhatsApp)"}
           </a>
         ))}
         <a href={`mailto:${FOOTER_CONTACT.email}`} className="flex items-center gap-2 hover:underline">

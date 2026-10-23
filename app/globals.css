@@ -98,6 +98,18 @@ body {
 .bg-navy ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.55);
 }
+/* An inactive pinned stage stays mounted (inert, its content faded) under
+   the active one. Its scroll region is still opacity 1, so on phones stage
+   3's overflowing list painted its navy thumb as a stray blue line down the
+   right edge of stages 1 and 2. Hide the bar until the stage is live. */
+[inert][data-stage-scroll],
+[inert] [data-stage-scroll] {
+  scrollbar-width: none;
+}
+[inert][data-stage-scroll]::-webkit-scrollbar,
+[inert] [data-stage-scroll]::-webkit-scrollbar {
+  display: none;
+}
 .bg-navy ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.75);
 }

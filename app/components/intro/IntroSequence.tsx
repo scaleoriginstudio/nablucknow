@@ -162,8 +162,8 @@ const JOURNEY_ENTRIES: { year: string; text: Bilingual }[] = [
   {
     year: "2001",
     text: {
-      en: "We implement the District Primary Education Programme (DPEP), bringing inclusive schooling closer to where children already are.",
-      hi: "हम डिस्ट्रिक्ट प्राइमरी एजुकेशन प्रोग्राम (DPEP) लागू करते हैं, जिससे समावेशी शिक्षा बच्चों के और करीब पहुंचती है।",
+      en: "We implement the District Primary Education Programme (DPEP), and run the Integrated Education Programme (IEP) of IDED in 2 blocks of Bhopal.",
+      hi: "हम डिस्ट्रिक्ट प्राइमरी एजुकेशन प्रोग्राम (DPEP) लागू करते हैं, और भोपाल के 2 ब्लॉकों में IDED का इंटीग्रेटेड एजुकेशन प्रोग्राम (IEP) चलाते हैं।",
     },
   },
   {
@@ -425,7 +425,9 @@ type Stage = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
 
 function StageStepper({ active, onSelect }: { active: number; onSelect?: (n: number) => void }) {
   return (
-    <div className="flex w-full items-baseline justify-center gap-4 font-body sm:gap-6">
+    // Ten numbers at gap-4 inside px-8 overran a 360px phone (the "10" fell
+    // off the right edge), so phones get a tighter gap and gutter.
+    <div className="flex w-full items-baseline justify-center gap-2.5 font-body sm:gap-6">
       {Array.from({ length: TOTAL_STAGES }, (_, i) => i + 1).map((n) => (
         <button
           key={n}
@@ -2429,7 +2431,7 @@ export default function IntroSequence() {
       {layout === "final" && (
         <div
           style={{ position: "fixed", top: HEADER_HEIGHT + 40, left: 0, width: "100vw" }}
-          className="z-20 px-8 pointer-events-none"
+          className="z-20 px-4 pointer-events-none sm:px-8"
         >
           <div className="mx-auto max-w-6xl">
             <div
@@ -2908,7 +2910,7 @@ export default function IntroSequence() {
                         className="absolute top-1.5 h-1.5 w-1.5 rounded-full bg-white"
                         style={{ left: -29 }}
                       />
-                      <span className="w-12 shrink-0 font-body text-base text-white md:w-16 md:text-lg">
+                      <span className="w-20 shrink-0 whitespace-nowrap font-body text-base text-white md:w-24 md:text-lg">
                         {entry.year}
                       </span>
                       <p className="max-w-md font-body text-sm leading-5 text-white md:text-base md:leading-6">
@@ -2992,7 +2994,10 @@ export default function IntroSequence() {
                   left: "50%",
                   top: "50%",
                   width: isActive ? (isMobile ? "80vw" : 560) : isMobile ? 120 : 172,
-                  height: isActive ? (isMobile ? 290 : 336) : isMobile ? 170 : 238,
+                  // Capped at the row's own height on phones: a fixed 290px
+                  // overran the 46vh row on short screens and clipped the
+                  // card's caption off the bottom.
+                  height: isActive ? (isMobile ? "min(310px, 100%)" : 336) : isMobile ? 170 : 238,
                   transform: `translate(calc(-50% + ${pos * (isMobile ? 150 : 400)}px), -50%) scale(${isActive ? 1 : 0.95})`,
                   opacity: off > 1 ? 0 : isActive ? 1 : 0.4,
                   zIndex: isActive ? 20 : 10 - off,
@@ -3010,7 +3015,7 @@ export default function IntroSequence() {
                     <Image src={cause.image} alt="" fill sizes="640px" className="object-cover" />
                     {isActive ? (
                       <div className="absolute inset-x-0 bottom-0 m-3 flex flex-col gap-2 rounded-2xl border border-white/40 bg-white/20 p-4 text-white backdrop-blur-xl md:m-4 md:p-5">
-                        <h3 className="line-clamp-2 font-heading text-base font-bold leading-tight md:text-2xl">
+                        <h3 className="line-clamp-3 font-heading text-base font-bold leading-tight md:line-clamp-2 md:text-2xl">
                           {t(cause.title)}
                         </h3>
                         <p className="hidden font-body text-sm leading-6 text-white/90 md:line-clamp-2 md:block">
@@ -3268,8 +3273,11 @@ export default function IntroSequence() {
               // per the site-wide scrollbar rule) underneath stages 1/2
               // even though the box itself was faded out.
               className={
-                "absolute inset-x-0 bottom-0 top-20 flex flex-col items-center justify-start gap-6 overscroll-contain px-8 pb-10 opacity-0 pointer-events-none md:top-28 md:justify-center md:pb-0 " +
-                (activeStage === 8 ? "overflow-y-auto md:overflow-hidden" : "overflow-hidden")
+                "absolute inset-x-0 bottom-0 top-20 flex flex-col items-center justify-start gap-6 overscroll-contain px-8 pb-10 opacity-0 pointer-events-none md:top-28 md:justify-center-safe md:pb-6 " +
+                // Scrolls on md+ too: on short laptop screens (~600-700px
+                // tall) the image + form column runs past the bottom, and
+                // overflow-hidden there left it clipped with no way to reach it.
+                (activeStage === 8 ? "overflow-y-auto" : "overflow-hidden")
               }
             >
               <div className="grid w-full max-w-5xl items-center gap-4 md:gap-10 md:grid-cols-[1fr_1.3fr]">
@@ -3374,7 +3382,10 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-start md:pt-28"
+          // Scrolls in place when the cards run taller than a short
+          // laptop screen, instead of clipping them (see the stage-8 CTA).
+          data-stage-scroll=""
+          className="z-[16] flex flex-col items-center justify-start overflow-y-auto overscroll-contain bg-white px-8 pt-20 pb-8 opacity-0 pointer-events-none md:justify-start md:pt-28"
         >
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 md:gap-10">
             <h2
@@ -3421,7 +3432,10 @@ export default function IntroSequence() {
             width: "100vw",
             height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
           }}
-          className="z-[16] flex flex-col items-center justify-start overflow-hidden bg-white px-8 pt-20 opacity-0 pointer-events-none md:justify-start md:pt-28"
+          // Scrolls in place when the cards run taller than a short
+          // laptop screen, instead of clipping them (see the stage-8 CTA).
+          data-stage-scroll=""
+          className="z-[16] flex flex-col items-center justify-start overflow-y-auto overscroll-contain bg-white px-8 pt-20 pb-8 opacity-0 pointer-events-none md:justify-start md:pt-28"
         >
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 md:gap-4">
             <h2

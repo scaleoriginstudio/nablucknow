@@ -7,8 +7,8 @@ import { Icon } from "./Icon";
 import { FOOTER_CONTACT, DONATE_LABEL } from "./constants";
 import { useLanguage } from "./LanguageContext";
 
-// The mobile number, not the landline: wa.me needs a WhatsApp-reachable
-// number, country code plus the last ten digits, nothing else.
+// The WhatsApp line: wa.me needs the country code plus the last ten
+// digits, nothing else.
 const WHATSAPP_HREF = `https://wa.me/91${FOOTER_CONTACT.phones[1].replace(/\D/g, "").slice(-10)}`;
 
 const WHATSAPP_LABEL = { en: "WhatsApp", hi: "व्हाट्सएप" };

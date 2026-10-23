@@ -89,7 +89,7 @@ export function SiteFooterContent({ hideLogo = false }: { hideLogo?: boolean } =
         <div className="col-span-2 sm:col-span-1">
           <h3 className="mb-3 font-heading text-sm font-bold text-white">{t(CONTACT_HEADING)}</h3>
           <p className="font-body text-xs leading-5 text-white/70">{FOOTER_CONTACT.address}</p>
-          <p className="mt-2 font-body text-xs text-white/70">{FOOTER_CONTACT.phones.join(" · ")}</p>
+          <p className="mt-2 font-body text-xs text-white/70">{FOOTER_CONTACT.phones[0]} · {FOOTER_CONTACT.phones[1]} (WhatsApp)</p>
           <p className="mt-1 font-body text-xs text-white/70">{FOOTER_CONTACT.email}</p>
         </div>
       </div>
