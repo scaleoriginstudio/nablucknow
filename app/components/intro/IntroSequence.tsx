@@ -80,8 +80,8 @@ const STAGE2_STORIES: { word: Bilingual; headline: Bilingual; image: string; hre
       en: "Ten minutes with a cane and a blindfold changes how a room thinks about access.",
       hi: "छड़ी और आँखों पर पट्टी बांधकर बिताए दस मिनट ही यह बदल देते हैं कि एक कमरा पहुंच के बारे में कैसे सोचता है।",
     },
-    image: "/img/nab/white-cane-distribution.jpg",
-    href: "/blog/white-cane-day-walk-2025",
+    image: "/img/nab/events/white-cane-day-2026.jpg",
+    href: "/blog/white-cane-safety-day-2026",
   },
   {
     word: { en: "Empower.", hi: "सशक्तिकरण।" },
@@ -316,9 +316,9 @@ const SKIP_INTRO_LABEL: Bilingual = { en: "Skip intro", hi: "इंट्रो 
 const PAUSE_LEARN_MORE_LABEL: Bilingual = { en: "Pause & learn more", hi: "रोकें और जानें" };
 const RESUME_INTRO_LABEL: Bilingual = { en: "Resume intro", hi: "इंट्रो जारी रखें" };
 const CTA_TAB_META = {
-  volunteer: { label: { en: "Volunteer", hi: "वॉलंटियर" } as Bilingual, image: "/img/nab/teacher.jpg" },
+  volunteer: { label: { en: "Volunteer", hi: "वॉलंटियर" } as Bilingual, image: "/img/nab/events/tiranga-yatra-children.jpg" },
   donate: { label: { en: "Donate", hi: "दान करें" } as Bilingual, image: "/img/nab/braille-pegs.jpg" },
-  csr: { label: { en: "CSR", hi: "CSR" } as Bilingual, image: "/img/nab/compitions.jpg" },
+  csr: { label: { en: "CSR", hi: "CSR" } as Bilingual, image: "/img/nab/events/helen-keller-day-felicitation.jpg" },
 } as const;
 // Copy for the three CTA forms (donate/volunteer/CSR) inside the stage-8
 // tab panel, kept separate from the near-identical DonateOverlay /

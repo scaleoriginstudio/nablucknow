@@ -116,6 +116,151 @@ export const POSTS: Post[] = [
       },
     ],
   },
+  // Real 2026 events, written from NAB Lucknow's own Facebook posts; the
+  // photos are theirs too (public/img/nab/events).
+  {
+    slug: "white-cane-safety-day-2026",
+    title: {
+      en: "White Cane Safety Day 2026 at KMC Language University",
+      hi: "KMC भाषा विश्वविद्यालय में व्हाइट केन सेफ्टी डे 2026",
+    },
+    excerpt: {
+      en: "With the university's Enabling Unit, we marked White Cane Safety Day with young participants and white canes in hand.",
+      hi: "विश्वविद्यालय की इनेबलिंग यूनिट के साथ हमने युवा प्रतिभागियों और उनके हाथों में व्हाइट केन के साथ व्हाइट केन सेफ्टी डे मनाया।",
+    },
+    image: "/img/nab/events/white-cane-day-2026.jpg",
+    date: "2026-10-15",
+    section: "Events",
+    eventCategory: "Fundraiser & Awareness",
+    mode: "Offline",
+    location: "Khwaja Moinuddin Chishti Language University, Lucknow",
+    body: [
+      {
+        en: "A white cane is more than a mobility aid. It is independence, confidence, and the right to move through the world on your own terms.",
+        hi: "व्हाइट केन सिर्फ चलने-फिरने का साधन नहीं है। यह आत्मनिर्भरता, आत्मविश्वास और अपनी शर्तों पर दुनिया में आगे बढ़ने का अधिकार है।",
+      },
+      {
+        en: "This International White Cane Safety Day, the Enabling Unit of Khwaja Moinuddin Chishti Language University, Lucknow, and NAB, U.P. State Branch came together to celebrate exactly that. Prof. Ajay Taneja (Hon. Vice Chancellor and Patron), Prof. Musheer Ahmad (Head and Nodal Officer) and Smt. Amita Dubey of NAB Lucknow led the conversation.",
+        hi: "इस अंतरराष्ट्रीय व्हाइट केन सेफ्टी डे पर ख्वाजा मुईनुद्दीन चिश्ती भाषा विश्वविद्यालय, लखनऊ की इनेबलिंग यूनिट और NAB, यू.पी. स्टेट ब्रांच ने मिलकर यही उत्सव मनाया। प्रो. अजय तनेजा (माननीय कुलपति एवं संरक्षक), प्रो. मुशीर अहमद (विभागाध्यक्ष एवं नोडल अधिकारी) और NAB लखनऊ की श्रीमती अमिता दुबे ने चर्चा का नेतृत्व किया।",
+      },
+      {
+        en: "Most of all, thank you to every young participant who filled the room with energy. Accessibility is not a favour. It is a shared responsibility.",
+        hi: "सबसे बढ़कर, उन सभी युवा प्रतिभागियों का धन्यवाद जिन्होंने पूरे कमरे को ऊर्जा से भर दिया। सुलभता कोई एहसान नहीं, एक साझा ज़िम्मेदारी है।",
+      },
+    ],
+  },
+  {
+    slug: "tiranga-yatra-2026",
+    title: {
+      en: "Independence Day 2026: Our Children's Tiranga Yatra",
+      hi: "स्वतंत्रता दिवस 2026: हमारे बच्चों की तिरंगा यात्रा",
+    },
+    excerpt: {
+      en: "Flags in hand, the children of NAB Lucknow, Indira Nagar, marched a tiranga yatra through the neighbourhood.",
+      hi: "हाथों में तिरंगा लिए NAB लखनऊ, इंदिरा नगर के बच्चों ने मोहल्ले में तिरंगा यात्रा निकाली।",
+    },
+    image: "/img/nab/events/tiranga-yatra-2026.jpg",
+    date: "2026-08-15",
+    section: "Events",
+    eventCategory: "Programs",
+    mode: "Offline",
+    location: "Indira Nagar, Lucknow",
+    body: [
+      {
+        en: "On Independence Day, with the tiranga in their hands and the spirit of the nation in their hearts, the children of NAB Lucknow, Indira Nagar, led a tiranga yatra that made the celebration of freedom one to remember.",
+        hi: "स्वतंत्रता दिवस के पावन अवसर पर, हाथों में तिरंगा और दिलों में हिंदुस्तानी जज़्बा लिए NAB लखनऊ, इंदिरा नगर के बच्चों ने शानदार तिरंगा यात्रा निकालकर आज़ादी के जश्न को यादगार बना दिया।",
+      },
+      {
+        en: "Students, teachers, parents and volunteers walked together: the same saath we work for every day, out on the street for everyone to see.",
+        hi: "विद्यार्थी, शिक्षक, अभिभावक और वॉलंटियर साथ-साथ चले: वही साथ जिसके लिए हम हर दिन काम करते हैं, इस बार सबके सामने सड़क पर।",
+      },
+    ],
+  },
+  {
+    slug: "samagra-shiksha-teacher-training-2026",
+    title: {
+      en: "Training Master Trainers for Inclusive Classrooms",
+      hi: "समावेशी कक्षाओं के लिए मास्टर ट्रेनर्स का प्रशिक्षण",
+    },
+    excerpt: {
+      en: "Samagra Shiksha, Uttar Pradesh invited NAB Lucknow as a resource person for its state-level master trainers programme on inclusive education.",
+      hi: "समग्र शिक्षा, उत्तर प्रदेश ने समावेशी शिक्षा पर अपने राज्य स्तरीय मास्टर ट्रेनर्स कार्यक्रम में NAB लखनऊ को रिसोर्स पर्सन के रूप में आमंत्रित किया।",
+    },
+    image: "/img/nab/events/teacher-training-2026.jpg",
+    date: "2026-07-21",
+    section: "Events",
+    eventCategory: "Programs",
+    mode: "Offline",
+    location: "Lucknow",
+    body: [
+      {
+        en: "Samagra Shiksha (SSA), Uttar Pradesh invited NAB Lucknow as a resource person for its three-day, state-level master trainers programme on teacher training for inclusive education.",
+        hi: "समग्र शिक्षा (SSA), उत्तर प्रदेश द्वारा आयोजित समावेशी शिक्षा के अन्तर्गत शिक्षक प्रशिक्षण हेतु राज्य स्तरीय तीन दिवसीय मास्टर ट्रेनर्स प्रशिक्षण कार्यक्रम में NAB लखनऊ को रिसोर्स पर्सन के रूप में आमंत्रित किया गया।",
+      },
+      {
+        en: "In sessions on 14 and 21 July 2026 we shared practical, hands-on guidance on the learning needs of visually impaired students, inclusive classroom management, braille, assistive technology, teaching and learning resources, and teaching strategies that work.",
+        hi: "14 जुलाई और 21 जुलाई 2026 के प्रशिक्षण सत्रों में दृष्टिबाधित विद्यार्थियों की शैक्षिक आवश्यकताओं, समावेशी कक्षा प्रबंधन, ब्रेल, सहायक तकनीक (Assistive Technology), शिक्षण-अधिगम संसाधनों और प्रभावी शिक्षण रणनीतियों पर व्यावहारिक जानकारी साझा की गई।",
+      },
+      {
+        en: "Later in July we met another group of special educators to swap experiences and talk openly about what is and is not working in the system. Inclusive education means quality education for all, without discrimination.",
+        hi: "जुलाई के अंत में हम विशेष शिक्षकों के एक और समूह से मिले, अनुभव साझा किए और व्यवस्था में क्या ठीक है और क्या नहीं, इस पर खुलकर चर्चा हुई। समावेशी शिक्षा यानी सभी के लिए गुणवत्तापूर्ण शिक्षा, बिना किसी भेदभाव के।",
+      },
+    ],
+  },
+  {
+    slug: "helen-keller-day-2026",
+    title: {
+      en: "Helen Keller Day 2026: Celebrating Our Alumni",
+      hi: "हेलन केलर डे 2026: अपने पूर्व विद्यार्थियों का सम्मान",
+    },
+    excerpt: {
+      en: "On Helen Keller Day we paid floral tribute to Helen Keller and honoured a former student for her outstanding Class 12 results.",
+      hi: "हेलन केलर डे पर हमने हेलन केलर को पुष्पांजलि अर्पित की और एक पूर्व विद्यार्थी को कक्षा 12 के उत्कृष्ट परिणाम के लिए सम्मानित किया।",
+    },
+    image: "/img/nab/events/helen-keller-day-2026.jpg",
+    date: "2026-06-27",
+    section: "Events",
+    eventCategory: "Programs",
+    mode: "Offline",
+    location: "Indira Nagar, Lucknow",
+    body: [
+      {
+        en: "On Helen Keller Day, NAB Lucknow, U.P. State Chapter paid floral tribute to Helen Keller and honoured a former student, who began her schooling with us in Indira Nagar, for an outstanding result in her Class 12 examinations. The organisation presented her with a cheque as encouragement.",
+        hi: "हेलन केलर डे के अवसर पर NAB लखनऊ, यू.पी. स्टेट चैप्टर ने हेलन केलर को पुष्पांजलि अर्पित की और इंदिरा नगर में हमारे साथ अपनी पढ़ाई शुरू करने वाली एक पूर्व विद्यार्थी को कक्षा 12 की परीक्षा में उत्कृष्ट परिणाम के लिए सम्मानित किया। संस्था की ओर से प्रोत्साहन स्वरूप उन्हें एक चेक भी प्रदान किया गया।",
+      },
+      {
+        en: "Her result is proof that when the hausla is strong, no barrier can block the road to success.",
+        hi: "उनकी उपलब्धि इस बात का प्रमाण है कि यदि हौसले बुलंद हों, तो कोई भी बाधा सफलता की राह नहीं रोक सकती।",
+      },
+    ],
+  },
+  {
+    slug: "yoga-day-2026",
+    title: {
+      en: "International Yoga Day 2026 with Our Students",
+      hi: "हमारे विद्यार्थियों के साथ अंतरराष्ट्रीय योग दिवस 2026",
+    },
+    excerpt: {
+      en: "Visually impaired children at NAB Lucknow performed yoga asanas and pranayama: see possibilities, not limits.",
+      hi: "NAB लखनऊ के दृष्टिबाधित बच्चों ने योगासन और प्राणायाम का प्रदर्शन किया: सीमाएँ नहीं, संभावनाएँ देखो।",
+    },
+    image: "/img/nab/events/yoga-day-2026.jpg",
+    date: "2026-06-21",
+    section: "Events",
+    eventCategory: "Programs",
+    mode: "Offline",
+    location: "NAB Lucknow, Lekhraj Dollar, Indira Nagar",
+    body: [
+      {
+        en: "Yoga taught us to see possibilities, not limits. On International Yoga Day 2026, visually impaired children at NAB Lucknow, Lekhraj Dollar, Indira Nagar gave a confident demonstration of yoga asanas and pranayama.",
+        hi: "योग ने सिखाया: सीमाएँ नहीं, संभावनाएँ देखो। अंतरराष्ट्रीय योग दिवस 2026 के अवसर पर NAB लखनऊ, लेखराज डॉलर, इंदिरा नगर में दृष्टिबाधित बच्चों ने योगासन एवं प्राणायाम का सफल प्रदर्शन किया।",
+      },
+      {
+        en: "The aim was to promote health, confidence and inclusion, and every participant joined in with enthusiasm.",
+        hi: "कार्यक्रम का उद्देश्य स्वास्थ्य, आत्मविश्वास और समावेशिता को बढ़ावा देना था। सभी प्रतिभागियों ने उत्साहपूर्वक भाग लिया।",
+      },
+    ],
+  },
   {
     slug: "annual-day-2025",
     title: {
@@ -153,7 +298,7 @@ export const POSTS: Post[] = [
       en: "Over 80 participants walked our guided route blindfolded, cane in hand, this October.",
       hi: "इस अक्टूबर 80 से अधिक प्रतिभागियों ने आँखों पर पट्टी बाँधकर, हाथ में केन लिए हमारा निर्धारित मार्ग तय किया।",
     },
-    image: "/img/nab/white-cane-distribution.jpg",
+    image: "/img/nab/white-cane-handover.jpg",
     date: "2025-10-15",
     section: "Events",
     eventCategory: "Fundraiser & Awareness",

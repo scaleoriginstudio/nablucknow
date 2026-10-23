@@ -36,9 +36,8 @@ export const PROGRAMS: Program[] = [
     },
     format: "Fundraising Talk",
     audience: "Corporate teams",
-    // Pexels photo 7580635 (free licence).
-    image: "/img/stock/indian-team-talk.jpg",
-    imageAlt: "A woman leads a discussion with colleagues in an office",
+    image: "/img/nab/events/teacher-training-session.jpg",
+    imageAlt: "Smt. Amita Dubey of NAB Lucknow leads a training session for teachers in a conference hall",
     hook: {
       en: "An honest conversation on what workplace inclusion for people with visual impairment actually looks like beyond compliance: hiring practices, accessible tooling, and the everyday accommodations that let colleagues do their best work. Saath (साथ) chalna, sirf policy nahi.",
       hi: "इस बातचीत में यह ईमानदारी से बताया जाता है कि दृष्टिबाधित लोगों के लिए कार्यस्थल में समावेशिता कंप्लायंस से आगे असल में कैसी दिखती है: भर्ती की प्रक्रिया, सुलभ टूल्स, और वे रोज़मर्रा की व्यवस्थाएँ जो सहकर्मियों को अपना सर्वश्रेष्ठ काम करने देती हैं।",
@@ -66,8 +65,8 @@ export const PROGRAMS: Program[] = [
     },
     format: "Street Performance",
     audience: "Schools & corporate campuses",
-    image: "/img/stock/street-performance.jpg",
-    imageAlt: "A street performer carrying and playing drums in an Indian market",
+    image: "/img/nab/events/yoga-day-performance.jpg",
+    imageAlt: "Visually impaired children perform for an audience in the NAB Lucknow hall",
     hook: {
       en: "A musical street play performed entirely by visually impaired students, trained over several weeks by professional street artists and theatre directors. No scripts read off a page, every line and cue learned by ear. Pure hausla (हौसला) on stage.",
       hi: "पूरी तरह दृष्टिबाधित विद्यार्थियों द्वारा प्रस्तुत एक संगीतमय नुक्कड़ नाटक, जिसे हफ्तों तक पेशेवर स्ट्रीट आर्टिस्टों और थिएटर डायरेक्टरों ने प्रशिक्षित किया है। कोई स्क्रिप्ट पढ़ी नहीं जाती, हर संवाद और क्यू कान से सीखा जाता है।",
@@ -95,8 +94,8 @@ export const PROGRAMS: Program[] = [
     },
     format: "Sponsored Walk",
     audience: "Corporate teams & school groups",
-    image: "/img/nab/white-cane-handover.jpg",
-    imageAlt: "A guest hands a white cane to a visually impaired student at a NAB Lucknow white cane distribution",
+    image: "/img/nab/events/tiranga-yatra-walk.jpg",
+    imageAlt: "NAB Lucknow students, staff and volunteers walk together through Indira Nagar carrying the tricolour",
     hook: {
       en: "Put on a blindfold, pick up a smart cane, and walk a short guided route the way many of our students do every day: a direct, physical way to understand what independent mobility without sight actually takes. Ek saath (एक साथ), step by step.",
       hi: "आँखों पर पट्टी बाँधिए, हाथ में स्मार्ट केन लीजिए, और वही छोटा-सा निर्धारित मार्ग तय कीजिए जो हमारे कई विद्यार्थी हर दिन तय करते हैं: बिना दृष्टि के आत्मनिर्भर चलने-फिरने को सीधे, शरीर से महसूस करने का एक तरीका।",
